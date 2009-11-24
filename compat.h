@@ -11,6 +11,7 @@
 
 #include "compat-2.6.14.h"
 #include "compat-2.6.18.h"
+#include "compat-2.6.19.h"
 #include "compat-2.6.22.h"
 #include "compat-2.6.23.h"
 #include "compat-2.6.24.h"
