@@ -25,6 +25,7 @@ compat-y += main.o
 compat-$(CONFIG_COMPAT_KERNEL_14) += compat-2.6.14.o
 compat-$(CONFIG_COMPAT_KERNEL_18) += compat-2.6.18.o
 compat-$(CONFIG_COMPAT_KERNEL_19) += compat-2.6.19.o
+compat-$(CONFIG_COMPAT_KERNEL_21) += compat-2.6.21.o
 compat-$(CONFIG_COMPAT_KERNEL_22) += compat-2.6.22.o
 compat-$(CONFIG_COMPAT_KERNEL_23) += compat-2.6.23.o
 compat-$(CONFIG_COMPAT_KERNEL_24) += compat-2.6.24.o
