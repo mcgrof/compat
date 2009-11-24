@@ -23,6 +23,7 @@ compat-y += main.o
 
 # Compat kernel compatibility code
 compat-$(CONFIG_COMPAT_KERNEL_14) += compat-2.6.14.o
+compat-$(CONFIG_COMPAT_KERNEL_18) += compat-2.6.18.o
 compat-$(CONFIG_COMPAT_KERNEL_22) += compat-2.6.22.o
 compat-$(CONFIG_COMPAT_KERNEL_23) += compat-2.6.23.o
 compat-$(CONFIG_COMPAT_KERNEL_24) += compat-2.6.24.o
