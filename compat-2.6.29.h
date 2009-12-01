@@ -6,6 +6,7 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29))
 
+#include <linux/netdevice.h>
 #include <linux/skbuff.h>
 #include <linux/usb.h>
 
@@ -38,6 +39,12 @@ static inline struct sk_buff *skb_queue_prev(const struct sk_buff_head *list,
 	 */
 	BUG_ON(skb_queue_is_first(list, skb));
 	return skb->prev;
+}
+
+
+static inline struct net_device_stats *dev_get_stats(struct net_device *dev)
+{
+	return dev->get_stats(dev);
 }
 
 extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);
