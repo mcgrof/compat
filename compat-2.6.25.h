@@ -82,7 +82,7 @@ static inline void be64_add_cpu(__be64 *var, u64 val)
 	*var = cpu_to_be64(v + val);
 }
 
-/* 2.6.25 changes hwrng_unregister()'s behaviour by supporting 
+/* 2.6.25 changes hwrng_unregister()'s behaviour by supporting
  * suspend of its parent device (the misc device, which is itself the
  * hardware random number generator). It does this by passing a parameter to
  * unregister_miscdev() which is not supported in older kernels. The suspend

@@ -88,19 +88,19 @@ static inline const char *dev_name(struct device *dev)
 	return dev->bus_id;
 }
 
-/* This is from include/linux/kernel.h, which was added as of 2.6.26 */ 
+/* This is from include/linux/kernel.h, which was added as of 2.6.26 */
 
 /**
  * clamp_val - return a value clamped to a given range using val's type
  * @val: current value
  * @min: minimum allowable value
  * @max: maximum allowable value
- * 
+ *
  * This macro does no typechecking and uses temporary variables of whatever
  * type the input argument 'val' is.  This is useful when val is an unsigned
  * type and min and max are literals that will otherwise be assigned a signed
  * integer type.
- */ 
+ */
 
 #define clamp_val(val, min, max) ({             \
 	typeof(val) __val = (val);              \
@@ -193,10 +193,10 @@ struct net *dev_net(const struct net_device *dev)
  * implementation.  The AVR32 AP implementation can handle unaligned
  * words, but halfwords must be halfword-aligned, and doublewords must
  * be word-aligned.
- * 
+ *
  * However, swapped word loads must be word-aligned so we can't
  * optimize word loads in general.
- */ 
+ */
 
 #include <linux/unaligned/be_struct.h>
 #include <linux/unaligned/le_byteshift.h>
@@ -213,7 +213,7 @@ struct net *dev_net(const struct net_device *dev)
 #ifdef CONFIG_CRIS
 
 /*
- * CRIS can do unaligned accesses itself. 
+ * CRIS can do unaligned accesses itself.
  */
 #include <linux/unaligned/access_ok.h>
 #include <linux/unaligned/generic.h>
@@ -300,7 +300,7 @@ struct net *dev_net(const struct net_device *dev)
 #ifdef CONFIG_PPC
 /*
  * The PowerPC can do unaligned accesses itself in big endian mode.
- */ 
+ */
 #include <linux/unaligned/access_ok.h>
 #include <linux/unaligned/generic.h>
 
@@ -308,7 +308,7 @@ struct net *dev_net(const struct net_device *dev)
 #ifdef CONFIG_S390
 
 /*
- * The S390 can do unaligned accesses itself. 
+ * The S390 can do unaligned accesses itself.
  */
 #include <linux/unaligned/access_ok.h>
 #include <linux/unaligned/generic.h>

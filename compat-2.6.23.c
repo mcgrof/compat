@@ -14,7 +14,7 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,23))
 
 /* Part of net/core/dev_mcast.c as of 2.6.23. This is a slightly different version.
- * Since da->da_synced is not part of 2.6.22 we need to take longer route when 
+ * Since da->da_synced is not part of 2.6.22 we need to take longer route when
  * syncing */
 
 /**
@@ -70,8 +70,8 @@ int dev_mc_sync(struct net_device *to, struct net_device *from)
 EXPORT_SYMBOL(dev_mc_sync);
 
 
-/* Part of net/core/dev_mcast.c as of 2.6.23. This is a slighty different version. 
- * Since da->da_synced is not part of 2.6.22 we need to take longer route when 
+/* Part of net/core/dev_mcast.c as of 2.6.23. This is a slighty different version.
+ * Since da->da_synced is not part of 2.6.22 we need to take longer route when
  * unsyncing */
 
 /**

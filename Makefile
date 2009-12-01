@@ -38,8 +38,8 @@ compat-$(CONFIG_COMPAT_KERNEL_30) += compat-2.6.30.o
 compat-$(CONFIG_COMPAT_KERNEL_31) += compat-2.6.31.o
 compat-$(CONFIG_COMPAT_KERNEL_32) += compat-2.6.32.o
 
-modules: 
-	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) modules 
+modules:
+	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) modules
 install: modules
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) $(KMODDIR_ARG) $(KMODPATH_ARG) \
 		modules_install

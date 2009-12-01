@@ -148,7 +148,7 @@ struct header_ops {
 		unsigned char *haddr);
 };
 
-/* net/ieee80211/ieee80211_crypt_tkip uses sg_init_table. This was added on 
+/* net/ieee80211/ieee80211_crypt_tkip uses sg_init_table. This was added on
  * 2.6.24. CONFIG_DEBUG_SG was added in 2.6.24 as well, so lets just ignore
  * the debug stuff. Note that adding this required changes to the struct
  * scatterlist on include/asm/scatterlist*, so the right way to port this

@@ -15,7 +15,7 @@
 
 /* Backport work for QoS dependencies (kernel/pm_qos_params.c)
  * ipw2100 now makes use of
- * pm_qos_add_requirement(), 
+ * pm_qos_add_requirement(),
  * pm_qos_update_requirement() and
  * pm_qos_remove_requirement() from it
  *
