@@ -29,6 +29,15 @@ extern void		__dev_addr_unsync(struct dev_addr_list **to, int *to_count, struct 
 
 #define seq_file_net &init_net;
 
+enum nf_inet_hooks {
+	NF_INET_PRE_ROUTING = 0,
+	NF_INET_LOCAL_IN = 1,
+	NF_INET_FORWARD = 2,
+	NF_INET_LOCAL_OUT = 3,
+	NF_INET_POST_ROUTING = 4,
+	NF_INET_NUMHOOKS = 5
+};
+
 /* The patch:
  * commit 8b5f6883683c91ad7e1af32b7ceeb604d68e2865
  * Author: Marcin Slusarz <marcin.slusarz@gmail.com>
