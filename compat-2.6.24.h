@@ -10,6 +10,13 @@
 /* Added on 2.6.24 in include/linux/types.h by Al viro on commit 142956af */
 typedef unsigned long               uintptr_t;
 
+/* From include/linux/net.h */
+enum sock_shutdown_cmd {
+	SHUT_RD		= 0,
+	SHUT_WR		= 1,
+	SHUT_RDWR	= 2,
+};
+
 #if (LINUX_VERSION_CODE == KERNEL_VERSION(2,6,23)) /* Local check */
 /* Added as of 2.6.24 in include/linux/skbuff.h.
  *
