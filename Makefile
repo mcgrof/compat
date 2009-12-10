@@ -9,6 +9,8 @@ export KLIB_BUILD ?=    $(KLIB)/build
 
 export PWD := $(shell pwd)
 
+# This generates a bunch of CONFIG_COMPAT_KERNEL_22 CONFIG_COMPAT_KERNEL_23 .. etc for
+# each kernel release you need an object for.
 ifneq ($(wildcard $(KLIB_BUILD)/Makefile),)
 COMPAT_LATEST_VERSION = 32
 KERNEL_SUBLEVEL := $(shell $(MAKE) -C $(KLIB_BUILD) kernelversion | sed -n 's/^2\.6\.\([0-9]\+\).*/\1/p')
@@ -16,27 +18,12 @@ COMPAT_VERSIONS := $(shell I=$(COMPAT_LATEST_VERSION); while [ "$$I" -gt $(KERNE
 $(foreach ver,$(COMPAT_VERSIONS),$(eval CONFIG_COMPAT_KERNEL_$(ver)=y))
 endif
 
-obj-m += compat.o
-#compat-objs :=
+obj-y += compat/
 
-compat-y += main.o
-
-# Compat kernel compatibility code
-compat-$(CONFIG_COMPAT_KERNEL_14) += compat-2.6.14.o
-compat-$(CONFIG_COMPAT_KERNEL_18) += compat-2.6.18.o
-compat-$(CONFIG_COMPAT_KERNEL_19) += compat-2.6.19.o
-compat-$(CONFIG_COMPAT_KERNEL_21) += compat-2.6.21.o
-compat-$(CONFIG_COMPAT_KERNEL_22) += compat-2.6.22.o
-compat-$(CONFIG_COMPAT_KERNEL_23) += compat-2.6.23.o
-compat-$(CONFIG_COMPAT_KERNEL_24) += compat-2.6.24.o
-compat-$(CONFIG_COMPAT_KERNEL_25) += compat-2.6.25.o
-compat-$(CONFIG_COMPAT_KERNEL_26) += compat-2.6.26.o
-compat-$(CONFIG_COMPAT_KERNEL_27) += compat-2.6.27.o
-compat-$(CONFIG_COMPAT_KERNEL_28) += compat-2.6.28.o
-compat-$(CONFIG_COMPAT_KERNEL_29) += compat-2.6.29.o
-compat-$(CONFIG_COMPAT_KERNEL_30) += compat-2.6.30.o
-compat-$(CONFIG_COMPAT_KERNEL_31) += compat-2.6.31.o
-compat-$(CONFIG_COMPAT_KERNEL_32) += compat-2.6.32.o
+# This hack lets us put our include path first than the kernel's
+# when building our compat modules. Your own makefile would look
+# the same.
+NOSTDINC_FLAGS := -I$(M)/include/ -include $(M)/include/linux/compat.h $(CFLAGS)
 
 modules:
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) modules

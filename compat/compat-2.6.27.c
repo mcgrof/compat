@@ -8,7 +8,7 @@
  * Compatibility file for Linux wireless for kernels 2.6.27
  */
 
-#include "compat.h"
+#include <linux/compat.h>
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27))
 
