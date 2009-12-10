@@ -36,6 +36,16 @@
 #define pcmcia_parse_tuple(tuple, parse) pccard_parse_tuple(tuple, parse)
 #endif
 
+/* From : include/pcmcia/ds.h */
+/* loop CIS entries for valid configuration */
+int pcmcia_loop_config(struct pcmcia_device *p_dev,
+		       int	(*conf_check)	(struct pcmcia_device *p_dev,
+						 cistpl_cftable_entry_t *cfg,
+						 cistpl_cftable_entry_t *dflt,
+						 unsigned int vcc,
+						 void *priv_data),
+		       void *priv_data);
+
 #if 0
 extern void usb_poison_urb(struct urb *urb);
 #endif
@@ -145,6 +155,20 @@ static inline void skb_queue_splice_tail_init(struct sk_buff_head *list,
 	}
 } /* From include/linux/skbuff.h */
 
+/**
+ *	skb_queue_splice_tail - join two skb lists, each list being a queue
+ *	@list: the new list to add
+ *	@head: the place to add it in the first list
+ */
+static inline void skb_queue_splice_tail(const struct sk_buff_head *list,
+					 struct sk_buff_head *head)
+{
+	if (!skb_queue_empty(list)) {
+		__skb_queue_splice(list, head->prev, (struct sk_buff *) head);
+		head->qlen += list->qlen;
+	}
+}
+
 #ifndef DECLARE_TRACE
 
 #define TP_PROTO(args...)	args
@@ -176,6 +200,9 @@ static inline void skb_queue_splice_tail_init(struct sk_buff_head *list,
 #define round_jiffies_up backport_round_jiffies_up
 
 unsigned long round_jiffies_up(unsigned long j);
+
+extern void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page,
+			    int off, int size);
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28)) */
 

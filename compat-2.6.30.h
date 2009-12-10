@@ -15,6 +15,15 @@
 
 #define IRQ_WAKE_THREAD	(2)
 
+/* From : include/linux/pm.h */
+/* How to reorder dpm_list after device_move() */
+enum dpm_order {
+	DPM_ORDER_NONE,
+	DPM_ORDER_DEV_AFTER_PARENT,
+	DPM_ORDER_PARENT_BEFORE_DEV,
+	DPM_ORDER_DEV_LAST,
+};
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,30)) */
 
 #endif /* LINUX_26_30_COMPAT_H */

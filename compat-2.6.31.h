@@ -11,6 +11,7 @@
 #include <linux/interrupt.h>
 #include <net/dst.h>
 #include <net/genetlink.h>
+#include <linux/ethtool.h>
 
 /*
  * These macros allow us to backport rfkill without any
@@ -106,7 +107,7 @@ static inline struct dst_entry *skb_dst(const struct sk_buff *skb)
 
 static inline void skb_dst_set(struct sk_buff *skb, struct dst_entry *dst)
 {
-	skb->dst = (unsigned long)dst;
+	skb->dst = dst;
 }
 
 static inline struct rtable *skb_rtable(const struct sk_buff *skb)

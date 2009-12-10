@@ -84,6 +84,81 @@ void usb_poison_urb(struct urb *urb)
 EXPORT_SYMBOL_GPL(usb_poison_urb);
 #endif
 
+#include <pcmcia/ds.h>
+struct pcmcia_cfg_mem {
+	tuple_t tuple;
+	cisparse_t parse;
+	u8 buf[256];
+	cistpl_cftable_entry_t dflt;
+};
+/**
+ * pcmcia_loop_config() - loop over configuration options
+ * @p_dev:	the struct pcmcia_device which we need to loop for.
+ * @conf_check:	function to call for each configuration option.
+ *		It gets passed the struct pcmcia_device, the CIS data
+ *		describing the configuration option, and private data
+ *		being passed to pcmcia_loop_config()
+ * @priv_data:	private data to be passed to the conf_check function.
+ *
+ * pcmcia_loop_config() loops over all configuration options, and calls
+ * the driver-specific conf_check() for each one, checking whether
+ * it is a valid one. Returns 0 on success or errorcode otherwise.
+ */
+int pcmcia_loop_config(struct pcmcia_device *p_dev,
+		       int	(*conf_check)	(struct pcmcia_device *p_dev,
+						 cistpl_cftable_entry_t *cfg,
+						 cistpl_cftable_entry_t *dflt,
+						 unsigned int vcc,
+						 void *priv_data),
+		       void *priv_data)
+{
+	struct pcmcia_cfg_mem *cfg_mem;
+
+	tuple_t *tuple;
+	int ret;
+	unsigned int vcc;
+
+	cfg_mem = kzalloc(sizeof(struct pcmcia_cfg_mem), GFP_KERNEL);
+	if (cfg_mem == NULL)
+		return -ENOMEM;
+
+	/* get the current Vcc setting */
+	vcc = p_dev->socket->socket.Vcc;
+
+	tuple = &cfg_mem->tuple;
+	tuple->TupleData = cfg_mem->buf;
+	tuple->TupleDataMax = 255;
+	tuple->TupleOffset = 0;
+	tuple->DesiredTuple = CISTPL_CFTABLE_ENTRY;
+	tuple->Attributes = 0;
+
+	ret = pcmcia_get_first_tuple(p_dev, tuple);
+	while (!ret) {
+		cistpl_cftable_entry_t *cfg = &cfg_mem->parse.cftable_entry;
+
+		if (pcmcia_get_tuple_data(p_dev, tuple))
+			goto next_entry;
+
+		if (pcmcia_parse_tuple(tuple, &cfg_mem->parse))
+			goto next_entry;
+
+		/* default values */
+		p_dev->conf.ConfigIndex = cfg->index;
+		if (cfg->flags & CISTPL_CFTABLE_DEFAULT)
+			cfg_mem->dflt = *cfg;
+
+		ret = conf_check(p_dev, cfg, &cfg_mem->dflt, vcc, priv_data);
+		if (!ret)
+			break;
+
+next_entry:
+		ret = pcmcia_get_next_tuple(p_dev, tuple);
+	}
+
+	return ret;
+}
+EXPORT_SYMBOL(pcmcia_loop_config);
+
 void usb_unpoison_urb(struct urb *urb)
 {
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28))
@@ -274,5 +349,15 @@ unsigned long round_jiffies_up(unsigned long j)
 	return round_jiffies_common(j, raw_smp_processor_id(), true);
 }
 EXPORT_SYMBOL_GPL(round_jiffies_up);
+
+void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page, int off,
+		int size)
+{
+	skb_fill_page_desc(skb, i, page, off, size);
+	skb->len += size;
+	skb->data_len += size;
+	skb->truesize += size;
+}
+EXPORT_SYMBOL(skb_add_rx_frag);
 
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28) */
