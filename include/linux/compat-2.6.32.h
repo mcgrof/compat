@@ -7,6 +7,7 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,32))
 
 #include <linux/netdevice.h>
+#include <asm/compat.h>
 #include <net/iw_handler.h>
 
 #define SDIO_VENDOR_ID_INTEL			0x0089
