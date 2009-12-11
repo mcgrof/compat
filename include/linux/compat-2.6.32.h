@@ -9,6 +9,7 @@
 #include <linux/netdevice.h>
 #include <asm/compat.h>
 #include <net/iw_handler.h>
+#include <linux/workqueue.h>
 
 #define SDIO_VENDOR_ID_INTEL			0x0089
 #define SDIO_DEVICE_ID_INTEL_IWMC3200WIMAX	0x1402
@@ -16,6 +17,24 @@
 #define SDIO_DEVICE_ID_INTEL_IWMC3200TOP	0x1404
 #define SDIO_DEVICE_ID_INTEL_IWMC3200GPS	0x1405
 #define SDIO_DEVICE_ID_INTEL_IWMC3200BT		0x1406
+
+static inline void flush_delayed_work(struct delayed_work *dwork)
+{
+	if (del_timer_sync(&dwork->timer)) {
+		/*
+		 * This is what would happen on 2.6.32 but since we don't have
+		 * access to the singlethread_cpu we can't really backport this,
+		 * so avoid really *flush*ing the work... Oh well. Any better ideas?
+
+		struct cpu_workqueue_struct *cwq;
+		cwq = wq_per_cpu(keventd_wq, get_cpu());
+		__queue_work(cwq, &dwork->work);
+		put_cpu();
+
+		*/
+	}
+	flush_work(&dwork->work);
+}
 
 /*
  * struct genl_multicast_group was made netns aware through
