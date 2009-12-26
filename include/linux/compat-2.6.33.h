@@ -11,6 +11,7 @@
 #include <pcmcia/cs_types.h>
 #include <pcmcia/cistpl.h>
 #include <pcmcia/ds.h>
+#include <linux/kfifo.h>
 
 #define IFF_DONT_BRIDGE 0x800		/* disallow bridging this ether dev */
 /* source: include/linux/if.h */
@@ -48,6 +49,13 @@ int pccard_loop_tuple(struct pcmcia_socket *s, unsigned int function,
 		      int (*loop_tuple) (tuple_t *tuple,
 					 cisparse_t *parse,
 					 void *priv_data));
+
+/* Backport for kfifo
+ * kfifo_alloc and kfifo_free must be backported manually 
+ */
+#define kfifo_in(a, b, c) __kfifo_put(*a, b, c)
+#define kfifo_out(a, b, c) __kfifo_get(*a, b, c)
+#define kfifo_len(a) __kfifo_len(*a)
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)) */
 
