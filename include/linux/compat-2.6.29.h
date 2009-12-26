@@ -56,6 +56,8 @@ extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);
 }							\
 )
 
+extern int eth_mac_addr(struct net_device *dev, void *p);
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
 
 #endif /*  LINUX_26_29_COMPAT_H */
