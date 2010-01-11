@@ -13,6 +13,8 @@
 /* All things not in 2.6.22 and 2.6.23 */
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
 
+#include <net/arp.h>
+
 /* Part of net/ethernet/eth.c as of 2.6.24 */
 char *print_mac(char *buf, const u8 *addr)
 {
