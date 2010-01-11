@@ -6,6 +6,9 @@ MODULE_LICENSE("GPL");
 
 static int __init compat_init(void)
 {
+	/* pm-qos for kernels <= 2.6.24, this is a no-op on newer kernels */
+	compat_pm_qos_power_init();
+
         return 0;
 }
 module_init(compat_init);

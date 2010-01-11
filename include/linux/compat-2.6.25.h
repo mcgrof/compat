@@ -15,6 +15,9 @@
 #include <linux/netdevice.h>
 #include <linux/pm.h>
 #include <asm-generic/bug.h>
+#include <linux/pm_qos_params.h>
+
+int compat_pm_qos_power_init(void);
 
 /*
  * 2.6.25 adds PM_EVENT_HIBERNATE as well here but
@@ -120,6 +123,15 @@ static inline void led_classdev_unregister_suspended(struct led_classdev *lcd)
 extern int strict_strtoul(const char *, unsigned int, unsigned long *);
 extern int strict_strtol(const char *, unsigned int, long *);
 
+#else
+/*
+ * Kernels >= 2.6.25 have pm-qos and its initialized as part of
+ * the bootup process
+ */
+static inline int compat_pm_qos_power_init(void)
+{
+	return;
+}
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25)) */
 
 #endif /* LINUX_26_25_COMPAT_H */
