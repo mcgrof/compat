@@ -130,7 +130,7 @@ extern int strict_strtol(const char *, unsigned int, long *);
  */
 static inline int compat_pm_qos_power_init(void)
 {
-	return;
+	return 0;
 }
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25)) */
 
