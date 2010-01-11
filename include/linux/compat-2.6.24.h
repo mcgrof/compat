@@ -18,6 +18,8 @@
 #define KEY_WLAN	238
 #define KEY_UWB		239
 
+#define DMA_BIT_MASK(n) (((n) == 64) ? ~0ULL : ((1ULL<<(n))-1))
+
 /* Added on 2.6.24 in include/linux/types.h by Al viro on commit 142956af */
 typedef unsigned long               uintptr_t;
 
