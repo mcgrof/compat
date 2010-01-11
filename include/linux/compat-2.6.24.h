@@ -14,6 +14,10 @@
 #include <linux/types.h>
 #include <linux/list.h>
 
+#define KEY_BLUETOOTH	237
+#define KEY_WLAN	238
+#define KEY_UWB		239
+
 /* Added on 2.6.24 in include/linux/types.h by Al viro on commit 142956af */
 typedef unsigned long               uintptr_t;
 
