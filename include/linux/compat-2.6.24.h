@@ -181,6 +181,7 @@ static inline void sg_mark_end(struct scatterlist *sg)
  *   used only on the last table part.
  *
  **/
+static inline void sg_init_table(struct scatterlist *sgl, unsigned int nents)
 {
 	memset(sgl, 0, sizeof(*sgl) * nents);
 }
