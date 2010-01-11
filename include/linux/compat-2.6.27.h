@@ -17,6 +17,7 @@
 #include <linux/workqueue.h>
 #include <net/iw_handler.h>
 #include <asm-generic/bug.h>
+#include <linux/wireless.h>
 
 #define PCI_PM_CAP_PME_SHIFT	11
 
