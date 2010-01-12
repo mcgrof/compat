@@ -1,12 +1,53 @@
 #include <net/compat.h>
 
-/* All things not in 2.6.22, 2.6.23 and 2.6.24 */
+/* This is the backport of pm-qos params for kernels <= 2.6.25 */
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25))
 
+/*
+ * This module exposes the interface to kernel space for specifying
+ * QoS dependencies.  It provides infrastructure for registration of:
+ *
+ * Dependents on a QoS value : register requirements
+ * Watchers of QoS value : get notified when target QoS value changes
+ *
+ * This QoS design is best effort based.  Dependents register their QoS needs.
+ * Watchers register to keep track of the current QoS needs of the system.
+ *
+ * There are 3 basic classes of QoS parameter: latency, timeout, throughput
+ * each have defined units:
+ * latency: usec
+ * timeout: usec <-- currently not used.
+ * throughput: kbs (kilo byte / sec)
+ *
+ * There are lists of pm_qos_objects each one wrapping requirements, notifiers
+ *
+ * User mode requirements on a QOS parameter register themselves to the
+ * subsystem by opening the device node /dev/... and writing there request to
+ * the node.  As long as the process holds a file handle open to the node the
+ * client continues to be accounted for.  Upon file release the usermode
+ * requirement is removed and a new qos target is computed.  This way when the
+ * requirement that the application has is cleaned up when closes the file
+ * pointer or exits the pm_qos_object will get an opportunity to clean up.
+ *
+ * Mark Gross <mgross@linux.intel.com>
+ */
+
+#include <linux/pm_qos_params.h>
+#include <linux/sched.h>
+#include <linux/spinlock.h>
+#include <linux/slab.h>
+#include <linux/time.h>
+#include <linux/fs.h>
+#include <linux/device.h>
 #include <linux/miscdevice.h>
+#include <linux/string.h>
+#include <linux/platform_device.h>
+#include <linux/init.h>
+
+#include <linux/uaccess.h>
 
 /*
- * locking rule: all changes to target_value or requirements or notifiers lists
+ * locking rule: all changes to requirements or notifiers lists
  * or pm_qos_object list and pm_qos_objects need to happen with pm_qos_lock
  * held, taken with _irqsave.  One lock to rule them all
  */
@@ -29,7 +70,7 @@ struct pm_qos_object {
 	struct miscdevice pm_qos_power_miscdev;
 	char *name;
 	s32 default_value;
-	s32 target_value;
+	atomic_t target_value;
 	s32 (*comparitor)(s32, s32);
 };
 
@@ -40,7 +81,7 @@ static struct pm_qos_object cpu_dma_pm_qos = {
 	.notifiers = &cpu_dma_lat_notifier,
 	.name = "cpu_dma_latency",
 	.default_value = 2000 * USEC_PER_SEC,
-	.target_value = 2000 * USEC_PER_SEC,
+	.target_value = ATOMIC_INIT(2000 * USEC_PER_SEC),
 	.comparitor = min_compare
 };
 
@@ -50,7 +91,7 @@ static struct pm_qos_object network_lat_pm_qos = {
 	.notifiers = &network_lat_notifier,
 	.name = "network_latency",
 	.default_value = 2000 * USEC_PER_SEC,
-	.target_value = 2000 * USEC_PER_SEC,
+	.target_value = ATOMIC_INIT(2000 * USEC_PER_SEC),
 	.comparitor = min_compare
 };
 
@@ -62,7 +103,7 @@ static struct pm_qos_object network_throughput_pm_qos = {
 	.notifiers = &network_throughput_notifier,
 	.name = "network_throughput",
 	.default_value = 0,
-	.target_value = 0,
+	.target_value = ATOMIC_INIT(0),
 	.comparitor = max_compare
 };
 
@@ -73,12 +114,12 @@ static struct pm_qos_object system_bus_freq_pm_qos = {
 	.notifiers = &system_bus_freq_notifier,
 	.name = "system_bus_freq",
 	.default_value = 0,
-	.target_value = 0,
+	.target_value = ATOMIC_INIT(0),
 	.comparitor = max_compare
 };
 
 
-static struct pm_qos_object *pm_qos_array[] = {
+static struct pm_qos_object *pm_qos_array[PM_QOS_NUM_CLASSES] = {
 	[PM_QOS_RESERVED] = &null_pm_qos,
 	[PM_QOS_CPU_DMA_LATENCY] = &cpu_dma_pm_qos,
 	[PM_QOS_NETWORK_LATENCY] = &network_lat_pm_qos,
@@ -94,9 +135,9 @@ static int pm_qos_power_open(struct inode *inode, struct file *filp);
 static int pm_qos_power_release(struct inode *inode, struct file *filp);
 
 static const struct file_operations pm_qos_power_fops = {
-        .write = pm_qos_power_write,
-        .open = pm_qos_power_open,
-        .release = pm_qos_power_release,
+	.write = pm_qos_power_write,
+	.open = pm_qos_power_open,
+	.release = pm_qos_power_release,
 };
 
 /* static helper functions */
@@ -109,6 +150,7 @@ static s32 min_compare(s32 v1, s32 v2)
 {
 	return min(v1, v2);
 }
+
 
 static void update_target(int target)
 {
@@ -124,11 +166,11 @@ static void update_target(int target)
 		extreme_value = pm_qos_array[target]->comparitor(
 				extreme_value, node->value);
 	}
-	if (pm_qos_array[target]->target_value != extreme_value) {
+	if (atomic_read(&pm_qos_array[target]->target_value) != extreme_value) {
 		call_notifier = 1;
-		pm_qos_array[target]->target_value = extreme_value;
+		atomic_set(&pm_qos_array[target]->target_value, extreme_value);
 		pr_debug(KERN_ERR "new target for qos %d is %d\n", target,
-			pm_qos_array[target]->target_value);
+			atomic_read(&pm_qos_array[target]->target_value));
 	}
 	spin_unlock_irqrestore(&pm_qos_lock, flags);
 
@@ -167,14 +209,7 @@ static int find_pm_qos_object_by_minor(int minor)
  */
 int pm_qos_requirement(int pm_qos_class)
 {
-	int ret_val;
-	unsigned long flags;
-
-	spin_lock_irqsave(&pm_qos_lock, flags);
-	ret_val = pm_qos_array[pm_qos_class]->target_value;
-	spin_unlock_irqrestore(&pm_qos_lock, flags);
-
-	return ret_val;
+	return atomic_read(&pm_qos_array[pm_qos_class]->target_value);
 }
 EXPORT_SYMBOL_GPL(pm_qos_requirement);
 
@@ -185,8 +220,8 @@ EXPORT_SYMBOL_GPL(pm_qos_requirement);
  * @value: defines the qos request
  *
  * This function inserts a new entry in the pm_qos_class list of requested qos
- * performance charactoistics.  It recomputes the agregate QoS expectations for
- * the pm_qos_class of parrameters.
+ * performance characteristics.  It recomputes the aggregate QoS expectations
+ * for the pm_qos_class of parameters.
  */
 int pm_qos_add_requirement(int pm_qos_class, char *name, s32 value)
 {
@@ -224,10 +259,10 @@ EXPORT_SYMBOL_GPL(pm_qos_add_requirement);
  * @name: identifies the request
  * @value: defines the qos request
  *
- * Updates an existing qos requierement for the pm_qos_class of parameters along
+ * Updates an existing qos requirement for the pm_qos_class of parameters along
  * with updating the target pm_qos_class value.
  *
- * If the named request isn't in the lest then no change is made.
+ * If the named request isn't in the list then no change is made.
  */
 int pm_qos_update_requirement(int pm_qos_class, char *name, s32 new_value)
 {
@@ -261,7 +296,7 @@ EXPORT_SYMBOL_GPL(pm_qos_update_requirement);
  * @pm_qos_class: identifies which list of qos request to us
  * @name: identifies the request
  *
- * Will remove named qos request from pm_qos_class list of parrameters and
+ * Will remove named qos request from pm_qos_class list of parameters and
  * recompute the current target value for the pm_qos_class.
  */
 void pm_qos_remove_requirement(int pm_qos_class, char *name)
@@ -293,9 +328,9 @@ EXPORT_SYMBOL_GPL(pm_qos_remove_requirement);
  * @notifier: notifier block managed by caller.
  *
  * will register the notifier into a notification chain that gets called
- * uppon changes to the pm_qos_class target value.
+ * upon changes to the pm_qos_class target value.
  */
- int pm_qos_add_notifier(int pm_qos_class, struct notifier_block *notifier)
+int pm_qos_add_notifier(int pm_qos_class, struct notifier_block *notifier)
 {
 	int retval;
 
@@ -312,7 +347,7 @@ EXPORT_SYMBOL_GPL(pm_qos_add_notifier);
  * @notifier: notifier block to be removed.
  *
  * will remove the notifier from the notification chain that gets called
- * uppon changes to the pm_qos_class target value.
+ * upon changes to the pm_qos_class target value.
  */
 int pm_qos_remove_notifier(int pm_qos_class, struct notifier_block *notifier)
 {
@@ -325,33 +360,33 @@ int pm_qos_remove_notifier(int pm_qos_class, struct notifier_block *notifier)
 }
 EXPORT_SYMBOL_GPL(pm_qos_remove_notifier);
 
-#define PID_NAME_LEN sizeof("process_1234567890")
-static char name[PID_NAME_LEN];
+#define PID_NAME_LEN 32
 
 static int pm_qos_power_open(struct inode *inode, struct file *filp)
 {
 	int ret;
 	long pm_qos_class;
+	char name[PID_NAME_LEN];
 
 	pm_qos_class = find_pm_qos_object_by_minor(iminor(inode));
 	if (pm_qos_class >= 0) {
 		filp->private_data = (void *)pm_qos_class;
-		sprintf(name, "process_%d", current->pid);
+		snprintf(name, PID_NAME_LEN, "process_%d", current->pid);
 		ret = pm_qos_add_requirement(pm_qos_class, name,
 					PM_QOS_DEFAULT_VALUE);
 		if (ret >= 0)
 			return 0;
 	}
-
 	return -EPERM;
 }
 
 static int pm_qos_power_release(struct inode *inode, struct file *filp)
 {
 	int pm_qos_class;
+	char name[PID_NAME_LEN];
 
 	pm_qos_class = (long)filp->private_data;
-	sprintf(name, "process_%d", current->pid);
+	snprintf(name, PID_NAME_LEN, "process_%d", current->pid);
 	pm_qos_remove_requirement(pm_qos_class, name);
 
 	return 0;
@@ -362,17 +397,19 @@ static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
 {
 	s32 value;
 	int pm_qos_class;
+	char name[PID_NAME_LEN];
 
 	pm_qos_class = (long)filp->private_data;
 	if (count != sizeof(s32))
 		return -EINVAL;
 	if (copy_from_user(&value, buf, sizeof(s32)))
 		return -EFAULT;
-	sprintf(name, "process_%d", current->pid);
+	snprintf(name, PID_NAME_LEN, "process_%d", current->pid);
 	pm_qos_update_requirement(pm_qos_class, name, value);
 
 	return  sizeof(s32);
 }
+
 
 /*
  * This initializes pm-qos for older kernels.
@@ -398,13 +435,10 @@ int compat_pm_qos_power_init(void)
 		return ret;
 	}
 	ret = register_pm_qos_misc(&system_bus_freq_pm_qos);
-	if (ret < 0) {
+	if (ret < 0)
 		printk(KERN_ERR
-			"pm_qos_param: network_throughput setup failed\n");
-		return ret;
-	}
+			"pm_qos_param: system_bus_freq setup failed\n");
 
 	return ret;
 }
-
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25) */
