@@ -6,24 +6,6 @@
 #include <linux/miscdevice.h>
 
 /*
- * Backport work for QoS dependencies (kernel/pm_qos_params.c)
- * pm-qos stuff written by mark gross mgross@linux.intel.com.
- *
- * ipw2100 now makes use of
- * pm_qos_add_requirement(),
- * pm_qos_update_requirement() and
- * pm_qos_remove_requirement() from it
- *
- * mac80211 uses the network latency to determine if to enable or not
- * dynamic PS. mac80211 also and registers a notifier for when
- * the latency changes. Since older kernels do no thave pm-qos stuff
- * we just implement it completley here and register it upon cfg80211
- * init. I haven't tested ipw2100 on 2.6.24 though.
- *
- * This is copied from the kernel written by mark gross mgross@linux.intel.com
- */
-
-/*
  * locking rule: all changes to target_value or requirements or notifiers lists
  * or pm_qos_object list and pm_qos_objects need to happen with pm_qos_lock
  * held, taken with _irqsave.  One lock to rule them all
