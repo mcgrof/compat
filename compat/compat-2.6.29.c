@@ -15,6 +15,7 @@
 #include <linux/usb.h>
 #include <linux/etherdevice.h>
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
 /**
  * usb_unpoison_anchored_urbs - let an anchor be used successfully again
  * @anchor: anchor the requests are bound to
@@ -35,6 +36,7 @@ void usb_unpoison_anchored_urbs(struct usb_anchor *anchor)
 	spin_unlock_irqrestore(&anchor->lock, flags);
 }
 EXPORT_SYMBOL_GPL(usb_unpoison_anchored_urbs);
+#endif
 
 /**
  * eth_mac_addr - set new Ethernet hardware address
