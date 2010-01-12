@@ -107,11 +107,11 @@ static struct pm_qos_object system_bus_freq_pm_qos = {
 
 
 static struct pm_qos_object *pm_qos_array[] = {
-	&null_pm_qos,
-	&cpu_dma_pm_qos,
-	&network_lat_pm_qos,
-	&network_throughput_pm_qos,
-	&system_bus_freq_pm_qos,
+	[PM_QOS_RESERVED] = &null_pm_qos,
+	[PM_QOS_CPU_DMA_LATENCY] = &cpu_dma_pm_qos,
+	[PM_QOS_NETWORK_LATENCY] = &network_lat_pm_qos,
+	[PM_QOS_NETWORK_THROUGHPUT] = &network_throughput_pm_qos,
+	[PM_QOS_SYSTEM_BUS_FREQ] = &system_bus_freq_pm_qos,
 };
 
 static DEFINE_SPINLOCK(pm_qos_lock);
