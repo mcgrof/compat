@@ -15,6 +15,13 @@
 
 #include <net/arp.h>
 
+/*
+ * We simply won't use it though, just declare it for our wrappers and
+ * for usage with tons of code that makes mention to it.
+ */
+struct net init_net;
+EXPORT_SYMBOL(init_net);
+
 /* Part of net/ethernet/eth.c as of 2.6.24 */
 char *print_mac(char *buf, const u8 *addr)
 {
