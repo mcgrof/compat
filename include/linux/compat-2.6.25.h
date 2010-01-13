@@ -16,6 +16,19 @@
 #include <linux/pm.h>
 #include <asm-generic/bug.h>
 #include <linux/pm_qos_params.h>
+#include <linux/pci.h>
+
+/* The macro below uses a const upstream, this differs */
+
+/**
+ * DEFINE_PCI_DEVICE_TABLE - macro used to describe a pci device table
+ * @_table: device table name
+ *
+ * This macro is used to create a struct pci_device_id array (a device table)
+ * in a generic manner.
+ */
+#define DEFINE_PCI_DEVICE_TABLE(_table) \
+	struct pci_device_id _table[] __devinitdata
 
 /*
  * Backport work for QoS dependencies (kernel/pm_qos_params.c)
