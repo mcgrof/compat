@@ -12,6 +12,9 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33))
 
+#include <linux/autoconf.h>
+
+#if defined(CONFIG_PCCARD) || defined(CONFIG_PCCARD_MODULE)
 
 /**
  * pccard_loop_tuple() - loop over tuples in the CIS
@@ -73,6 +76,7 @@ next_entry:
 EXPORT_SYMBOL(pccard_loop_tuple);
 /* Source: drivers/pcmcia/cistpl.c */
 
+#if defined(CONFIG_PCMCIA) || defined(CONFIG_PCMCIA_MODULE)
 
 struct pcmcia_loop_mem {
 	struct pcmcia_device *p_dev;
@@ -125,6 +129,9 @@ int pcmcia_loop_tuple(struct pcmcia_device *p_dev, cisdata_t code,
 EXPORT_SYMBOL(pcmcia_loop_tuple);
 /* Source: drivers/pcmcia/pcmcia_resource.c */
 
+#endif /* CONFIG_PCMCIA */
+
+#endif /* CONFIG_PCCARD */
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)) */
 

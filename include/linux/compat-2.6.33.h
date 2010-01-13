@@ -30,6 +30,10 @@ static inline struct sk_buff *netdev_alloc_skb_ip_align(struct net_device *dev,
 	return skb;
 }
 
+#if defined(CONFIG_PCCARD) || defined(CONFIG_PCCARD_MODULE)
+
+#if defined(CONFIG_PCMCIA) || defined(CONFIG_PCMCIA_MODULE)
+
 #define pcmcia_request_window(a, b, c) pcmcia_request_window(&a, b, c)
 
 #define pcmcia_map_mem_page(a, b, c) pcmcia_map_mem_page(b, c)
@@ -41,12 +45,16 @@ int pcmcia_loop_tuple(struct pcmcia_device *p_dev, cisdata_t code,
 					 void *priv_data),
 		      void *priv_data);
 
+#endif /* CONFIG_PCMCIA */
+
 /* loop over CIS entries */
 int pccard_loop_tuple(struct pcmcia_socket *s, unsigned int function,
 		      cisdata_t code, cisparse_t *parse, void *priv_data,
 		      int (*loop_tuple) (tuple_t *tuple,
 					 cisparse_t *parse,
 					 void *priv_data));
+
+#endif /* CONFIG_PCCARD */
 
 /* Backport for kfifo
  * kfifo_alloc and kfifo_free must be backported manually 

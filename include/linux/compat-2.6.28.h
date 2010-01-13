@@ -27,6 +27,8 @@
 })
 #endif /* From include/asm-generic/bug.h */
 
+#if defined(CONFIG_PCMCIA) || defined(CONFIG_PCMCIA_MODULE)
+
 #include <pcmcia/cs_types.h>
 #include <pcmcia/cs.h>
 #include <pcmcia/cistpl.h>
@@ -44,6 +46,8 @@ int pcmcia_loop_config(struct pcmcia_device *p_dev,
 						 unsigned int vcc,
 						 void *priv_data),
 		       void *priv_data);
+
+#endif /* CONFIG_PCMCIA */
 
 /* USB anchors were added as of 2.6.23 */
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))

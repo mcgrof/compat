@@ -85,6 +85,8 @@ void usb_poison_urb(struct urb *urb)
 EXPORT_SYMBOL_GPL(usb_poison_urb);
 #endif
 
+#if defined(CONFIG_PCMCIA) || defined(CONFIG_PCMCIA_MODULE)
+
 #include <pcmcia/ds.h>
 struct pcmcia_cfg_mem {
 	tuple_t tuple;
@@ -159,6 +161,8 @@ next_entry:
 	return ret;
 }
 EXPORT_SYMBOL(pcmcia_loop_config);
+
+#endif /* CONFIG_PCMCIA */
 
 void usb_unpoison_urb(struct urb *urb)
 {
