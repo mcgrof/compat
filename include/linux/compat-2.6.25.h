@@ -53,6 +53,7 @@
  * defned below is used by the compat module to initialize pm-qos.
  */
 int compat_pm_qos_power_init(void);
+int compat_pm_qos_power_deinit(void);
 
 /*
  * 2.6.25 adds PM_EVENT_HIBERNATE as well here but
@@ -164,6 +165,11 @@ extern int strict_strtol(const char *, unsigned int, long *);
  * the bootup process
  */
 static inline int compat_pm_qos_power_init(void)
+{
+	return 0;
+}
+
+static inline int int compat_pm_qos_power_deinit(void)
 {
 	return 0;
 }

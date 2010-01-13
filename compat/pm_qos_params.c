@@ -441,4 +441,37 @@ int compat_pm_qos_power_init(void)
 
 	return ret;
 }
+
+int compat_pm_qos_power_deinit(void)
+{
+	int ret = 0;
+
+	ret = misc_deregister(&cpu_dma_pm_qos.pm_qos_power_miscdev);
+	if (ret < 0) {
+		printk(KERN_ERR "pm_qos_param: cpu_dma_latency deinit failed\n");
+		return ret;
+	}
+
+	ret = misc_deregister(&network_lat_pm_qos.pm_qos_power_miscdev);
+	if (ret < 0) {
+		printk(KERN_ERR "pm_qos_param: network_latency deinit failed\n");
+		return ret;
+	}
+
+	ret = misc_deregister(&network_throughput_pm_qos.pm_qos_power_miscdev);
+	if (ret < 0) {
+		printk(KERN_ERR
+			"pm_qos_param: network_throughput deinit failed\n");
+		return ret;
+	}
+
+	ret = misc_deregister(&system_bus_freq_pm_qos.pm_qos_power_miscdev);
+	if (ret < 0) {
+		printk(KERN_ERR
+			"pm_qos_param: system_bus_freq deinit failed\n");
+		return ret;
+	}
+
+	return ret;
+}
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25) */

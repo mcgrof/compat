@@ -15,6 +15,8 @@ module_init(compat_init);
 
 static void __exit compat_exit(void)
 {
+	compat_pm_qos_power_deinit();
+
         return;
 }
 module_exit(compat_exit);
