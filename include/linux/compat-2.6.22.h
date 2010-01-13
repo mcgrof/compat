@@ -1,7 +1,6 @@
 #ifndef LINUX_26_22_COMPAT_H
 #define LINUX_26_22_COMPAT_H
 
-#include <linux/autoconf.h>
 #include <linux/version.h>
 
 /* Compat work for 2.6.21 */
