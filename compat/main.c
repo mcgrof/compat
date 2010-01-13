@@ -8,6 +8,8 @@ static int __init compat_init(void)
 {
 	/* pm-qos for kernels <= 2.6.24, this is a no-op on newer kernels */
 	compat_pm_qos_power_init();
+	printk(KERN_INFO "Generic kernel compatibility enabled based on "
+	       "linux-next next-20100112\n");
 
         return 0;
 }
