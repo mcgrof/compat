@@ -169,7 +169,7 @@ static inline int compat_pm_qos_power_init(void)
 	return 0;
 }
 
-static inline int int compat_pm_qos_power_deinit(void)
+static inline int compat_pm_qos_power_deinit(void)
 {
 	return 0;
 }
