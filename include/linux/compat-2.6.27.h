@@ -23,6 +23,12 @@
 /* I can't find a more suitable replacement... */
 #define flush_work(work) cancel_work_sync(work)
 
+struct builtin_fw {
+	char *name;
+	void *data;
+	unsigned long size;
+};
+
 /*
  * On older kernels we do not have net_device Multi Queue support, but
  * since we no longer use MQ on mac80211 we can simply use the 0 queue.

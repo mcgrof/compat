@@ -1,6 +1,8 @@
 obj-m += compat.o
 #compat-objs :=
 
+obj-m += compat_firmware_class.o
+
 compat-y += main.o
 
 # Compat kernel compatibility code
