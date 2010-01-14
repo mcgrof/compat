@@ -19,7 +19,7 @@ $(foreach ver,$(COMPAT_VERSIONS),$(eval export CONFIG_COMPAT_KERNEL_$(ver)=y))
 endif
 
 ifeq ($(CONFIG_COMPAT_KERNEL_33),y)
- CONFIG_COMPAT_FIRMWARE_CLASS=m
+ export CONFIG_COMPAT_FIRMWARE_CLASS=m
 endif
 
 obj-y += compat/
