@@ -12,7 +12,7 @@ export PWD := $(shell pwd)
 # This generates a bunch of CONFIG_COMPAT_KERNEL_22 CONFIG_COMPAT_KERNEL_23 .. etc for
 # each kernel release you need an object for.
 ifneq ($(wildcard $(KLIB_BUILD)/Makefile),)
-COMPAT_LATEST_VERSION = 32
+COMPAT_LATEST_VERSION = 33
 KERNEL_SUBLEVEL := $(shell $(MAKE) -C $(KLIB_BUILD) kernelversion | sed -n 's/^2\.6\.\([0-9]\+\).*/\1/p')
 COMPAT_VERSIONS := $(shell I=$(COMPAT_LATEST_VERSION); while [ "$$I" -gt $(KERNEL_SUBLEVEL) ]; do echo $$I; I=$$(($$I - 1)); done)
 $(foreach ver,$(COMPAT_VERSIONS),$(eval export CONFIG_COMPAT_KERNEL_$(ver)=y))
@@ -20,7 +20,6 @@ endif
 
 ifeq ($(CONFIG_COMPAT_KERNEL_33),y)
  CONFIG_COMPAT_FIRMWARE_CLASS=m
- $(error "poo")
 endif
 
 obj-y += compat/
