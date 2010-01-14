@@ -18,6 +18,11 @@ COMPAT_VERSIONS := $(shell I=$(COMPAT_LATEST_VERSION); while [ "$$I" -gt $(KERNE
 $(foreach ver,$(COMPAT_VERSIONS),$(eval export CONFIG_COMPAT_KERNEL_$(ver)=y))
 endif
 
+ifeq ($(CONFIG_COMPAT_KERNEL_33),y)
+ CONFIG_COMPAT_FIRMWARE_CLASS=m
+ $(error "poo")
+endif
+
 obj-y += compat/
 
 # This hack lets us put our include path first than the kernel's
