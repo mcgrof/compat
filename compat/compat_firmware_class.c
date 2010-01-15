@@ -138,7 +138,7 @@ exit:
 #endif
 
 static struct class firmware_class = {
-	.name		= "firmware",
+	.name		= "compat_firmware",
 	.dev_uevent	= firmware_uevent,
 	.dev_release	= fw_dev_release,
 };
