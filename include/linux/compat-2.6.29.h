@@ -47,7 +47,9 @@ static inline struct net_device_stats *dev_get_stats(struct net_device *dev)
 }
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
+#if defined(CONFIG_USB)
 extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);
+#endif /* CONFIG_USB */
 #endif
 
 #define DIV_ROUND_CLOSEST(x, divisor)(			\

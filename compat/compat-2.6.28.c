@@ -17,6 +17,7 @@
 /* 2.6.28 compat code goes here */
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
+#if defined(CONFIG_USB)
 /*
  * Compat-wireless notes for USB backport stuff:
  *
@@ -84,6 +85,7 @@ void usb_poison_urb(struct urb *urb)
 }
 EXPORT_SYMBOL_GPL(usb_poison_urb);
 #endif
+#endif /* CONFIG_USB */
 
 #if defined(CONFIG_PCMCIA) || defined(CONFIG_PCMCIA_MODULE)
 
@@ -163,6 +165,8 @@ next_entry:
 EXPORT_SYMBOL(pcmcia_loop_config);
 
 #endif /* CONFIG_PCMCIA */
+
+#if defined(CONFIG_USB)
 
 void usb_unpoison_urb(struct urb *urb)
 {
@@ -286,8 +290,8 @@ int usb_anchor_empty(struct usb_anchor *anchor)
 }
 
 EXPORT_SYMBOL_GPL(usb_anchor_empty);
+#endif /* CONFIG_USB */
 #endif
-
 
 void __iomem *pci_ioremap_bar(struct pci_dev *pdev, int bar)
 {
