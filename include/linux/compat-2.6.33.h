@@ -10,6 +10,40 @@
 #include <pcmcia/cistpl.h>
 #include <pcmcia/ds.h>
 #include <linux/kfifo.h>
+#include <linux/firmware.h>
+
+#define release_firmware compat_release_firmware
+#define request_firmware compat_request_firmware
+#define request_firmware_nowait compat_request_firmware_nowait
+
+#if defined(CONFIG_FW_LOADER) || defined(CONFIG_FW_LOADER_MODULE)
+int compat_request_firmware(const struct firmware **fw, const char *name,
+		     struct device *device);
+int compat_request_firmware_nowait(
+	struct module *module, int uevent,
+	const char *name, struct device *device, gfp_t gfp, void *context,
+	void (*cont)(const struct firmware *fw, void *context));
+
+void compat_release_firmware(const struct firmware *fw);
+#else
+static inline int compat_request_firmware(const struct firmware **fw,
+				   const char *name,
+				   struct device *device)
+{
+	return -EINVAL;
+}
+static inline int request_firmware_nowait(
+	struct module *module, int uevent,
+	const char *name, struct device *device, gfp_t gfp, void *context,
+	void (*cont)(const struct firmware *fw, void *context))
+{
+	return -EINVAL;
+}
+
+static inline void compat_release_firmware(const struct firmware *fw)
+{
+}
+#endif
 
 #define IFF_DONT_BRIDGE 0x800		/* disallow bridging this ether dev */
 /* source: include/linux/if.h */

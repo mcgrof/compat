@@ -9,40 +9,6 @@
 #include <asm/compat.h>
 #include <net/iw_handler.h>
 #include <linux/workqueue.h>
-#include <linux/firmware.h>
-
-#define release_firmware compat_release_firmware
-#define request_firmware compat_request_firmware
-#define request_firmware_nowait compat_request_firmware_nowait
-
-#if defined(CONFIG_FW_LOADER) || (defined(CONFIG_FW_LOADER_MODULE) && defined(MODULE))
-int compat_request_firmware(const struct firmware **fw, const char *name,
-		     struct device *device);
-int compat_request_firmware_nowait(
-	struct module *module, int uevent,
-	const char *name, struct device *device, gfp_t gfp, void *context,
-	void (*cont)(const struct firmware *fw, void *context));
-
-void compat_release_firmware(const struct firmware *fw);
-#else
-static inline int compat_request_firmware(const struct firmware **fw,
-				   const char *name,
-				   struct device *device)
-{
-	return -EINVAL;
-}
-static inline int request_firmware_nowait(
-	struct module *module, int uevent,
-	const char *name, struct device *device, gfp_t gfp, void *context,
-	void (*cont)(const struct firmware *fw, void *context))
-{
-	return -EINVAL;
-}
-
-static inline void compat_release_firmware(const struct firmware *fw)
-{
-}
-#endif
 
 #define SDIO_VENDOR_ID_INTEL			0x0089
 #define SDIO_DEVICE_ID_INTEL_IWMC3200WIMAX	0x1402
