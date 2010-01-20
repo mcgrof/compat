@@ -17,7 +17,7 @@
 /* 2.6.28 compat code goes here */
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
-#if defined(CONFIG_USB)
+#if defined(CONFIG_USB) || defined(CONFIG_USB_MODULE)
 /*
  * Compat-wireless notes for USB backport stuff:
  *
@@ -166,7 +166,7 @@ EXPORT_SYMBOL(pcmcia_loop_config);
 
 #endif /* CONFIG_PCMCIA */
 
-#if defined(CONFIG_USB)
+#if defined(CONFIG_USB) || defined(CONFIG_USB_MODULE)
 
 void usb_unpoison_urb(struct urb *urb)
 {

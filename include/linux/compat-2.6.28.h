@@ -52,7 +52,7 @@ int pcmcia_loop_config(struct pcmcia_device *p_dev,
 /* USB anchors were added as of 2.6.23 */
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
 
-#if defined(CONFIG_USB)
+#if defined(CONFIG_USB) || defined(CONFIG_USB_MODULE)
 #if 0
 extern void usb_poison_urb(struct urb *urb);
 #endif

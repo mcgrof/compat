@@ -16,7 +16,7 @@
 #include <linux/etherdevice.h>
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
-#if defined(CONFIG_USB)
+#if defined(CONFIG_USB) || defined(CONFIG_USB_MODULE)
 /**
  * usb_unpoison_anchored_urbs - let an anchor be used successfully again
  * @anchor: anchor the requests are bound to
