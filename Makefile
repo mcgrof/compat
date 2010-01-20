@@ -37,6 +37,7 @@ install: modules
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) $(KMODDIR_ARG) $(KMODPATH_ARG) \
 		modules_install
 	depmod -a
+	@./scripts/compat_firmware_install
 clean:
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) clean
 all: modules
