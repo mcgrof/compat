@@ -9,6 +9,7 @@
 #include <linux/compat.h>
 #include <net/iw_handler.h>
 #include <linux/workqueue.h>
+#include <net/genetlink.h>
 
 #define SDIO_VENDOR_ID_INTEL			0x0089
 #define SDIO_DEVICE_ID_INTEL_IWMC3200WIMAX	0x1402
@@ -47,6 +48,7 @@ static inline void flush_delayed_work(struct delayed_work *dwork)
 /* net namespace is lost */
 #define genlmsg_multicast_netns(a, b, c, d, e)	genlmsg_multicast(b, c, d, e)
 #define genlmsg_multicast_allns(a, b, c, d)	genlmsg_multicast(a, b, c, d)
+#define genlmsg_unicast(net, skb, pid)	genlmsg_unicast(skb, pid)
 
 #define dev_change_net_namespace(a, b, c) (-EOPNOTSUPP)
 
