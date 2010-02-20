@@ -11,19 +11,11 @@
 #include <linux/jiffies.h>
 #include <net/sock.h>
 #include <linux/fs.h>
-#include <linux/debugfs.h>
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
 #include <net/net_namespace.h>
 #endif
 #include <linux/fs.h>
 #include <linux/types.h>
-
-#if defined(CONFIG_DEBUG_FS)
-void debugfs_remove_recursive(struct dentry *dentry);
-#else
-static inline void debugfs_remove_recursive(struct dentry *dentry)
-{ }
-#endif
 
 /* These jiffie helpers added as of 2.6.26 */
 

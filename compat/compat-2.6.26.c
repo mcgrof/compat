@@ -89,37 +89,5 @@ int dev_set_name(struct device *dev, const char *fmt, ...)
 }
 EXPORT_SYMBOL_GPL(dev_set_name);
 
-/*
- * Backport of debugfs_remove_recursive() without using the internals globals
- * which are used by the kernel's version with:
- * simple_release_fs(&debugfs_mount, &debugfs_mount_count);
- */
-void debugfs_remove_recursive(struct dentry *dentry)
-{
-	struct dentry *last = NULL;
-
-	/* Sanity checks */
-	if (!dentry || !dentry->d_parent || !dentry->d_parent->d_inode)
-		return;
-
-	while (dentry != last) {
-		struct dentry *child = dentry;
-
-		/* Find a child without children */
-		while (!list_empty(&child->d_subdirs))
-			child = list_entry(child->d_subdirs.next,
-					   struct dentry,
-					   d_u.d_child);
-
-		/* Bail out if we already tried to remove that entry */
-		if (child == last)
-			return;
-
-		last = child;
-		debugfs_remove(child);
-	}
-}
-EXPORT_SYMBOL_GPL(debugfs_remove_recursive);
-
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26) */
 

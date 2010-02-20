@@ -5,6 +5,7 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27))
 
+#include <linux/debugfs.h>
 #include <linux/list.h>
 #include <linux/pci.h>
 #include <linux/dma-mapping.h>
@@ -211,6 +212,13 @@ static inline void dma_sync_single_range_for_device(struct device *dev,
 }
 
 #endif /* arm */
+
+#if defined(CONFIG_DEBUG_FS)
+void debugfs_remove_recursive(struct dentry *dentry);
+#else
+static inline void debugfs_remove_recursive(struct dentry *dentry)
+{ }
+#endif
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)) */
 
