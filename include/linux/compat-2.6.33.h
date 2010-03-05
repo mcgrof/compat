@@ -49,6 +49,8 @@ static inline void compat_release_firmware(const struct firmware *fw)
 }
 #endif
 
+#define KEY_RFKILL		247	/* Key that controls all radios */
+
 #define IFF_DONT_BRIDGE 0x800		/* disallow bridging this ether dev */
 /* source: include/linux/if.h */
 
