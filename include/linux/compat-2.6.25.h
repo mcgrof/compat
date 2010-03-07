@@ -27,7 +27,7 @@
  * in a generic manner.
  */
 #define DEFINE_PCI_DEVICE_TABLE(_table) \
-	struct pci_device_id _table[] __devinitdata
+	const struct pci_device_id _table[] __devinitdata
 
 /*
  * Backport work for QoS dependencies (kernel/pm_qos_params.c)
