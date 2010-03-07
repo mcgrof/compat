@@ -139,6 +139,22 @@ do {								\
 #endif
 /* source: include/linux/netdevice.h */
 
+
+static inline void device_lock(struct device *dev)
+{
+	down(&dev->sem);
+}
+
+static inline int device_trylock(struct device *dev)
+{
+	return down_trylock(&dev->sem);
+}
+
+static inline void device_unlock(struct device *dev)
+{
+	up(&dev->sem);
+}
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,34)) */
 
 #endif /* LINUX_26_34_COMPAT_H */
