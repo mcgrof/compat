@@ -18,6 +18,8 @@
 #include <net/iw_handler.h>
 #include <asm-generic/bug.h>
 #include <linux/wireless.h>
+#include <linux/skbuff.h>
+#include <net/sch_generic.h>
 
 #define PCI_PM_CAP_PME_SHIFT	11
 
@@ -47,6 +49,12 @@ static inline void netif_tx_start_all_queues(struct net_device *dev)
 static inline void netif_tx_stop_all_queues(struct net_device *dev)
 {
 	netif_stop_queue(dev);
+}
+
+/* Are all TX queues of the device empty?  */
+static inline bool qdisc_all_tx_empty(const struct net_device *dev)
+{
+	return skb_queue_empty(&dev->qdisc->q);
 }
 
 bool pci_pme_capable(struct pci_dev *dev, pci_power_t state);
