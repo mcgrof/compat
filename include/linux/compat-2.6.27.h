@@ -228,6 +228,14 @@ static inline void debugfs_remove_recursive(struct dentry *dentry)
 { }
 #endif
 
+#define device_create(cls, parent, devt, drvdata, fmt, ...)		\
+({									\
+	struct device *_dev;						\
+	_dev = (device_create)(cls, parent, devt, fmt, __VA_ARGS__);	\
+	dev_set_drvdata(_dev, drvdata);					\
+	_dev;								\
+})
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)) */
 
 #endif /* LINUX_26_27_COMPAT_H */
