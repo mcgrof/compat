@@ -1,0 +1,8 @@
+#ifndef _COMPAT_TRACE_DEFINE_TRACE_H
+#define _COMPAT_TRACE_DEFINE_TRACE_H 1
+
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,30))
+#include_next <trace/define_trace.h>
+#endif /* (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,30)) */
+
+#endif	/* _COMPAT_TRACE_DEFINE_TRACE_H */
