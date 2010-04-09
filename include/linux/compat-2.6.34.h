@@ -162,6 +162,8 @@ static inline void device_unlock(struct device *dev)
 	.prod_id_hash = { 0, 0, (vh3), 0 }, }
 #endif
 
+#define rcu_dereference_check(p, c) rcu_dereference(p)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,34)) */
 
 #endif /* LINUX_26_34_COMPAT_H */
