@@ -432,6 +432,8 @@ static int fw_register_device(struct device **dev_p, const char *fw_name,
 	dev_set_drvdata(f_dev, fw_priv);
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30))
 	dev_set_uevent_suppress(f_dev, 1);
+#else
+	f_dev->uevent_suppress = 1;
 #endif
 	retval = device_register(f_dev);
 	if (retval) {
@@ -479,9 +481,11 @@ static int fw_setup_device(struct firmware *fw, struct device **dev_p,
 		goto error_unreg;
 	}
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30))
 	if (uevent)
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30))
 		dev_set_uevent_suppress(f_dev, 0);
+#else
+		f_dev->uevent_suppress = 0;
 #endif
 	*dev_p = f_dev;
 	goto out;
