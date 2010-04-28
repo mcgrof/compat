@@ -5,6 +5,8 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,30))
 
+#include <linux/device.h>
+
 #ifndef TP_PROTO
 #define TP_PROTO(args...)	TPPROTO(args)
 #endif
@@ -22,6 +24,11 @@ enum dpm_order {
 	DPM_ORDER_PARENT_BEFORE_DEV,
 	DPM_ORDER_DEV_LAST,
 };
+
+static inline void dev_set_uevent_suppress(struct device *dev, int val)
+{
+	dev->uevent_suppress = val;
+}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,30)) */
 
