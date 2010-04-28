@@ -5,6 +5,7 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
 #include <linux/etherdevice.h>
+#include <net/sock.h>
 
 #define IW_HANDLER(id, func)			\
 	[IW_IOCTL_IDX(id)] = func
@@ -13,6 +14,11 @@
 #define  SDIO_BUS_SCSI		0x40	/* Support continuous SPI interrupt */
 
 #define netdev_hw_addr dev_mc_list
+
+static inline wait_queue_head_t *sk_sleep(struct sock *sk)
+{
+	return sk->sk_sleep;
+}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)) */
 
