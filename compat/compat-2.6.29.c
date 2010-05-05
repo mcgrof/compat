@@ -16,8 +16,10 @@
 #include <linux/etherdevice.h>
 
 /*
- * Expand this as drivers require more ops, for now this
- * only sets the ones we need.
+ * If you don't see your net_device_ops implemented on
+ * netdev_attach_ops() then you are shit out of luck and
+ * you must do the nasty ifdef magic, unless you figure
+ * out a way to squeze your hacks into this routine :)
  */
 void netdev_attach_ops(struct net_device *dev,
 		       const struct net_device_ops *ops)
@@ -26,11 +28,21 @@ void netdev_attach_ops(struct net_device *dev,
 	dev->open = SET_NETDEVOP(ops->ndo_open);
 	dev->stop = SET_NETDEVOP(ops->ndo_stop);
 	dev->hard_start_xmit = SET_NETDEVOP(ops->ndo_start_xmit);
+	dev->change_rx_flags = SET_NETDEVOP(ops->ndo_change_rx_flags);
 	dev->set_multicast_list = SET_NETDEVOP(ops->ndo_set_multicast_list);
+	dev->validate_addr = SET_NETDEVOP(ops->ndo_validate_addr);
+	dev->do_ioctl = SET_NETDEVOP(ops->ndo_do_ioctl);
+	dev->set_config = SET_NETDEVOP(ops->ndo_set_config);
 	dev->change_mtu = SET_NETDEVOP(ops->ndo_change_mtu);
 	dev->set_mac_address = SET_NETDEVOP(ops->ndo_set_mac_address);
 	dev->tx_timeout = SET_NETDEVOP(ops->ndo_tx_timeout);
 	dev->get_stats = SET_NETDEVOP(ops->ndo_get_stats);
+	dev->vlan_rx_register = SET_NETDEVOP(ops->ndo_vlan_rx_register);
+	dev->vlan_rx_add_vid = SET_NETDEVOP(ops->ndo_vlan_rx_add_vid);
+	dev->vlan_rx_kill_vid = SET_NETDEVOP(ops->ndo_vlan_rx_kill_vid);
+#ifdef CONFIG_NET_POLL_CONTROLLER
+	dev->poll_controller = SET_NETDEVOP(ops->ndo_poll_controller);
+#endif
 #undef SET_NETDEVOP
 }
 EXPORT_SYMBOL(netdev_attach_ops);
