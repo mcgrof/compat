@@ -43,6 +43,11 @@ void netdev_attach_ops(struct net_device *dev,
 #ifdef CONFIG_NET_POLL_CONTROLLER
 	dev->poll_controller = SET_NETDEVOP(ops->ndo_poll_controller);
 #endif
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+	dev->select_queue = SET_NETDEVOP(ops->ndo_select_queue);
+#endif
+
 #undef SET_NETDEVOP
 }
 EXPORT_SYMBOL(netdev_attach_ops);
