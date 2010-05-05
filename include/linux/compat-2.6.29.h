@@ -246,6 +246,8 @@ extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);
 )
 
 extern int eth_mac_addr(struct net_device *dev, void *p);
+extern int eth_change_mtu(struct net_device *dev, int new_mtu);
+extern int eth_validate_addr(struct net_device *dev);
 
 #else
 
