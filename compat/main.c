@@ -4,6 +4,15 @@ MODULE_AUTHOR("Luis R. Rodriguez");
 MODULE_DESCRIPTION("Kernel compatibility module");
 MODULE_LICENSE("GPL");
 
+#ifndef COMPAT_VERSION
+#error "You need a COMPAT_VERSION"
+#endif
+
+static char *compat_version = COMPAT_VERSION;
+
+module_param(compat_version, charp, 0400);
+MODULE_PARM_DESC(compat_version, "Version of the kernel compat backport");
+
 static int __init compat_init(void)
 {
 	/* pm-qos for kernels <= 2.6.24, this is a no-op on newer kernels */
