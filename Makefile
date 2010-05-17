@@ -10,6 +10,13 @@ export KLIB_BUILD ?=    $(KLIB)/build
 export PWD := $(shell pwd)
 
 ifeq ($(KERNELRELEASE),)
+export COMPAT_BASE_TREE := "linux-next.git"
+# For this specific tree this is only relevant in
+# terms of the last time we synched code up with upstream
+# for internal stuff. For other compatability projects this
+# would be the git describe of the base tree you are
+# working with.
+export COMPAT_BASE_TREE_VERSION := "next-20100517"
 export COMPAT_VERSION := $(shell git describe)
 endif
 
@@ -36,6 +43,8 @@ obj-y += compat/
 NOSTDINC_FLAGS := -I$(M)/include/ \
 	-include $(M)/include/linux/compat-2.6.h \
 	$(CFLAGS) \
+	-DCOMPAT_BASE_TREE=\"$(COMPAT_BASE_TREE)\" \
+	-DCOMPAT_BASE_TREE_VERSION=\"$(COMPAT_BASE_TREE_VERSION)\" \
 	-DCOMPAT_VERSION=\"$(COMPAT_VERSION)\"
 
 modules:
