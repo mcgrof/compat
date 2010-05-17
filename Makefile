@@ -9,6 +9,10 @@ export KLIB_BUILD ?=    $(KLIB)/build
 
 export PWD := $(shell pwd)
 
+ifeq ($(KERNELRELEASE),)
+export COMPAT_VERSION := $(shell git describe)
+endif
+
 # This generates a bunch of CONFIG_COMPAT_KERNEL_22 CONFIG_COMPAT_KERNEL_23 .. etc for
 # each kernel release you need an object for.
 ifneq ($(wildcard $(KLIB_BUILD)/Makefile),)
@@ -29,7 +33,10 @@ obj-y += compat/
 # This hack lets us put our include path first than the kernel's
 # when building our compat modules. Your own makefile would look
 # the same.
-NOSTDINC_FLAGS := -I$(M)/include/ -include $(M)/include/linux/compat-2.6.h $(CFLAGS)
+NOSTDINC_FLAGS := -I$(M)/include/ \
+	-include $(M)/include/linux/compat-2.6.h \
+	$(CFLAGS) \
+	-DCOMPAT_VERSION=\"$(COMPAT_VERSION)\"
 
 modules:
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) modules
