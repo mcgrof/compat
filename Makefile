@@ -43,10 +43,10 @@ obj-y += compat/
 NOSTDINC_FLAGS := -I$(M)/include/ \
 	-include $(M)/include/linux/compat-2.6.h \
 	$(CFLAGS) \
-	-DCOMPAT_BASE_TREE=\"$(COMPAT_BASE_TREE)\" \
-	-DCOMPAT_BASE_TREE_VERSION=\"$(COMPAT_BASE_TREE_VERSION)\" \
+	-DCOMPAT_BASE_TREE="\"$(COMPAT_BASE_TREE)\"" \
+	-DCOMPAT_BASE_TREE_VERSION="\"$(COMPAT_BASE_TREE_VERSION)\"" \
 	-DCOMPAT_PROJECT="\"Generic kernel\"" \
-	-DCOMPAT_VERSION=\"$(COMPAT_VERSION)\"
+	-DCOMPAT_VERSION="\"$(COMPAT_VERSION)\""
 
 modules:
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) modules
