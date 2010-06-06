@@ -23,9 +23,6 @@ static inline wait_queue_head_t *sk_sleep(struct sock *sk)
 	return sk->sk_sleep;
 }
 
-#define kparam_block_sysfs_write(a)
-#define kparam_unblock_sysfs_write(a)
-
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)) */
 
 #endif /* LINUX_26_35_COMPAT_H */
