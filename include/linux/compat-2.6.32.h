@@ -92,6 +92,8 @@ struct dev_pm_ops name = { \
 /* The export symbol in changed in compat/patches/15-symbol-export-conflicts.patch */
 #define ieee80211_rx(hw, skb) mac80211_ieee80211_rx(hw, skb)
 
+#define dev_to_sdio_func(d)	container_of(d, struct sdio_func, dev)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,32)) */
 
 #endif /* LINUX_26_32_COMPAT_H */
