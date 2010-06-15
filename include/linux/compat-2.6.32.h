@@ -94,6 +94,8 @@ struct dev_pm_ops name = { \
 
 #define dev_to_sdio_func(d)	container_of(d, struct sdio_func, dev)
 
+#define lockdep_assert_held(l)			do { } while (0)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,32)) */
 
 #endif /* LINUX_26_32_COMPAT_H */
