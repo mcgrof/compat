@@ -35,7 +35,8 @@ void netdev_attach_ops(struct net_device *dev,
 	dev->change_mtu = ops->ndo_change_mtu;
 	dev->set_mac_address = ops->ndo_set_mac_address;
 	dev->tx_timeout = ops->ndo_tx_timeout;
-	dev->get_stats = ops->ndo_get_stats;
+	if (ops->ndo_get_stats)
+		dev->get_stats = ops->ndo_get_stats;
 	dev->vlan_rx_register = ops->ndo_vlan_rx_register;
 	dev->vlan_rx_add_vid = ops->ndo_vlan_rx_add_vid;
 	dev->vlan_rx_kill_vid = ops->ndo_vlan_rx_kill_vid;
