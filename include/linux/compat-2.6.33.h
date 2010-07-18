@@ -7,11 +7,9 @@
 
 #include <linux/skbuff.h>
 #if defined(CONFIG_PCCARD) || defined(CONFIG_PCCARD_MODULE)
-#if defined(CONFIG_PCMCIA) || defined(CONFIG_PCMCIA_MODULE)
 #include <pcmcia/cs_types.h>
 #include <pcmcia/cistpl.h>
 #include <pcmcia/ds.h>
-#endif
 #endif
 #include <linux/kfifo.h>
 #include <linux/firmware.h>
