@@ -25,6 +25,8 @@ static inline wait_queue_head_t *sk_sleep(struct sock *sk)
 
 #define sdio_writeb_readb(func, write_byte, addr, err_ret) sdio_readb(func, addr, err_ret)
 
+int hex_to_bin(char ch);
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)) */
 
 #endif /* LINUX_26_35_COMPAT_H */
