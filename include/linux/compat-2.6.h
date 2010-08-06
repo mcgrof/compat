@@ -29,5 +29,6 @@
 #include <linux/compat-2.6.34.h>
 #include <linux/compat-2.6.35.h>
 #include <linux/compat-2.6.36.h>
+#include <linux/compat-2.6.37.h>
 
 #endif /* LINUX_26_COMPAT_H */
