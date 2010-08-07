@@ -236,6 +236,8 @@ static inline void debugfs_remove_recursive(struct dentry *dentry)
 	_dev;								\
 })
 
+#define dev_name(dev) dev_name((struct device *)dev)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)) */
 
 #endif /* LINUX_26_27_COMPAT_H */
