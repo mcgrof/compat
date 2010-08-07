@@ -13,6 +13,8 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
 
 #include <linux/usb.h>
+#include <linux/tty.h>
+#include <asm/poll.h>
 
 /* 2.6.28 compat code goes here */
 
@@ -369,5 +371,131 @@ void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page, int off,
 	skb->truesize += size;
 }
 EXPORT_SYMBOL(skb_add_rx_frag);
+
+void tty_write_unlock(struct tty_struct *tty)
+{
+	mutex_unlock(&tty->atomic_write_lock);
+	wake_up_interruptible_poll(&tty->write_wait, POLLOUT);
+}
+
+int tty_write_lock(struct tty_struct *tty, int ndelay)
+{
+	if (!mutex_trylock(&tty->atomic_write_lock)) {
+		if (ndelay)
+			return -EAGAIN;
+		if (mutex_lock_interruptible(&tty->atomic_write_lock))
+			return -ERESTARTSYS;
+	}
+	return 0;
+}
+
+/**
+ *	send_prio_char		-	send priority character
+ *
+ *	Send a high priority character to the tty even if stopped
+ *
+ *	Locking: none for xchar method, write ordering for write method.
+ */
+
+static int send_prio_char(struct tty_struct *tty, char ch)
+{
+	int	was_stopped = tty->stopped;
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+	if (tty->ops->send_xchar) {
+		tty->ops->send_xchar(tty, ch);
+#else
+	if (tty->driver->send_xchar) {
+		tty->driver->send_xchar(tty, ch);
+#endif
+		return 0;
+	}
+
+	if (tty_write_lock(tty, 0) < 0)
+		return -ERESTARTSYS;
+
+	if (was_stopped)
+		start_tty(tty);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+	tty->ops->write(tty, &ch, 1);
+#else
+	tty->driver->write(tty, &ch, 1);
+#endif
+	if (was_stopped)
+		stop_tty(tty);
+	tty_write_unlock(tty);
+	return 0;
+}
+
+int n_tty_ioctl_helper(struct tty_struct *tty, struct file *file,
+		       unsigned int cmd, unsigned long arg)
+{
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+	unsigned long flags;
+#endif
+	int retval;
+
+	switch (cmd) {
+	case TCXONC:
+		retval = tty_check_change(tty);
+		if (retval)
+			return retval;
+		switch (arg) {
+		case TCOOFF:
+			if (!tty->flow_stopped) {
+				tty->flow_stopped = 1;
+				stop_tty(tty);
+			}
+			break;
+		case TCOON:
+			if (tty->flow_stopped) {
+				tty->flow_stopped = 0;
+				start_tty(tty);
+			}
+			break;
+		case TCIOFF:
+			if (STOP_CHAR(tty) != __DISABLED_CHAR)
+				return send_prio_char(tty, STOP_CHAR(tty));
+			break;
+		case TCION:
+			if (START_CHAR(tty) != __DISABLED_CHAR)
+				return send_prio_char(tty, START_CHAR(tty));
+			break;
+		default:
+			return -EINVAL;
+		}
+		return 0;
+	case TCFLSH:
+		return tty_perform_flush(tty, arg);
+	case TIOCPKT:
+	{
+		int pktmode;
+
+		if (tty->driver->type != TTY_DRIVER_TYPE_PTY ||
+		    tty->driver->subtype != PTY_TYPE_MASTER)
+			return -ENOTTY;
+		if (get_user(pktmode, (int __user *) arg))
+			return -EFAULT;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+		spin_lock_irqsave(&tty->ctrl_lock, flags);
+#endif
+		if (pktmode) {
+			if (!tty->packet) {
+				tty->packet = 1;
+				tty->link->ctrl_status = 0;
+			}
+		} else
+			tty->packet = 0;
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,26))
+		spin_unlock_irqrestore(&tty->ctrl_lock, flags);
+#endif
+		return 0;
+	}
+	default:
+		/* Try the mode commands */
+		return tty_mode_ioctl(tty, file, cmd, arg);
+	}
+}
+EXPORT_SYMBOL(n_tty_ioctl_helper);
 
 #endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28) */
