@@ -13,6 +13,8 @@ struct va_format {
 	va_list *va;
 };
 
+#define device_rename(dev, new_name) device_rename(dev, (char *)new_name)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36)) */
 
 #endif /* LINUX_26_36_COMPAT_H */
