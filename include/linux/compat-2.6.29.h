@@ -274,6 +274,8 @@ static inline struct net *read_pnet(struct net * const *pnet)
 
 #endif
 
+extern int		init_dummy_netdev(struct net_device *dev);
+
 #else
 
 static inline void netdev_attach_ops(struct net_device *dev,
