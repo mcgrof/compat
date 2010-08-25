@@ -58,7 +58,9 @@ int compat_pm_qos_power_deinit(void);
  * 2.6.25 adds PM_EVENT_HIBERNATE as well here but
  * we don't have this on <= 2.6.23)
  */
+#ifndef PM_EVENT_SLEEP /* some distribution have mucked with their own headers to add this.. */
 #define PM_EVENT_SLEEP  (PM_EVENT_SUSPEND)
+#endif
 
 /* Although we don't care about wimax this is needed for rfkill input stuff */
 #define KEY_WIMAX		246
