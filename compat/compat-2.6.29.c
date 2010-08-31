@@ -25,6 +25,7 @@ void netdev_attach_ops(struct net_device *dev,
 		       const struct net_device_ops *ops)
 {
 	dev->open = ops->ndo_open;
+	dev->init = ops->ndo_init;
 	dev->stop = ops->ndo_stop;
 	dev->hard_start_xmit = ops->ndo_start_xmit;
 	dev->change_rx_flags = ops->ndo_change_rx_flags;
