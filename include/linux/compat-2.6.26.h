@@ -394,6 +394,15 @@ struct net *dev_net(const struct net_device *dev)
 
 #endif /* xtensa */
 
+#define PCIE_LINK_STATE_L0S	1
+#define PCIE_LINK_STATE_L1	2
+#define PCIE_LINK_STATE_CLKPM	4
+
+static inline void pci_disable_link_state(struct pci_dev *pdev, int state)
+{
+}
+/* source: include/linux/pci-aspm.h */
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26)) */
 
 #endif /* LINUX_26_26_COMPAT_H */
