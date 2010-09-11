@@ -30,6 +30,18 @@ static inline void dev_set_uevent_suppress(struct device *dev, int val)
 	dev->uevent_suppress = val;
 }
 
+/*
+ * Print a one-time message (analogous to WARN_ONCE() et al):
+ */
+#define printk_once(x...) ({			\
+	static bool __print_once;		\
+						\
+	if (!__print_once) {			\
+		__print_once = true;		\
+		printk(x);			\
+	}					\
+})
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,30)) */
 
 #endif /* LINUX_26_30_COMPAT_H */
