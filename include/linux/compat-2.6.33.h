@@ -98,6 +98,20 @@ int pccard_loop_tuple(struct pcmcia_socket *s, unsigned int function,
 #define kfifo_out(a, b, c) __kfifo_get(*a, b, c)
 #define kfifo_len(a) __kfifo_len(*a)
 
+/**
+ * list_for_each_entry_continue_rcu - continue iteration over list of given type
+ * @pos:	the type * to use as a loop cursor.
+ * @head:	the head for your list.
+ * @member:	the name of the list_struct within the struct.
+ *
+ * Continue to iterate over list of given type, continuing after
+ * the current position.
+ */
+#define list_for_each_entry_continue_rcu(pos, head, member) 		\
+	for (pos = list_entry_rcu(pos->member.next, typeof(*pos), member); \
+	     prefetch(pos->member.next), &pos->member != (head);	\
+	     pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)) */
 
 #endif /* LINUX_26_33_COMPAT_H */
