@@ -27,6 +27,8 @@ static inline wait_queue_head_t *sk_sleep(struct sock *sk)
 
 int hex_to_bin(char ch);
 
+extern loff_t noop_llseek(struct file *file, loff_t offset, int origin);
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)) */
 
 #endif /* LINUX_26_35_COMPAT_H */
