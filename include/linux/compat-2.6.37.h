@@ -43,6 +43,8 @@ static inline void skb_checksum_none_assert(struct sk_buff *skb)
 #endif
 }
 
+#define pcmcia_enable_device(link)	pcmcia_request_configuration(link, &link->conf)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) */
 
 #endif /* LINUX_26_37_COMPAT_H */
