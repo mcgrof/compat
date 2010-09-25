@@ -153,8 +153,10 @@ int init_dummy_netdev(struct net_device *dev)
 	/* initialize the ref count */
 	atomic_set(&dev->refcnt, 1);
 
+#ifdef CONFIG_NETPOLL
 	/* NAPI wants this */
 	INIT_LIST_HEAD(&dev->napi_list);
+#endif
 
 	/* a dummy interface is started by default */
 	set_bit(__LINK_STATE_PRESENT, &dev->state);
