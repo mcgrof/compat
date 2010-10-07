@@ -114,10 +114,6 @@ static inline struct rtable *skb_rtable(const struct sk_buff *skb)
 	return (struct rtable *)skb_dst(skb);
 }
 
-extern int genl_register_family_with_ops(struct genl_family *family,
-	struct genl_ops *ops, size_t n_ops);
-
-
 /* Backport threaded IRQ support */
 
 static inline

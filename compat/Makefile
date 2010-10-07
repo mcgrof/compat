@@ -23,7 +23,6 @@ compat-$(CONFIG_COMPAT_KERNEL_27) += compat-2.6.27.o
 compat-$(CONFIG_COMPAT_KERNEL_28) += compat-2.6.28.o
 compat-$(CONFIG_COMPAT_KERNEL_29) += compat-2.6.29.o
 compat-$(CONFIG_COMPAT_KERNEL_30) += compat-2.6.30.o
-compat-$(CONFIG_COMPAT_KERNEL_31) += compat-2.6.31.o
 compat-$(CONFIG_COMPAT_KERNEL_32) += compat-2.6.32.o
 compat-$(CONFIG_COMPAT_KERNEL_33) += compat-2.6.33.o
 compat-$(CONFIG_COMPAT_KERNEL_35) += compat-2.6.35.o
