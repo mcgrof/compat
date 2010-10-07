@@ -110,6 +110,9 @@ int genl_unregister_family(struct genl_family *family);
 #define genl_register_mc_group(_fam, _grp) genl_register_mc_group(&(_fam)->family, _grp)
 #define genl_unregister_mc_group(_fam, _grp) genl_unregister_mc_group(&(_fam)->family, _grp)
 
+/* rename member in struct mmc_host in include/linux/mmc/host.h */
+#define max_segs	max_hw_segs
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) */
 
 #endif /* LINUX_26_37_COMPAT_H */
