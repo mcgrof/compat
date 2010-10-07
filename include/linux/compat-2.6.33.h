@@ -94,9 +94,42 @@ int pccard_loop_tuple(struct pcmcia_socket *s, unsigned int function,
 /* Backport for kfifo
  * kfifo_alloc and kfifo_free must be backported manually 
  */
-#define kfifo_in(a, b, c) __kfifo_put(*a, b, c)
-#define kfifo_out(a, b, c) __kfifo_get(*a, b, c)
+#define kfifo_in(a, b, c) __kfifo_put(*a, (unsigned char *)b, c)
+#define kfifo_out(a, b, c) __kfifo_get(*a, (unsigned char *)b, c)
 #define kfifo_len(a) __kfifo_len(*a)
+
+/**
+ * kfifo_is_empty - returns true if the fifo is empty
+ * @fifo: the fifo to be used.
+ */
+static inline __must_check int kfifo_is_empty(struct kfifo **fifo)
+{
+	return (*fifo)->in == (*fifo)->out;
+}
+
+/**
+ * kfifo_size - returns the size of the fifo in bytes
+ * @fifo: the fifo to be used.
+ */
+static inline __must_check unsigned int kfifo_size(struct kfifo *fifo)
+{
+	return fifo->size;
+}
+
+/**
+ * kfifo_is_full - returns true if the fifo is full
+ * @fifo: the fifo to be used.
+ */
+static inline __must_check int kfifo_is_full(struct kfifo **fifo)
+{
+	return kfifo_len(fifo) == kfifo_size(*fifo);
+}
+
+static inline void compat_kfifo_free(struct kfifo **fifo) {
+	if (*fifo)
+		kfifo_free(*fifo);
+}
+#define kfifo_free compat_kfifo_free
 
 /**
  * list_for_each_entry_continue_rcu - continue iteration over list of given type
