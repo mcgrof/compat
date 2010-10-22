@@ -142,17 +142,32 @@ do {								\
 
 static inline void device_lock(struct device *dev)
 {
+#if defined(CONFIG_NONE) || defined(CONFIG_PREEMPT_RT) || \
+    defined(CONFIG_PREEMPT_VOLUNTARY) || defined(CONFIG_PREEMPT_DESKTOP)
+        mutex_lock(&dev->parent->mutex);
+#else
 	down(&dev->sem);
+#endif
 }
 
 static inline int device_trylock(struct device *dev)
 {
+#if defined(CONFIG_NONE) || defined(CONFIG_PREEMPT_RT) || \
+    defined(CONFIG_PREEMPT_VOLUNTARY) || defined(CONFIG_PREEMPT_DESKTOP)
+	return mutex_trylock(&dev->mutex);
+#else
 	return down_trylock(&dev->sem);
+#endif
 }
 
 static inline void device_unlock(struct device *dev)
 {
+#if defined(CONFIG_NONE) || defined(CONFIG_PREEMPT_RT) || \
+    defined(CONFIG_PREEMPT_VOLUNTARY) || defined(CONFIG_PREEMPT_DESKTOP)
+        mutex_unlock(&dev->mutex);
+#else
 	up(&dev->sem);
+#endif
 }
 
 #if defined(CONFIG_PCMCIA) || defined(CONFIG_PCMCIA_MODULE)
