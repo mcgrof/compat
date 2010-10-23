@@ -142,8 +142,7 @@ do {								\
 
 static inline void device_lock(struct device *dev)
 {
-#if defined(CONFIG_NONE) || defined(CONFIG_PREEMPT_RT) || \
-    defined(CONFIG_PREEMPT_VOLUNTARY) || defined(CONFIG_PREEMPT_DESKTOP)
+#if defined(CONFIG_PREEMPT_RT) || defined(CONFIG_PREEMPT_DESKTOP)
         mutex_lock(&dev->parent->mutex);
 #else
 	down(&dev->sem);
@@ -152,8 +151,7 @@ static inline void device_lock(struct device *dev)
 
 static inline int device_trylock(struct device *dev)
 {
-#if defined(CONFIG_NONE) || defined(CONFIG_PREEMPT_RT) || \
-    defined(CONFIG_PREEMPT_VOLUNTARY) || defined(CONFIG_PREEMPT_DESKTOP)
+#if defined(CONFIG_PREEMPT_RT) || defined(CONFIG_PREEMPT_DESKTOP)
 	return mutex_trylock(&dev->mutex);
 #else
 	return down_trylock(&dev->sem);
@@ -162,8 +160,7 @@ static inline int device_trylock(struct device *dev)
 
 static inline void device_unlock(struct device *dev)
 {
-#if defined(CONFIG_NONE) || defined(CONFIG_PREEMPT_RT) || \
-    defined(CONFIG_PREEMPT_VOLUNTARY) || defined(CONFIG_PREEMPT_DESKTOP)
+#if defined(CONFIG_PREEMPT_RT) || defined(CONFIG_PREEMPT_DESKTOP)
         mutex_unlock(&dev->mutex);
 #else
 	up(&dev->sem);
