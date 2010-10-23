@@ -143,7 +143,7 @@ do {								\
 static inline void device_lock(struct device *dev)
 {
 #if defined(CONFIG_PREEMPT_RT) || defined(CONFIG_PREEMPT_DESKTOP)
-        mutex_lock(&dev->parent->mutex);
+        mutex_lock(&dev->mutex);
 #else
 	down(&dev->sem);
 #endif
