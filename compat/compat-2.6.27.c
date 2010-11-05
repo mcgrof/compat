@@ -9,9 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27))
-
 #include <linux/pci.h>
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
 #include <linux/mmc/sdio.h>
@@ -239,6 +236,4 @@ void debugfs_remove_recursive(struct dentry *dentry)
 }
 EXPORT_SYMBOL_GPL(debugfs_remove_recursive);
 #endif /* CONFIG_DEBUG_FS */
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27) */
 

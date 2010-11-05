@@ -9,10 +9,6 @@
  */
 
 #include <net/compat.h>
-
-/* All things not in 2.6.22 and 2.6.23 */
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24))
-
 #include <net/arp.h>
 
 /*
@@ -180,6 +176,4 @@ int compat_is_pcie(struct pci_dev *pdev)
 	return cap ? 1 : 0;
 }
 EXPORT_SYMBOL(compat_is_pcie);
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24) */
 

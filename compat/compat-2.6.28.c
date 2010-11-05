@@ -9,9 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
-
 #include <linux/usb.h>
 #include <linux/tty.h>
 #include <asm/poll.h>
@@ -442,4 +439,3 @@ int n_tty_ioctl_helper(struct tty_struct *tty, struct file *file,
 }
 EXPORT_SYMBOL(n_tty_ioctl_helper);
 
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28) */

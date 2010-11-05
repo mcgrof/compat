@@ -16,10 +16,6 @@
 
 #include <net/compat.h>
 
-/* All things not in 2.6.25 */
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26))
-
-
 /* 2.6.24 does not have the struct kobject with a name */
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,25))
 
@@ -88,6 +84,4 @@ int dev_set_name(struct device *dev, const char *fmt, ...)
 	return err;
 }
 EXPORT_SYMBOL_GPL(dev_set_name);
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,26) */
 

@@ -9,9 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29))
-
 #include <linux/usb.h>
 #include <linux/etherdevice.h>
 
@@ -166,7 +163,4 @@ int init_dummy_netdev(struct net_device *dev)
 }
 EXPORT_SYMBOL_GPL(init_dummy_netdev);
 /* Source: net/core/dev.c */
-
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29) */
 

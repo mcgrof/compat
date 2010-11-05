@@ -10,9 +10,5 @@
 
 #include <net/compat.h>
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,14))
-
 /* 2.6.14 compat code goes here */
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,14) */
 

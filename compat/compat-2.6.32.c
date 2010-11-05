@@ -9,9 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,32))
-
 #include <linux/netdevice.h>
 
 int __dev_addr_add(struct dev_addr_list **list, int *count,
@@ -119,6 +116,4 @@ void __dev_addr_unsync(struct dev_addr_list **to, int *to_count,
 	}
 }
 EXPORT_SYMBOL_GPL(__dev_addr_unsync);
-
-#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,32)) */
 

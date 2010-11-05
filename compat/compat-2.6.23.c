@@ -10,9 +10,6 @@
 
 #include <net/compat.h>
 
-/* All things not in 2.6.22 */
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,23))
-
 /* On net/core/dev.c as of 2.6.24 */
 int __dev_addr_delete(struct dev_addr_list **list, int *count,
                       void *addr, int alen, int glbl)
@@ -244,6 +241,4 @@ int pci_try_set_mwi(struct pci_dev *dev)
 }
 EXPORT_SYMBOL(pci_try_set_mwi);
 #endif
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,23)) */
 

@@ -9,9 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36)
-
 #include <linux/usb.h>
 
 #ifdef CONFIG_COMPAT_USB_URB_THREAD_FIX
@@ -97,4 +94,3 @@ void compat_usb_scuttle_anchored_urbs(struct usb_anchor *anchor)
 EXPORT_SYMBOL_GPL(compat_usb_scuttle_anchored_urbs);
 #endif /* CONFIG_COMPAT_USB_URB_THREAD_FIX */
 
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36) */

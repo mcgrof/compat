@@ -9,9 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33))
-
 #include <linux/autoconf.h>
 
 #if defined(CONFIG_PCCARD) || defined(CONFIG_PCCARD_MODULE)
@@ -132,6 +129,4 @@ EXPORT_SYMBOL(pcmcia_loop_tuple);
 #endif /* CONFIG_PCMCIA */
 
 #endif /* CONFIG_PCCARD */
-
-#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)) */
 

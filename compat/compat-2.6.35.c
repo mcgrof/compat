@@ -9,8 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)
 #include <linux/ctype.h>
 
 /**
@@ -48,4 +46,3 @@ loff_t noop_llseek(struct file *file, loff_t offset, int origin)
 }
 EXPORT_SYMBOL(noop_llseek);
 
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35) */

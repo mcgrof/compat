@@ -8,9 +8,6 @@
  * Compatibility file for Linux wireless for kernels 2.6.25.
  */
 
-/* All things not in 2.6.22, 2.6.23 and 2.6.24 */
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25))
-
 #include <linux/miscdevice.h>
 
 /**
@@ -97,6 +94,4 @@ define_strict_strtox(l, long)
 
 EXPORT_SYMBOL(strict_strtoul);
 EXPORT_SYMBOL(strict_strtol);
-
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,25) */
 

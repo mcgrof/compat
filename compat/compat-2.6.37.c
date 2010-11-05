@@ -9,9 +9,6 @@
  */
 
 #include <linux/compat.h>
-
-#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)
-
 #include <linux/netdevice.h>
 #include <net/sock.h>
 #include <linux/nsproxy.h>
@@ -155,4 +152,3 @@ int compat_genl_unregister_family(struct genl_family *family)
 }
 EXPORT_SYMBOL(compat_genl_unregister_family);
 
-#endif /* LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37) */
