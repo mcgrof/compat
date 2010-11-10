@@ -8,6 +8,7 @@
 #include <linux/usb.h>
 #include <pcmcia/cistpl.h>
 #include <pcmcia/ds.h>
+#include <linux/pm_qos_params.h>
 
 #define kparam_block_sysfs_write(a)
 #define kparam_unblock_sysfs_write(a)
@@ -55,6 +56,39 @@ static inline int pcmcia_write_config_byte(struct pcmcia_device *p_dev, off_t wh
 	conf_reg_t reg = { 0, CS_WRITE, where, val };
 	return pcmcia_access_configuration_register(p_dev, &reg);
 }
+
+struct pm_qos_request_list {
+	u32 qos;
+	void *request;
+};
+
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35))
+
+#define pm_qos_add_request(_req, _class, _value) do {			\
+	(_req)->request = #_req;					\
+	(_req)->qos = _class;						\
+	pm_qos_add_requirement((_class), (_req)->request, (_value));	\
+    } while(0)
+
+#define pm_qos_update_request(_req, _value)				\
+	pm_qos_update_requirement((_req)->qos, (_req)->request, (_value))
+
+#define pm_qos_remove_request(_req)					\
+	pm_qos_remove_requirement((_req)->qos, (_req)->request)
+
+#else
+
+#define pm_qos_add_request(_req, _class, _value) do {			\
+	(_req)->request = pm_qos_add_request((_class), (_value));	\
+    } while (0)
+
+#define pm_qos_update_request(_req, _value)				\
+	pm_qos_update_request((_req)->request, (_value)
+
+#define pm_qos_remove_request(_req)					\
+	pm_qos_remove_request((_req)->request)
+
+#endif
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36)) */
 
