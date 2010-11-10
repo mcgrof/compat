@@ -29,6 +29,8 @@ int hex_to_bin(char ch);
 
 extern loff_t noop_llseek(struct file *file, loff_t offset, int origin);
 
+#define pm_qos_request(_qos) pm_qos_requirement(_qos)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)) */
 
 #endif /* LINUX_26_35_COMPAT_H */
