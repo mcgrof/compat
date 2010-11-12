@@ -83,7 +83,7 @@ struct pm_qos_request_list {
     } while (0)
 
 #define pm_qos_update_request(_req, _value)				\
-	pm_qos_update_request((_req)->request, (_value)
+	pm_qos_update_request((_req)->request, (_value))
 
 #define pm_qos_remove_request(_req)					\
 	pm_qos_remove_request((_req)->request)
