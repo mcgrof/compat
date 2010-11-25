@@ -54,6 +54,8 @@ static inline unsigned long ewma_read(const struct ewma *avg)
 	return DIV_ROUND_CLOSEST(avg->internal, avg->factor);
 }
 
+#define pr_warn pr_warning
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)) */
 
 #endif /* LINUX_26_38_COMPAT_H */
