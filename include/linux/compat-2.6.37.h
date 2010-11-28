@@ -6,6 +6,7 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37))
 
 #include <linux/skbuff.h>
+#include <linux/leds.h>
 
 #define SDIO_CLASS_BT_AMP	0x09	/* Type-A Bluetooth AMP interface */
 
@@ -92,6 +93,18 @@ int genl_unregister_family(struct genl_family *family);
 #define genlmsg_put(_skb, _pid, _seq, _fam, _flags, _cmd) genlmsg_put(_skb, _pid, _seq, &(_fam)->family, _flags, _cmd)
 #define genl_register_mc_group(_fam, _grp) genl_register_mc_group(&(_fam)->family, _grp)
 #define genl_unregister_mc_group(_fam, _grp) genl_unregister_mc_group(&(_fam)->family, _grp)
+
+
+extern void led_blink_set(struct led_classdev *led_cdev,
+			  unsigned long *delay_on,
+			  unsigned long *delay_off);
+
+#define led_classdev_unregister compat_led_classdev_unregister
+extern void compat_led_classdev_unregister(struct led_classdev *led_cdev);
+
+#define led_brightness_set compat_led_brightness_set
+extern void compat_led_brightness_set(struct led_classdev *led_cdev,
+				      enum led_brightness brightness);
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) */
 
