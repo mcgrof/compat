@@ -152,7 +152,7 @@ int compat_genl_unregister_family(struct genl_family *family)
 }
 EXPORT_SYMBOL(compat_genl_unregister_family);
 
-#ifdef CONFIG_LEDS_CLASS
+#if defined(CONFIG_LEDS_CLASS) || defined(CONFIG_LEDS_CLASS_MODULE)
 
 #undef led_brightness_set
 #undef led_classdev_unregister
