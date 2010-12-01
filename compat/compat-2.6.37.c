@@ -281,7 +281,11 @@ void led_blink_set(struct led_classdev *led_cdev,
 	if (current_brightness)
 		led->blink_brightness = current_brightness;
 	if (!led->blink_brightness)
+#if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30)
 		led->blink_brightness = led_cdev->max_brightness;
+#else
+		led->blink_brightness = LED_FULL;
+#endif
 
 	led_stop_software_blink(led);
 	led->blink_delay_on = *delay_on;
