@@ -17,6 +17,8 @@
 #include <linux/skbuff.h>
 #include <linux/usb.h>
 
+#define  PCI_EXP_LNKCTL_ES     0x0080  /* Extended Synch */
+
 /*
  * Older kernels do not have struct net_device_ops but what we can
  * do is just define the data structure and use a caller to let us
