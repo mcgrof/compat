@@ -6,6 +6,7 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38))
 
 #include <linux/kernel.h>
+#include <linux/skbuff.h>
 
 /*
  * This is not part of The 2.6.37 kernel yet but we
@@ -55,6 +56,11 @@ static inline unsigned long ewma_read(const struct ewma *avg)
 }
 
 #define pr_warn pr_warning
+
+static inline int skb_checksum_start_offset(const struct sk_buff *skb)
+{
+	return skb->csum_start - skb_headroom(skb);
+}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)) */
 
