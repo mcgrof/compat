@@ -6,6 +6,7 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33))
 
 #include <linux/skbuff.h>
+#include <linux/pci.h>
 #if defined(CONFIG_PCCARD) || defined(CONFIG_PCCARD_MODULE)
 #include <pcmcia/cs_types.h>
 #include <pcmcia/cistpl.h>
@@ -146,6 +147,37 @@ static inline void compat_kfifo_free(struct kfifo **fifo) {
 	     pos = list_entry_rcu(pos->member.next, typeof(*pos), member))
 
 #define sock_recv_ts_and_drops(msg, sk, skb) sock_recv_timestamp(msg, sk, skb)
+
+/**
+ * pci_pcie_cap - get the saved PCIe capability offset
+ * @dev: PCI device
+ *
+ * PCIe capability offset is calculated at PCI device initialization
+ * time and saved in the data structure. This function returns saved
+ * PCIe capability offset. Using this instead of pci_find_capability()
+ * reduces unnecessary search in the PCI configuration space. If you
+ * need to calculate PCIe capability offset from raw device for some
+ * reasons, please use pci_find_capability() instead.
+ */
+static inline int pci_pcie_cap(struct pci_dev *dev)
+{
+	return pci_find_capability(dev, PCI_CAP_ID_EXP);
+}
+
+/**
+ * pci_is_pcie - check if the PCI device is PCI Express capable
+ * @dev: PCI device
+ *
+ * Retrun true if the PCI device is PCI Express capable, false otherwise.
+ */
+static inline bool pci_is_pcie(struct pci_dev *dev)
+{
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
+	return dev->is_pcie;
+#else
+	return !!pci_pcie_cap(dev);
+#endif
+}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)) */
 

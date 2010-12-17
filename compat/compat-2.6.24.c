@@ -165,15 +165,3 @@ int eth_rebuild_header(struct sk_buff *skb)
 }
 EXPORT_SYMBOL(eth_rebuild_header);
 
-/* 2.6.24 will introduce struct pci_dev is_pcie bit. To help
- * with the compatibility code (compat.diff) being smaller, we provide a helper
- * so in cases where that will be used we can simply slap ifdefs with this
- * routine. Use compat_ prefex to not pollute namespace.  */
-int compat_is_pcie(struct pci_dev *pdev)
-{
-	int cap;
-	cap = pci_find_capability(pdev, PCI_CAP_ID_EXP);
-	return cap ? 1 : 0;
-}
-EXPORT_SYMBOL(compat_is_pcie);
-

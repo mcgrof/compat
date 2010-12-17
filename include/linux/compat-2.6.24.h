@@ -249,9 +249,6 @@ static inline int usb_endpoint_num(const struct usb_endpoint_descriptor *epd)
 	return epd->bEndpointAddress & USB_ENDPOINT_NUMBER_MASK;
 }
 
-/* Helper to make struct pci_dev is_pcie compatibility code smaller */
-int compat_is_pcie(struct pci_dev *pdev);
-
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,24)) */
 
 #endif /* LINUX_26_24_COMPAT_H */
