@@ -18,15 +18,6 @@
 struct net init_net;
 EXPORT_SYMBOL(init_net);
 
-/* Part of net/ethernet/eth.c as of 2.6.24 */
-char *print_mac(char *buf, const u8 *addr)
-{
-	sprintf(buf, MAC_FMT,
-		addr[0], addr[1], addr[2], addr[3], addr[4], addr[5]);
-	return buf;
-}
-EXPORT_SYMBOL(print_mac);
-
 /* 2.6.22 and 2.6.23 have eth_header_cache_update defined as extern in include/linux/etherdevice.h
  * and actually defined in net/ethernet/eth.c but 2.6.24 exports it. Lets export it here */
 

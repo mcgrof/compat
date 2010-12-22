@@ -162,13 +162,6 @@ struct ssb_device_id {
 #define dev_get_by_index(a, b)		dev_get_by_index(b)
 #define __dev_get_by_index(a, b)	__dev_get_by_index(b)
 
-/*
- * Display a 6 byte device address (MAC) in a readable format.
- */
-#define MAC_FMT "%02x:%02x:%02x:%02x:%02x:%02x"
-extern char *print_mac(char *buf, const u8 *addr);
-#define DECLARE_MAC_BUF(var) char var[18] __maybe_unused
-
 extern int		eth_header(struct sk_buff *skb, struct net_device *dev,
 				unsigned short type, void *daddr,
 				void *saddr, unsigned len);
