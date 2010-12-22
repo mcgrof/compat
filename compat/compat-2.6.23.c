@@ -217,14 +217,6 @@ void __dev_set_rx_mode(struct net_device *dev)
 		dev->set_multicast_list(dev);
 }
 
-#ifndef HAVE_PCI_SET_MWI
-int pci_try_set_mwi(struct pci_dev *dev)
-{
-	return 0;
-}
-EXPORT_SYMBOL(pci_try_set_mwi);
-#else
-
 /**
  * pci_try_set_mwi - enables memory-write-invalidate PCI transaction
  * @dev: the PCI device for which MWI is enabled
@@ -236,7 +228,10 @@ EXPORT_SYMBOL(pci_try_set_mwi);
  */
 int pci_try_set_mwi(struct pci_dev *dev)
 {
-	int rc = pci_set_mwi(dev);
+	int rc = 0;
+#ifdef HAVE_PCI_SET_MWI
+	rc = pci_set_mwi(dev);
+#endif
 	return rc;
 }
 EXPORT_SYMBOL(pci_try_set_mwi);
