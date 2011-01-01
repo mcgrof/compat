@@ -278,6 +278,36 @@ static inline struct net *read_pnet(struct net * const *pnet)
 
 extern int		init_dummy_netdev(struct net_device *dev);
 
+#define compat_pci_suspend(fn)						\
+	int fn##_compat(struct pci_dev *pdev, pm_message_t state) 	\
+	{								\
+		int r;							\
+									\
+		r = fn(&pdev->dev);					\
+		if (r)							\
+			return r;					\
+									\
+		pci_save_state(pdev);					\
+		pci_disable_device(pdev);				\
+		pci_set_power_state(pdev, PCI_D3hot);			\
+									\
+		return 0;						\
+	}
+
+#define compat_pci_resume(fn)						\
+	int fn##_compat(struct pci_dev *pdev)				\
+	{								\
+		int r;							\
+									\
+		pci_set_power_state(pdev, PCI_D0);			\
+		r = pci_enable_device(pdev);				\
+		if (r)							\
+			return r;					\
+		pci_restore_state(pdev);				\
+									\
+		return fn(&pdev->dev);					\
+	}
+
 #else
 
 static inline void netdev_attach_ops(struct net_device *dev,
@@ -285,6 +315,10 @@ static inline void netdev_attach_ops(struct net_device *dev,
 {
 	dev->netdev_ops = ops;
 }
+
+#define compat_pci_suspend(fn)
+#define compat_pci_resume(fn)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
 
 #endif /*  LINUX_26_29_COMPAT_H */
