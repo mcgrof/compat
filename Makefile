@@ -35,6 +35,10 @@ ifneq ($(CONFIG_FW_LOADER),)
 endif
 endif
 
+ifeq ($(CONFIG_COMPAT_KERNEL_36),y)
+ export CONFIG_COMPAT_KFIFO=m
+endif #CONFIG_COMPAT_KERNEL_36
+
 obj-y += compat/
 
 # This hack lets us put our include path first than the kernel's
