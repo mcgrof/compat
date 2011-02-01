@@ -106,6 +106,8 @@ extern void compat_led_classdev_unregister(struct led_classdev *led_cdev);
 extern void compat_led_brightness_set(struct led_classdev *led_cdev,
 				      enum led_brightness brightness);
 
+#define alloc_ordered_workqueue(name, flags) create_singlethread_workqueue(name)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) */
 
 #endif /* LINUX_26_37_COMPAT_H */
