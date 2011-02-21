@@ -5,6 +5,8 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39))
 
+#include <linux/tty.h>
+
 /*
  * This is not part of The 2.6.37 kernel yet but we
  * we use it to optimize the backport code we
@@ -21,6 +23,11 @@
 #else
 #define br_port_exists(dev)	(dev->br_port)
 #endif
+
+#define tiocmget(tty) tiocmget(tty, NULL)
+#define tiocmset(tty, set, clear) tiocmset(tty, NULL, set, clear)
+
+extern int tty_set_termios(struct tty_struct *tty, struct ktermios *kt);
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39)) */
 
