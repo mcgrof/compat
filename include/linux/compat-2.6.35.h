@@ -7,6 +7,7 @@
 #include <linux/etherdevice.h>
 #include <net/sock.h>
 #include <linux/types.h>
+#include <linux/usb.h>
 
 /* added on linux/kernel.h */
 #define USHRT_MAX      ((u16)(~0U))
@@ -30,6 +31,14 @@ int hex_to_bin(char ch);
 extern loff_t noop_llseek(struct file *file, loff_t offset, int origin);
 
 #define pm_qos_request(_qos) pm_qos_requirement(_qos)
+
+static inline struct usb_host_endpoint *
+usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
+{
+	struct usb_host_endpoint **eps;
+	eps = usb_pipein(pipe) ? dev->ep_in : dev->ep_out;
+	return eps[usb_pipeendpoint(pipe)];
+}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,35)) */
 
