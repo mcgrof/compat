@@ -119,6 +119,7 @@ static inline void tty_unlock(void) __releases(kernel_lock)
 }
 #define tty_locked()           (kernel_locked())
 
+#define usleep_range(_min, _max)	msleep((_max) / 1000)
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36)) */
 
 #endif /* LINUX_26_36_COMPAT_H */
