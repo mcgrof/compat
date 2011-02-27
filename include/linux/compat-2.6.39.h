@@ -27,7 +27,9 @@
 #define tiocmget(tty) tiocmget(tty, NULL)
 #define tiocmset(tty, set, clear) tiocmset(tty, NULL, set, clear)
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 extern int tty_set_termios(struct tty_struct *tty, struct ktermios *kt);
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39)) */
 

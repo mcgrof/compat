@@ -11,6 +11,7 @@
 #include <linux/compat.h>
 #include <linux/tty.h>
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 /*
  *		Termios Helper Methods
  */
@@ -108,4 +109,5 @@ int tty_set_termios(struct tty_struct *tty, struct ktermios *new_termios)
 	return 0;
 }
 EXPORT_SYMBOL_GPL(tty_set_termios);
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 
