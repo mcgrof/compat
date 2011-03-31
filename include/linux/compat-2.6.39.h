@@ -71,6 +71,8 @@ static inline void irq_set_probe(unsigned int irq)
 {
 	set_irq_probe(irq);
 }
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29))
 static inline struct irq_chip *irq_desc_get_chip(struct irq_desc *desc)
 {
 	return get_irq_desc_chip(desc);
@@ -89,6 +91,7 @@ static inline struct msi_desc *irq_desc_get_msi_desc(struct irq_desc *desc)
 {
 	return get_irq_desc_msi(desc);
 }
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29)) */
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,39)) */
 
