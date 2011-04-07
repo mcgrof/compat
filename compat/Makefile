@@ -2,7 +2,6 @@ obj-m += compat.o
 #compat-objs :=
 
 obj-$(CONFIG_COMPAT_FIRMWARE_CLASS) += compat_firmware_class.o
-obj-$(CONFIG_COMPAT_KFIFO) += kfifo.o
 
 compat-y += main.o
 
@@ -14,7 +13,6 @@ compat-$(CONFIG_COMPAT_KERNEL_21) += compat-2.6.21.o
 compat-$(CONFIG_COMPAT_KERNEL_22) += compat-2.6.22.o
 compat-$(CONFIG_COMPAT_KERNEL_23) += compat-2.6.23.o
 compat-$(CONFIG_COMPAT_KERNEL_24) += compat-2.6.24.o
-
 compat-$(CONFIG_COMPAT_KERNEL_25) += \
 	compat-2.6.25.o \
 	pm_qos_params.o
@@ -26,7 +24,10 @@ compat-$(CONFIG_COMPAT_KERNEL_29) += compat-2.6.29.o
 compat-$(CONFIG_COMPAT_KERNEL_32) += compat-2.6.32.o
 compat-$(CONFIG_COMPAT_KERNEL_33) += compat-2.6.33.o
 compat-$(CONFIG_COMPAT_KERNEL_35) += compat-2.6.35.o
-compat-$(CONFIG_COMPAT_KERNEL_36) += compat-2.6.36.o
+compat-$(CONFIG_COMPAT_KERNEL_36) += \
+	compat-2.6.36.o \
+	kfifo.o
+
 compat-$(CONFIG_COMPAT_KERNEL_37) += compat-2.6.37.o
 compat-$(CONFIG_COMPAT_KERNEL_38) += compat-2.6.38.o
 compat-$(CONFIG_COMPAT_KERNEL_39) += compat-2.6.39.o
