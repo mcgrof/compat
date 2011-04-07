@@ -243,6 +243,9 @@ static inline int usb_enable_autosuspend(struct usb_device *udev)
 static inline int usb_disable_autosuspend(struct usb_device *udev)
 { return 0; }
 
+#define MMC_PM_KEEP_POWER	(1 << 0)	/* preserve card power during suspend */
+#define sdio_set_host_pm_flags(a, b) 0
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,34)) */
 
 #endif /* LINUX_26_34_COMPAT_H */
