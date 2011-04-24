@@ -11,6 +11,14 @@
  *
  * If -E is returned, result is not touched.
  */
+#include <linux/kernel.h>
+/* 
+ * kstrto* was included in kernel 2.6.38.4 and causes conflicts with the
+ * version included in compat-wireless. We use strict_strtol to check if
+ * kstrto* is already available.
+ */
+#ifndef strict_strtol
+
 #include <linux/ctype.h>
 #include <linux/errno.h>
 #include <linux/kernel.h>
@@ -225,3 +233,4 @@ int kstrtos8(const char *s, unsigned int base, s8 *res)
 	return 0;
 }
 EXPORT_SYMBOL(kstrtos8);
+#endif /* #ifndef strict_strtol */
