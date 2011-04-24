@@ -10,6 +10,7 @@
 
 #include <linux/compat.h>
 #include <linux/tty.h>
+#include <linux/sched.h>
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
 /*
