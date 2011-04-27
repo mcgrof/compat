@@ -348,7 +348,8 @@ void *vzalloc(unsigned long size)
 {
 	void *buf;
 	buf = vmalloc(size);
-	memset(buf, 0, size);
+	if (buf)
+		memset(buf, 0, size);
 	return buf;
 }
 EXPORT_SYMBOL(vzalloc);
