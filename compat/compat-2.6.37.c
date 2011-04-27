@@ -334,4 +334,23 @@ void compat_led_classdev_unregister(struct led_classdev *led_cdev)
 }
 EXPORT_SYMBOL(compat_led_classdev_unregister);
 
+/**
+ *	vzalloc - allocate virtually contiguous memory with zero fill
+ *	@size:	allocation size
+ *	Allocate enough pages to cover @size from the page level
+ *	allocator and map them into contiguous kernel virtual space.
+ *	The memory allocated is set to zero.
+ *
+ *	For tight control over page level allocator and protection flags
+ *	use __vmalloc() instead.
+ */
+void *vzalloc(unsigned long size)
+{
+	void *buf;
+	buf = vmalloc(size);
+	memset(buf, 0, size);
+	return buf;
+}
+EXPORT_SYMBOL(vzalloc);
+
 #endif
