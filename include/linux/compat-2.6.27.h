@@ -20,6 +20,7 @@
 #include <linux/wireless.h>
 #include <linux/skbuff.h>
 #include <net/sch_generic.h>
+#include <linux/ethtool.h>
 
 #define PCI_PM_CAP_PME_SHIFT	11
 
@@ -237,6 +238,17 @@ static inline void debugfs_remove_recursive(struct dentry *dentry)
 })
 
 #define dev_name(dev) dev_name((struct device *)dev)
+
+static inline void ethtool_cmd_speed_set(struct ethtool_cmd *ep,
+					 __u32 speed)
+{
+	ep->speed = (__u16)speed;
+}
+
+static inline __u32 ethtool_cmd_speed(const struct ethtool_cmd *ep)
+{
+	return ep->speed;
+}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)) */
 
