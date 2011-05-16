@@ -247,6 +247,7 @@ static inline int usb_disable_autosuspend(struct usb_device *udev)
 #define sdio_set_host_pm_flags(a, b) 0
 
 #define rcu_dereference_protected(p, c) (p)
+#define rcu_access_pointer(p)   ACCESS_ONCE(p)
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,34)) */
 
