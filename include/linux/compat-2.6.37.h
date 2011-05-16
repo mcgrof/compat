@@ -112,6 +112,9 @@ extern void compat_led_brightness_set(struct led_classdev *led_cdev,
 
 extern void *vzalloc(unsigned long size);
 
+#define rtnl_dereference(p)                                     \
+        rcu_dereference_protected(p, lockdep_rtnl_is_held())
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,37)) */
 
 #endif /* LINUX_26_37_COMPAT_H */
