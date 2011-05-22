@@ -249,6 +249,8 @@ static inline int usb_disable_autosuspend(struct usb_device *udev)
 #define rcu_dereference_protected(p, c) (p)
 #define rcu_access_pointer(p)   ACCESS_ONCE(p)
 
+#define rcu_dereference_raw(p)	rcu_dereference(p)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,34)) */
 
 #endif /* LINUX_26_34_COMPAT_H */
