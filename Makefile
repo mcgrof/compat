@@ -7,6 +7,7 @@ export KLIB:=          /lib/modules/$(shell uname -r)
 endif
 export KLIB_BUILD ?=    $(KLIB)/build
 
+
 export PWD := $(shell pwd)
 
 ifeq ($(KERNELRELEASE),)
