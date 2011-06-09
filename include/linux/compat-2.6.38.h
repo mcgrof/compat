@@ -39,6 +39,7 @@ static inline unsigned long ewma_read(const struct ewma *avg)
 }
 
 #define pr_warn pr_warning
+#define create_freezable_workqueue create_freezeable_workqueue
 
 static inline int skb_checksum_start_offset(const struct sk_buff *skb)
 {
