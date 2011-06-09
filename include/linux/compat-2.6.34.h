@@ -251,6 +251,8 @@ static inline int usb_disable_autosuspend(struct usb_device *udev)
 
 #define rcu_dereference_raw(p)	rcu_dereference(p)
 
+#define KEY_WPS_BUTTON		0x211	/* WiFi Protected Setup key */
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,34)) */
 
 #endif /* LINUX_26_34_COMPAT_H */
