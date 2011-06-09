@@ -1,11 +1,9 @@
-#ifndef LINUX_26_40_COMPAT_H
-#define LINUX_26_40_COMPAT_H
+#ifndef LINUX_3_1_COMPAT_H
+#define LINUX_3_1_COMPAT_H
 
 #include <linux/version.h>
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,40))
-
-#include <linux/rcupdate.h>
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
 
 /*
  * This is not part of The 2.6.37 kernel yet but we
@@ -24,6 +22,6 @@
 #define br_port_exists(dev)	(dev->br_port)
 #endif
 
-#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,40)) */
+#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0)) */
 
-#endif /* LINUX_26_40_COMPAT_H */
+#endif /* LINUX_3_1_COMPAT_H */
