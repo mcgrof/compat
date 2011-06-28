@@ -22,6 +22,8 @@
 #define br_port_exists(dev)	(dev->br_port)
 #endif
 
+#define genl_dump_check_consistent(cb, user_hdr, family)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0)) */
 
 #endif /* LINUX_3_1_COMPAT_H */
