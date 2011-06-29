@@ -20,12 +20,11 @@
 
 /* netdev_printk helpers, similar to dev_printk */
 
-static inline const char *netdev_name(const struct net_device *dev)
-{
-	if (dev->reg_state != NETREG_REGISTERED)
-		return "(unregistered net_device)";
-	return dev->name;
-}
+#ifndef netdev_name
+#define netdev_name(__dev) \
+	((__dev->reg_state != NETREG_REGISTERED) ? \
+		"(unregistered net_device)" : __dev->name)
+#endif
 
 #define netdev_printk(level, netdev, format, args...)		\
 	dev_printk(level, (netdev)->dev.parent,			\
