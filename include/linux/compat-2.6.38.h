@@ -71,6 +71,10 @@ static inline int skb_checksum_start_offset(const struct sk_buff *skb)
 	no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
 #endif
 
+/* include/linux/netdevice.h */
+#define alloc_netdev_mqs(sizeof_priv, name, setup, txqs, rxqs) \
+	alloc_netdev_mq(sizeof_priv, name, setup, max(txqs, rxqs))
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)) */
 
 #endif /* LINUX_26_38_COMPAT_H */
