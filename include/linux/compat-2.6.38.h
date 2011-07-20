@@ -75,6 +75,8 @@ static inline int skb_checksum_start_offset(const struct sk_buff *skb)
 #define alloc_netdev_mqs(sizeof_priv, name, setup, txqs, rxqs) \
 	alloc_netdev_mq(sizeof_priv, name, setup, max(txqs, rxqs))
 
+#define ETH_P_LINK_CTL	0x886c		/* HPNA, wlan link local tunnel */
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,38)) */
 
 #endif /* LINUX_26_38_COMPAT_H */
