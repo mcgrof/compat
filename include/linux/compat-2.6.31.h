@@ -199,6 +199,9 @@ void compat_synchronize_threaded_irq(struct compat_threaded_irq *comp)
 #define list_entry_rcu(ptr, type, member) \
 	container_of(rcu_dereference(ptr), type, member)
 
+#define skb_walk_frags(skb, iter)	\
+	for (iter = skb_shinfo(skb)->frag_list; iter; iter = iter->next)
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,31)) */
 
 #endif /* LINUX_26_31_COMPAT_H */
