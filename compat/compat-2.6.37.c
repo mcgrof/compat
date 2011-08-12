@@ -158,7 +158,7 @@ EXPORT_SYMBOL(compat_genl_unregister_family);
 #undef led_brightness_set
 #undef led_classdev_unregister
 
-spinlock_t led_lock;
+static DEFINE_SPINLOCK(led_lock);
 static LIST_HEAD(led_timers);
 
 struct led_timer {
