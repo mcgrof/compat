@@ -34,5 +34,6 @@
 #include <linux/compat-2.6.39.h>
 #include <linux/compat-3.0.h>
 #include <linux/compat-3.1.h>
+#include <linux/compat-3.2.h>
 
 #endif /* LINUX_26_COMPAT_H */
