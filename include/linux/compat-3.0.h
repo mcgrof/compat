@@ -46,6 +46,8 @@ struct bcma_device_id {
 #define BCMA_ANY_CLASS		0xFF
 #endif /* BCMA_CORE */
 
+int mac_pton(const char *s, u8 *mac);
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)) */
 
 #endif /* LINUX_3_0_COMPAT_H */
