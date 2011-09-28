@@ -144,6 +144,11 @@ static inline bool pci_is_pcie(struct pci_dev *dev)
 #define __always_unused			/* unimplemented */
 #endif
 
+static inline long __must_check IS_ERR_OR_NULL(const void *ptr)
+{
+	return !ptr || IS_ERR_VALUE((unsigned long)ptr);
+}
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)) */
 
 #endif /* LINUX_26_33_COMPAT_H */
