@@ -125,6 +125,15 @@ static inline void tty_unlock(void) __releases(kernel_lock)
 
 static inline void pm_wakeup_event(struct device *dev, unsigned int msec) {}
 
+static inline bool skb_defer_rx_timestamp(struct sk_buff *skb)
+{
+	return false;
+}
+
+static inline void skb_tx_timestamp(struct sk_buff *skb)
+{
+}
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36)) */
 
 #endif /* LINUX_26_36_COMPAT_H */
