@@ -58,6 +58,8 @@ static inline dma_addr_t skb_frag_dma_map(struct device *dev,
 			    frag->page_offset + offset, size, dir);
 }
 
+#define ETH_P_TDLS	0x890D          /* TDLS */
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,2,0)) */
 
 #endif /* LINUX_3_2_COMPAT_H */
