@@ -134,6 +134,21 @@ static inline void skb_tx_timestamp(struct sk_buff *skb)
 {
 }
 
+extern struct workqueue_struct *system_nrt_wq;
+
+void compat_system_workqueue_create(void);
+void compat_system_workqueue_destroy(void);
+
+#else
+
+static inline void compat_system_workqueue_create(void)
+{
+}
+
+static inline void compat_system_workqueue_destroy(void)
+{
+}
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36)) */
 
 #endif /* LINUX_26_36_COMPAT_H */
