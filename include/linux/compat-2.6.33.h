@@ -55,6 +55,9 @@ static inline void compat_release_firmware(const struct firmware *fw)
 /* this will never happen on older kernels */
 #define NETDEV_POST_INIT 0xffff
 
+/* mask netdev_alloc_skb_ip_align as debian squeeze also backports this */
+#define netdev_alloc_skb_ip_align(a, b) compat_netdev_alloc_skb_ip_align(a, b)
+
 static inline struct sk_buff *netdev_alloc_skb_ip_align(struct net_device *dev,
                 unsigned int length)
 {
@@ -107,6 +110,9 @@ int pccard_loop_tuple(struct pcmcia_socket *s, unsigned int function,
 
 #define sock_recv_ts_and_drops(msg, sk, skb) sock_recv_timestamp(msg, sk, skb)
 
+/* mask pci_pcie_cap as debian squeeze also backports this */
+#define pci_pcie_cap(a) compat_pci_pcie_cap(a)
+
 /**
  * pci_pcie_cap - get the saved PCIe capability offset
  * @dev: PCI device
@@ -143,6 +149,9 @@ static inline bool pci_is_pcie(struct pci_dev *dev)
 #else
 #define __always_unused			/* unimplemented */
 #endif
+
+/* mask IS_ERR_OR_NULL as debian squeeze also backports this */
+#define IS_ERR_OR_NULL(a) compat_IS_ERR_OR_NULL(a)
 
 static inline long __must_check IS_ERR_OR_NULL(const void *ptr)
 {
