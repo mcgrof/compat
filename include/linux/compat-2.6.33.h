@@ -14,9 +14,11 @@
 #endif
 #include <linux/firmware.h>
 
+#if defined(CONFIG_COMPAT_FIRMWARE_CLASS)
 #define release_firmware compat_release_firmware
 #define request_firmware compat_request_firmware
 #define request_firmware_nowait compat_request_firmware_nowait
+#endif
 
 #if defined(CONFIG_FW_LOADER) || defined(CONFIG_FW_LOADER_MODULE)
 int compat_request_firmware(const struct firmware **fw, const char *name,
