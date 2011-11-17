@@ -46,6 +46,9 @@
 #define netdev_info(dev, format, args...)			\
 	netdev_printk(KERN_INFO, dev, format, ##args)
 
+/* mask netdev_dbg as RHEL6 backports this */
+#if !defined(netdev_dbg)
+
 #if defined(DEBUG)
 #define netdev_dbg(__dev, format, args...)			\
 	netdev_printk(KERN_DEBUG, __dev, format, ##args)
@@ -64,6 +67,11 @@ do {								\
 })
 #endif
 
+#endif
+
+/* mask netdev_vdbg as RHEL6 backports this */
+#if !defined(netdev_dbg)
+
 #if defined(VERBOSE_DEBUG)
 #define netdev_vdbg	netdev_dbg
 #else
@@ -74,6 +82,8 @@ do {								\
 		netdev_printk(KERN_DEBUG, dev, format, ##args);	\
 	0;							\
 })
+#endif
+
 #endif
 
 /*
@@ -107,6 +117,9 @@ do {					  			\
 #define netif_info(priv, type, dev, fmt, args...)		\
 	netif_printk(priv, type, KERN_INFO, (dev), fmt, ##args)
 
+/* mask netif_dbg as RHEL6 backports this */
+#if !defined(netif_dbg)
+
 #if defined(DEBUG)
 #define netif_dbg(priv, type, dev, format, args...)		\
 	netif_printk(priv, type, KERN_DEBUG, dev, format, ##args)
@@ -127,6 +140,11 @@ do {								\
 })
 #endif
 
+#endif
+
+/* mask netif_vdbg as RHEL6 backports this */
+#if !defined(netif_vdbg)
+
 #if defined(VERBOSE_DEBUG)
 #define netif_vdbg	netdev_dbg
 #else
@@ -136,6 +154,7 @@ do {								\
 		netif_printk(KERN_DEBUG, dev, format, ##args);	\
 	0;							\
 })
+#endif
 #endif
 /* source: include/linux/netdevice.h */
 

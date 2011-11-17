@@ -13,6 +13,7 @@
 #include <pcmcia/ds.h>
 #endif
 #include <linux/firmware.h>
+#include <linux/input.h>
 
 #if defined(CONFIG_COMPAT_FIRMWARE_CLASS)
 #define release_firmware compat_release_firmware
@@ -49,7 +50,10 @@ static inline void compat_release_firmware(const struct firmware *fw)
 }
 #endif
 
+/* mask KEY_RFKILL as RHEL6 backports this */
+#if !defined(KEY_RFKILL)
 #define KEY_RFKILL		247	/* Key that controls all radios */
+#endif
 
 #define IFF_DONT_BRIDGE 0x800		/* disallow bridging this ether dev */
 /* source: include/linux/if.h */
@@ -130,6 +134,9 @@ static inline int pci_pcie_cap(struct pci_dev *dev)
 {
 	return pci_find_capability(dev, PCI_CAP_ID_EXP);
 }
+
+/* mask pci_is_pcie as RHEL6 backports this */
+#define pci_is_pcie(a) compat_pci_is_pcie(a)
 
 /**
  * pci_is_pcie - check if the PCI device is PCI Express capable

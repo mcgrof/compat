@@ -14,6 +14,9 @@
 #define kparam_block_sysfs_write(a)
 #define kparam_unblock_sysfs_write(a)
 
+/* mask va_format as RHEL6 backports this */
+#define va_format compat_va_format
+
 struct va_format {
 	const char *fmt;
 	va_list *va;
