@@ -99,7 +99,7 @@ EXPORT_SYMBOL_GPL(system_nrt_wq);
 void compat_system_workqueue_create()
 {
 	system_nrt_wq = create_singlethread_workqueue("events_nrt");
-	WARN_ON(system_nrt_wq);
+	WARN_ON(!system_nrt_wq);
 }
 
 void compat_system_workqueue_destroy()
