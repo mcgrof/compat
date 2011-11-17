@@ -31,6 +31,8 @@ static inline void skb_complete_wifi_ack(struct sk_buff *skb, bool acked)
 }
 #define NL80211_FEATURE_SK_TX_STATUS 0
 
+typedef u32 netdev_features_t;
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)) */
 
 #endif /* LINUX_3_3_COMPAT_H */
