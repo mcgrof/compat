@@ -5,6 +5,8 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0))
 
+#include <linux/security.h>
+
 #define genl_dump_check_consistent(cb, user_hdr, family)
 
 #define IFF_TX_SKB_SHARING	0x10000	/* The interface supports sharing
