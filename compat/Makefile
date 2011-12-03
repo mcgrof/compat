@@ -34,9 +34,9 @@ compat-$(CONFIG_COMPAT_KERNEL_2_6_39) += \
 	compat-2.6.39.o \
 	kstrtox.o
 compat-$(CONFIG_COMPAT_KERNEL_3_0) += compat-3.0.o
-compat-$(CONFIG_COMPAT_KERNEL_3_1) += \
-	cordic.o \
-	crc8.o
+
+compat-$(CONFIG_COMPAT_CORDIC) += cordic.o
+compat-$(CONFIG_COMPAT_CRC8) += crc8.o
 
 ifndef CONFIG_64BIT
 ifndef CONFIG_GENERIC_ATOMIC64
