@@ -215,6 +215,20 @@ extern long long atomic64_add_return(long long a, atomic64_t *v);
 
 #endif
 
+/*
+ * Like above, but uses del_timer() instead of del_timer_sync(). This means,
+ * if it returns 0 the timer function may be running and the queueing is in
+ * progress.
+ */
+static inline bool __cancel_delayed_work(struct delayed_work *work)
+{
+	bool ret;
+
+	ret = del_timer(&work->timer);
+	if (ret)
+		work_clear_pending(&work->work);
+	return ret;
+}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,31)) */
 
