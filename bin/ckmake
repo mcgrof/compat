@@ -1,0 +1,65 @@
+#!/bin/bash
+#
+# Copyright (C) 2012, Luis R. Rodriguez <mcgrof@frijolero.org>
+# Copyright (C) 2012, Hauke Mehrtens <hauke@hauke-m.de>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# You can use this to compile a module accross all installed kernels
+# found. This relies on distribution specific kernels, but can handle
+# your own custom list of target kernels. Log is setnt to LOG variable.
+
+# Pretty colors
+GREEN="\033[01;32m"
+YELLOW="\033[01;33m"
+NORMAL="\033[00m"
+BLUE="\033[34m"
+RED="\033[31m"
+PURPLE="\033[35m"
+CYAN="\033[36m"
+UNDERLINE="\033[02m"
+
+#export KCFLAGS="-Wno-unused-but-set-variable"
+KERNEL_DIR="/lib/modules"
+KLIBS=""
+LOG="ckmake.log"
+
+LSB_RED_ID=$(/usr/bin/lsb_release -i -s)
+case $LSB_RED_ID in
+"Ubuntu")
+	for i in $(find /lib/modules/ -type d -name \*generic\* | sort -n -r); do
+		KLIBS="$KLIBS $i"
+	done
+	;;
+*)
+	echo -e "Unsupported distribution"
+	exit
+	;;
+esac
+
+nice make clean 2>&1 > $LOG
+
+for i in $KLIBS; do
+	KERNEL=$(basename $i)
+	DIR=${i}/build/
+	echo -e "--------------------------------------------" >> $LOG
+
+	if [[ ! -d $DIR ]]; then
+		continue
+	fi
+
+	echo -en "Trying kernel ${BLUE}" | tee -a $LOG
+	printf "%40s\t" "${KERNEL}" | tee -a $LOG
+	echo -en "${NORMAL}" | tee -a $LOG
+
+	ionice -c 3 nice -n 20 make KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable &>> $LOG
+	if [[ $? -eq 0 ]]; then
+		echo -e "${GREEN}[OK]${NORMAL}" | tee -a $LOG
+	else
+		echo -e "${RED}[FAILED]${NORMAL}" | tee -a $LOG
+	fi
+
+	nice make clean KLIB=$DIR KLIB_BUILD=$DIR 2>&1 >> $LOG
+done
