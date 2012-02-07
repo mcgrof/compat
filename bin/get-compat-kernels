@@ -11,89 +11,106 @@
 # then use ckmake to cross compile against all supported kernels.
 
 function get_ubuntu_kernels() {
+
+	ARCH=$(uname -m)
+	TARGET=""
+
+	case $ARCH in
+	"x86_64")
+		TARGET="amd64"
+		;;
+	"i686")
+		TARGET="i386"
+		;;
+	*)
+		echo -e "Unsupported architecture"
+		exit
+		;;
+	esac
+
 	KERNELS=""
 
 	KPATH="http://kernel.ubuntu.com/~kernel-ppa/mainline/"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.24/linux-headers-2.6.24-020624_2.6.24-020624_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.24/linux-headers-2.6.24-020624-generic_2.6.24-020624_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.24/linux-image-2.6.24-020624-generic_2.6.24-020624_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.24/linux-headers-2.6.24-020624-generic_2.6.24-020624_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.24/linux-image-2.6.24-020624-generic_2.6.24-020624_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.25/linux-headers-2.6.25-020625_2.6.25-020625_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.25/linux-headers-2.6.25-020625-generic_2.6.25-020625_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.25/linux-image-2.6.25-020625-generic_2.6.25-020625_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.25/linux-headers-2.6.25-020625-generic_2.6.25-020625_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.25/linux-image-2.6.25-020625-generic_2.6.25-020625_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.26/linux-headers-2.6.26-020626_2.6.26-020626_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.26/linux-headers-2.6.26-020626-generic_2.6.26-020626_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.26/linux-image-2.6.26-020626-generic_2.6.26-020626_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.26/linux-headers-2.6.26-020626-generic_2.6.26-020626_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.26/linux-image-2.6.26-020626-generic_2.6.26-020626_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.27/linux-headers-2.6.27-020627_2.6.27-020627_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.27/linux-headers-2.6.27-020627-generic_2.6.27-020627_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.27/linux-image-2.6.27-020627-generic_2.6.27-020627_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.27/linux-headers-2.6.27-020627-generic_2.6.27-020627_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.27/linux-image-2.6.27-020627-generic_2.6.27-020627_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.28.10/linux-headers-2.6.28-02062810_2.6.28-02062810_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.28.10/linux-headers-2.6.28-02062810-generic_2.6.28-02062810_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.28.10/linux-image-2.6.28-02062810-generic_2.6.28-02062810_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.28.10/linux-headers-2.6.28-02062810-generic_2.6.28-02062810_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.28.10/linux-image-2.6.28-02062810-generic_2.6.28-02062810_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.29.6/linux-headers-2.6.29-02062906_2.6.29-02062906_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.29.6/linux-headers-2.6.29-02062906-generic_2.6.29-02062906_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.29.6/linux-image-2.6.29-02062906-generic_2.6.29-02062906_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.29.6/linux-headers-2.6.29-02062906-generic_2.6.29-02062906_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.29.6/linux-image-2.6.29-02062906-generic_2.6.29-02062906_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.30.10/linux-headers-2.6.30-02063010_2.6.30-02063010_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.30.10/linux-headers-2.6.30-02063010-generic_2.6.30-02063010_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.30.10/linux-image-2.6.30-02063010-generic_2.6.30-02063010_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.30.10/linux-headers-2.6.30-02063010-generic_2.6.30-02063010_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.30.10/linux-image-2.6.30-02063010-generic_2.6.30-02063010_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.31.13-karmic/linux-headers-2.6.31-02063113_2.6.31-02063113_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.31.13-karmic/linux-headers-2.6.31-02063113-generic_2.6.31-02063113_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.31.13-karmic/linux-image-2.6.31-02063113-generic_2.6.31-02063113_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.31.13-karmic/linux-headers-2.6.31-02063113-generic_2.6.31-02063113_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.31.13-karmic/linux-image-2.6.31-02063113-generic_2.6.31-02063113_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.32.55-lucid/linux-headers-2.6.32-02063255_2.6.32-02063255.201201251735_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.32.55-lucid/linux-headers-2.6.32-02063255-generic_2.6.32-02063255.201201251735_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.32.55-lucid/linux-image-2.6.32-02063255-generic_2.6.32-02063255.201201251735_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.32.55-lucid/linux-headers-2.6.32-02063255-generic_2.6.32-02063255.201201251735_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.32.55-lucid/linux-image-2.6.32-02063255-generic_2.6.32-02063255.201201251735_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.33.5-lucid/linux-headers-2.6.33-02063305_2.6.33-02063305_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.33.5-lucid/linux-headers-2.6.33-02063305-generic_2.6.33-02063305_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.33.5-lucid/linux-image-2.6.33-02063305-generic_2.6.33-02063305_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.33.5-lucid/linux-headers-2.6.33-02063305-generic_2.6.33-02063305_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.33.5-lucid/linux-image-2.6.33-02063305-generic_2.6.33-02063305_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.34.10-maverick/linux-headers-2.6.34-02063410_2.6.34-02063410.201111101535_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.34.10-maverick/linux-headers-2.6.34-02063410-generic_2.6.34-02063410.201111101535_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.34.10-maverick/linux-image-2.6.34-02063410-generic_2.6.34-02063410.201111101535_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.34.10-maverick/linux-headers-2.6.34-02063410-generic_2.6.34-02063410.201111101535_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.34.10-maverick/linux-image-2.6.34-02063410-generic_2.6.34-02063410.201111101535_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.35.13-maverick/linux-headers-2.6.35-02063512_2.6.35-02063512.201111232118_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.35.13-maverick/linux-headers-2.6.35-02063512-generic_2.6.35-02063512.201111232118_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.35.13-maverick/linux-image-2.6.35-02063512-generic_2.6.35-02063512.201111232118_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.35.13-maverick/linux-headers-2.6.35-02063512-generic_2.6.35-02063512.201111232118_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.35.13-maverick/linux-image-2.6.35-02063512-generic_2.6.35-02063512.201111232118_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.36.4-natty/linux-headers-2.6.36-02063604_2.6.36-02063604.201102180911_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.36.4-natty/linux-headers-2.6.36-02063604-generic_2.6.36-02063604.201102180911_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.36.4-natty/linux-image-2.6.36-02063604-generic_2.6.36-02063604.201102180911_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.36.4-natty/linux-headers-2.6.36-02063604-generic_2.6.36-02063604.201102180911_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.36.4-natty/linux-image-2.6.36-02063604-generic_2.6.36-02063604.201102180911_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.37.6-natty/linux-headers-2.6.37-02063706_2.6.37-02063706.201103281005_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.37.6-natty/linux-headers-2.6.37-02063706-generic_2.6.37-02063706.201103281005_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.37.6-natty/linux-image-2.6.37-02063706-generic_2.6.37-02063706.201103281005_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.37.6-natty/linux-headers-2.6.37-02063706-generic_2.6.37-02063706.201103281005_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.37.6-natty/linux-image-2.6.37-02063706-generic_2.6.37-02063706.201103281005_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.38.8-natty/linux-headers-2.6.38-02063808_2.6.38-02063808.201106040910_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.38.8-natty/linux-headers-2.6.38-02063808-generic_2.6.38-02063808.201106040910_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.38.8-natty/linux-image-2.6.38-02063808-generic_2.6.38-02063808.201106040910_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.38.8-natty/linux-headers-2.6.38-02063808-generic_2.6.38-02063808.201106040910_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.38.8-natty/linux-image-2.6.38-02063808-generic_2.6.38-02063808.201106040910_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v2.6.39.4-oneiric/linux-headers-2.6.39-02063904_2.6.39-02063904.201108040905_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.39.4-oneiric/linux-headers-2.6.39-02063904-generic_2.6.39-02063904.201108040905_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v2.6.39.4-oneiric/linux-image-2.6.39-02063904-generic_2.6.39-02063904.201108040905_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.39.4-oneiric/linux-headers-2.6.39-02063904-generic_2.6.39-02063904.201108040905_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v2.6.39.4-oneiric/linux-image-2.6.39-02063904-generic_2.6.39-02063904.201108040905_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v3.0.18-oneiric/linux-headers-3.0.18-030018_3.0.18-030018.201201252135_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.0.18-oneiric/linux-headers-3.0.18-030018-generic_3.0.18-030018.201201252135_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.0.18-oneiric/linux-image-3.0.18-030018-generic_3.0.18-030018.201201252135_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.0.18-oneiric/linux-headers-3.0.18-030018-generic_3.0.18-030018.201201252135_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.0.18-oneiric/linux-image-3.0.18-030018-generic_3.0.18-030018.201201252135_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v3.1.10-precise/linux-headers-3.1.10-030110_3.1.10-030110.201201181135_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.1.10-precise/linux-headers-3.1.10-030110-generic_3.1.10-030110.201201181135_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.1.10-precise/linux-image-3.1.10-030110-generic_3.1.10-030110.201201181135_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.1.10-precise/linux-headers-3.1.10-030110-generic_3.1.10-030110.201201181135_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.1.10-precise/linux-image-3.1.10-030110-generic_3.1.10-030110.201201181135_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-headers-3.2.2-030202_3.2.2-030202.201201252035_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-headers-3.2.2-030202-generic_3.2.2-030202.201201252035_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-image-3.2.2-030202-generic_3.2.2-030202.201201252035_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-headers-3.2.2-030202-generic_3.2.2-030202.201201252035_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-image-3.2.2-030202-generic_3.2.2-030202.201201252035_${TARGET}.deb"
 
 	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-headers-3.3.0-030300rc2_3.3.0-030300rc2.201201311735_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-headers-3.3.0-030300rc2-generic_3.3.0-030300rc2.201201311735_amd64.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-image-3.3.0-030300rc2-generic_3.3.0-030300rc2.201201311735_amd64.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-headers-3.3.0-030300rc2-generic_3.3.0-030300rc2.201201311735_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-image-3.3.0-030300rc2-generic_3.3.0-030300rc2.201201311735_${TARGET}.deb"
 
 	for i in $KERNELS; do
 		FILE=$(basename $i)
