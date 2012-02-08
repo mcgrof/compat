@@ -19,7 +19,8 @@
 #if defined(CONFIG_X86) || defined(CONFIG_X86_64) || defined(CONFIG_PPC)
 /*
  * CONFIG_PHYS_ADDR_T_64BIT was added as new to all architectures
- * as of 2.6.28 but x86 and ppc had it already.
+ * as of 2.6.28 but x86 and ppc had it already. x86 only got phys_addr_t
+ * as of 2.6.25 but then is backported in compat-2.6.25.h
  */
 #else
 #if defined(CONFIG_64BIT) || defined(CONFIG_X86_PAE) || defned(CONFIG_PPC64) || defined(CONFIG_PHYS_64BIT)
