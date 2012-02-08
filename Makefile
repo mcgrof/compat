@@ -20,7 +20,7 @@ export COMPAT_BASE_TREE_VERSION := "next-20100517"
 export COMPAT_VERSION := $(shell git describe)
 endif
 
-# This generates a bunch of CONFIG_COMPAT_KERNEL_22 CONFIG_COMPAT_KERNEL_23 .. etc for
+# This generates a bunch of CONFIG_COMPAT_KERNEL_2_6_22 CONFIG_COMPAT_KERNEL_3_0 .. etc for
 # each kernel release you need an object for.
 ifneq ($(wildcard $(KLIB_BUILD)/Makefile),)
 
@@ -42,15 +42,15 @@ $(foreach ver,$(COMPAT_VERSIONS),$(eval export CONFIG_COMPAT_KERNEL_3_$(ver)=y))
 
 endif
 
-ifeq ($(CONFIG_COMPAT_KERNEL_33),y)
+ifeq ($(CONFIG_COMPAT_KERNEL_2_6_33),y)
 ifneq ($(CONFIG_FW_LOADER),)
  export CONFIG_COMPAT_FIRMWARE_CLASS=m
 endif
 endif
 
-ifeq ($(CONFIG_COMPAT_KERNEL_36),y)
+ifeq ($(CONFIG_COMPAT_KERNEL_2_6_36),y)
  export CONFIG_COMPAT_KFIFO=m
-endif #CONFIG_COMPAT_KERNEL_36
+endif #CONFIG_COMPAT_KERNEL_2_6_36
 
 obj-y += compat/
 
