@@ -3,3 +3,13 @@ Module.symvers
 module.order
 .pc
 ckmake.log
+.config
+include/linux/compat_autoconf.h
+.tmp_versions/
+compat/*.cmd
+compat/*.o
+compat/*.mod.c
+compat/*.ko
+modules.order
+modules
+*.patch

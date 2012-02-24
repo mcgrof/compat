@@ -20,37 +20,14 @@ export COMPAT_BASE_TREE_VERSION := "next-20100517"
 export COMPAT_VERSION := $(shell git describe)
 endif
 
-# This generates a bunch of CONFIG_COMPAT_KERNEL_2_6_22 CONFIG_COMPAT_KERNEL_3_0 .. etc for
-# each kernel release you need an object for.
-ifneq ($(wildcard $(KLIB_BUILD)/Makefile),)
+# to check config and compat autoconf
+export COMPAT_CONFIG=.config
+export COMPAT_AUTOCONF=include/linux/compat_autoconf.h
+export MAKE
 
-COMPAT_LATEST_VERSION = 3
-KERNEL_VERSION := $(shell $(MAKE) -C $(KLIB_BUILD) kernelversion | sed -n 's/^\([0-9]\)\..*/\1/p')
-
-ifneq ($(KERNEL_VERSION),2)
-KERNEL_SUBLEVEL := $(shell $(MAKE) -C $(KLIB_BUILD) kernelversion | sed -n 's/^3\.\([0-9]\+\).*/\1/p')
-else
-COMPAT_26LATEST_VERSION = 39
-KERNEL_26SUBLEVEL := $(shell $(MAKE) -C $(KLIB_BUILD) kernelversion | sed -n 's/^2\.6\.\([0-9]\+\).*/\1/p')
-COMPAT_26VERSIONS := $(shell I=$(COMPAT_26LATEST_VERSION); while [ "$$I" -gt $(KERNEL_26SUBLEVEL) ]; do echo $$I; I=$$(($$I - 1)); done)
-$(foreach ver,$(COMPAT_26VERSIONS),$(eval export CONFIG_COMPAT_KERNEL_2_6_$(ver)=y))
-KERNEL_SUBLEVEL := -1
-endif
-
-COMPAT_VERSIONS := $(shell I=$(COMPAT_LATEST_VERSION); while [ "$$I" -gt $(KERNEL_SUBLEVEL) ]; do echo $$I; I=$$(($$I - 1)); done)
-$(foreach ver,$(COMPAT_VERSIONS),$(eval export CONFIG_COMPAT_KERNEL_3_$(ver)=y))
-
-endif
-
-ifeq ($(CONFIG_COMPAT_KERNEL_2_6_33),y)
-ifneq ($(CONFIG_FW_LOADER),)
- export CONFIG_COMPAT_FIRMWARE_CLASS=m
-endif
-endif
-
-ifeq ($(CONFIG_COMPAT_KERNEL_2_6_36),y)
- export CONFIG_COMPAT_KFIFO=m
-endif #CONFIG_COMPAT_KERNEL_2_6_36
+# Recursion lets us ensure we get this file included.
+# Trick is to run make -C $(PWD) modules later.
+-include $(PWD)/$(COMPAT_CONFIG)
 
 obj-y += compat/
 
@@ -65,15 +42,31 @@ NOSTDINC_FLAGS := -I$(M)/include/ \
 	-DCOMPAT_PROJECT="\"Generic kernel\"" \
 	-DCOMPAT_VERSION="\"$(COMPAT_VERSION)\""
 
-modules:
+all: $(COMPAT_CONFIG)
+
+modules: $(COMPAT_CONFIG) $(COMPAT_AUTOCONF)
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) modules
+	@touch modules
+
 install: modules
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) $(KMODDIR_ARG) $(KMODPATH_ARG) \
 		modules_install
 	depmod -a
-	@./scripts/compat_firmware_install
+	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) clean
+
+$(COMPAT_AUTOCONF): ;
+
+$(COMPAT_CONFIG):
+	@$(PWD)/scripts/gen-compat-config.sh > $(PWD)/$(COMPAT_CONFIG)
+	@$(PWD)/scripts/gen-compat-autoconf.sh $(COMPAT_CONFIG) > $(PWD)/$(COMPAT_AUTOCONF)
+	@$(MAKE) -C $(PWD) modules
+
+install: modules
+
 clean:
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) clean
-all: modules
 
 clean-files := Module.symvers modules.order Module.markers compat/modules.order
+clean-files += modules $(COMPAT_CONFIG) $(COMPAT_AUTOCONF)
+
+.PHONY: all install clean
