@@ -18,6 +18,22 @@ export COMPAT_BASE_TREE := "linux-next.git"
 # working with.
 export COMPAT_BASE_TREE_VERSION := "next-20100517"
 export COMPAT_VERSION := $(shell git describe)
+
+else
+# By stuffing this hear we avoid using
+# this hackery on modpost, the 2nd section of module building.
+#
+# This hack lets us put our include path first than the kernel's
+# when building our compat modules. Your own makefile would look
+# the same.
+NOSTDINC_FLAGS := -I$(M)/include/ \
+	-include $(M)/include/linux/compat-2.6.h \
+	$(CFLAGS) \
+	-DCOMPAT_BASE_TREE="\"$(COMPAT_BASE_TREE)\"" \
+	-DCOMPAT_BASE_TREE_VERSION="\"$(COMPAT_BASE_TREE_VERSION)\"" \
+	-DCOMPAT_PROJECT="\"Generic kernel\"" \
+	-DCOMPAT_VERSION="\"$(COMPAT_VERSION)\""
+
 endif
 
 # to check config and compat autoconf
@@ -30,17 +46,6 @@ export MAKE
 -include $(PWD)/$(COMPAT_CONFIG)
 
 obj-y += compat/
-
-# This hack lets us put our include path first than the kernel's
-# when building our compat modules. Your own makefile would look
-# the same.
-NOSTDINC_FLAGS := -I$(M)/include/ \
-	-include $(M)/include/linux/compat-2.6.h \
-	$(CFLAGS) \
-	-DCOMPAT_BASE_TREE="\"$(COMPAT_BASE_TREE)\"" \
-	-DCOMPAT_BASE_TREE_VERSION="\"$(COMPAT_BASE_TREE_VERSION)\"" \
-	-DCOMPAT_PROJECT="\"Generic kernel\"" \
-	-DCOMPAT_VERSION="\"$(COMPAT_VERSION)\""
 
 all: $(COMPAT_CONFIG)
 
