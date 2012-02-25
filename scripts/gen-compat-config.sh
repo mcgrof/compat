@@ -41,6 +41,16 @@ for i in $(seq ${KERNEL_SUBLEVEL} ${COMPAT_LATEST_VERSION}); do
 	echo "CONFIG_COMPAT_KERNEL_3_${i}=y"
 done
 
+# The purpose of these seem to be the inverse of the above other varibales.
+# The RHEL checks seem to annotate the existance of RHEL minor versions.
+RHEL_MAJOR=$(grep ^RHEL_MAJOR ${KLIB_BUILD}/Makefile | sed -n 's/.*= *\(.*\)/\1/p')
+if [[ ! -z ${RHEL_MAJOR} ]]; then
+	RHEL_MINOR=$(grep ^RHEL_MINOR $(KLIB_BUILD)/Makefile | sed -n 's/.*= *\(.*\)/\1/p')
+	for i in $(seq 0 ${RHEL_MINOR}); do
+		echo "CONFIG_COMPAT_${RHEL_MAJOR}_${i}=y"
+	done
+fi
+
 if [[ ${CONFIG_COMPAT_KERNEL_2_6_33} -eq "y" ]]; then
 	echo "CONFIG_COMPAT_FIRMWARE_CLASS=m"
 fi
