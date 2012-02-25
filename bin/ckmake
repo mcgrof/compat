@@ -63,3 +63,6 @@ for i in $KLIBS; do
 
 	nice make clean KLIB=$DIR KLIB_BUILD=$DIR 2>&1 >> $LOG
 done
+
+cat $LOG | ./scripts/skip-colors > $LOG.tmp
+mv $LOG.tmp $LOG
