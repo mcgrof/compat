@@ -21,7 +21,10 @@
 #include <linux/firmware.h>
 #include <linux/slab.h>
 
+#ifdef to_dev
+#undef to_dev
 #define to_dev(obj) container_of(obj, struct device, kobj)
+#endif
 
 MODULE_AUTHOR("Manuel Estrada Sainz");
 MODULE_DESCRIPTION("Multi purpose firmware loading support");
