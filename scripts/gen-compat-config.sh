@@ -32,12 +32,14 @@ else
 	let KERNEL_26SUBLEVEL=${KERNEL_26SUBLEVEL}+1
 
 	for i in $(seq ${KERNEL_26SUBLEVEL} ${COMPAT_26LATEST_VERSION}); do
+		eval CONFIG_COMPAT_KERNEL_2_6_${i}=y
 		echo "CONFIG_COMPAT_KERNEL_2_6_${i}=y"
 	done
 fi
 
 let KERNEL_SUBLEVEL=${KERNEL_SUBLEVEL}+1
 for i in $(seq ${KERNEL_SUBLEVEL} ${COMPAT_LATEST_VERSION}); do
+	eval CONFIG_COMPAT_KERNEL_3_${i}=y
 	echo "CONFIG_COMPAT_KERNEL_3_${i}=y"
 done
 
@@ -47,14 +49,15 @@ RHEL_MAJOR=$(grep ^RHEL_MAJOR ${KLIB_BUILD}/Makefile | sed -n 's/.*= *\(.*\)/\1/
 if [[ ! -z ${RHEL_MAJOR} ]]; then
 	RHEL_MINOR=$(grep ^RHEL_MINOR $(KLIB_BUILD)/Makefile | sed -n 's/.*= *\(.*\)/\1/p')
 	for i in $(seq 0 ${RHEL_MINOR}); do
+		eval CONFIG_COMPAT_${RHEL_MAJOR}_${i}=y
 		echo "CONFIG_COMPAT_${RHEL_MAJOR}_${i}=y"
 	done
 fi
 
-if [[ ${CONFIG_COMPAT_KERNEL_2_6_33} -eq "y" ]]; then
+if [[ ${CONFIG_COMPAT_KERNEL_2_6_33} = "y" ]]; then
 	echo "CONFIG_COMPAT_FIRMWARE_CLASS=m"
 fi
 
-if [[ ${CONFIG_COMPAT_KERNEL_2_6_36} -eq "y" ]]; then
+if [[ ${CONFIG_COMPAT_KERNEL_2_6_36} = "y" ]]; then
 	echo "CONFIG_COMPAT_KFIFO=m"
 fi
