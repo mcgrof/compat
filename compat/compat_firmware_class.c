@@ -21,10 +21,7 @@
 #include <linux/firmware.h>
 #include <linux/slab.h>
 
-#ifdef to_dev
-#undef to_dev
-#define to_dev(obj) container_of(obj, struct device, kobj)
-#endif
+#define compat_firmware_to_dev(obj) container_of(obj, struct device, kobj)
 
 MODULE_AUTHOR("Manuel Estrada Sainz");
 MODULE_DESCRIPTION("Multi purpose firmware loading support");
@@ -327,7 +324,7 @@ static ssize_t firmware_data_read(struct kobject *kobj,
 				  char *buffer, loff_t offset, size_t count)
 #endif
 {
-	struct device *dev = to_dev(kobj);
+	struct device *dev = compat_firmware_to_dev(kobj);
 	struct firmware_priv *fw_priv = to_firmware_priv(dev);
 	struct firmware *fw;
 	ssize_t ret_count;
@@ -426,7 +423,7 @@ static ssize_t firmware_data_write(struct kobject *kobj,
 				   char *buffer, loff_t offset, size_t count)
 #endif
 {
-	struct device *dev = to_dev(kobj);
+	struct device *dev = compat_firmware_to_dev(kobj);
 	struct firmware_priv *fw_priv = to_firmware_priv(dev);
 	struct firmware *fw;
 	ssize_t retval;
