@@ -69,4 +69,4 @@ clean:
 clean-files := Module.symvers modules.order Module.markers compat/modules.order
 clean-files += modules $(COMPAT_CONFIG) $(COMPAT_AUTOCONF)
 
-.PHONY: all install clean
+.PHONY: all install clean modules Makefile
