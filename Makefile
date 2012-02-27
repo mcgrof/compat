@@ -39,15 +39,12 @@ NOSTDINC_FLAGS := -I$(M)/include/ \
 	-DCOMPAT_PROJECT="\"Generic kernel\"" \
 	-DCOMPAT_VERSION="\"$(COMPAT_VERSION)\""
 
+include $(COMPAT_CONFIG)
 endif
-
-# Recursion lets us ensure we get this file included.
-# Trick is to run make -C $(PWD) modules later.
--include $(COMPAT_CONFIG)
 
 obj-y += compat/
 
-all: $(COMPAT_CONFIG)
+all: modules
 
 modules: $(COMPAT_CONFIG) $(COMPAT_AUTOCONF)
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) modules
@@ -63,7 +60,6 @@ $(COMPAT_AUTOCONF): $(COMPAT_CONFIG)
 
 $(COMPAT_CONFIG):
 	+@$(PWD)/scripts/gen-compat-config.sh > $(COMPAT_CONFIG)
-	@$(MAKE) -C $(PWD) modules
 
 install: modules
 
