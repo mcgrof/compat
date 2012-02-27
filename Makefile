@@ -19,6 +19,11 @@ export COMPAT_BASE_TREE := "linux-next.git"
 export COMPAT_BASE_TREE_VERSION := "next-20100517"
 export COMPAT_VERSION := $(shell git describe)
 
+# to check config and compat autoconf
+export COMPAT_CONFIG=.config
+export COMPAT_AUTOCONF=include/linux/compat_autoconf.h
+export MAKE
+
 else
 # By stuffing this hear we avoid using
 # this hackery on modpost, the 2nd section of module building.
@@ -35,11 +40,6 @@ NOSTDINC_FLAGS := -I$(M)/include/ \
 	-DCOMPAT_VERSION="\"$(COMPAT_VERSION)\""
 
 endif
-
-# to check config and compat autoconf
-export COMPAT_CONFIG=.config
-export COMPAT_AUTOCONF=include/linux/compat_autoconf.h
-export MAKE
 
 # Recursion lets us ensure we get this file included.
 # Trick is to run make -C $(PWD) modules later.
