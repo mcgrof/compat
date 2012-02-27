@@ -20,8 +20,8 @@ export COMPAT_BASE_TREE_VERSION := "next-20100517"
 export COMPAT_VERSION := $(shell git describe)
 
 # to check config and compat autoconf
-export COMPAT_CONFIG=.config
-export COMPAT_AUTOCONF=include/linux/compat_autoconf.h
+export COMPAT_CONFIG=$(PWD)/.config
+export COMPAT_AUTOCONF=$(PWD)/include/linux/compat_autoconf.h
 export MAKE
 
 else
@@ -43,7 +43,7 @@ endif
 
 # Recursion lets us ensure we get this file included.
 # Trick is to run make -C $(PWD) modules later.
--include $(PWD)/$(COMPAT_CONFIG)
+-include $(COMPAT_CONFIG)
 
 obj-y += compat/
 
@@ -62,8 +62,8 @@ install: modules
 $(COMPAT_AUTOCONF): ;
 
 $(COMPAT_CONFIG):
-	+@$(PWD)/scripts/gen-compat-config.sh > $(PWD)/$(COMPAT_CONFIG)
-	+@$(PWD)/scripts/gen-compat-autoconf.sh $(COMPAT_CONFIG) > $(PWD)/$(COMPAT_AUTOCONF)
+	+@$(PWD)/scripts/gen-compat-config.sh > $(COMPAT_CONFIG)
+	+@$(PWD)/scripts/gen-compat-autoconf.sh $(COMPAT_CONFIG) > $(COMPAT_AUTOCONF)
 	@$(MAKE) -C $(PWD) modules
 
 install: modules
