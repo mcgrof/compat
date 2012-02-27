@@ -62,8 +62,8 @@ install: modules
 $(COMPAT_AUTOCONF): ;
 
 $(COMPAT_CONFIG):
-	@$(PWD)/scripts/gen-compat-config.sh > $(PWD)/$(COMPAT_CONFIG)
-	@$(PWD)/scripts/gen-compat-autoconf.sh $(COMPAT_CONFIG) > $(PWD)/$(COMPAT_AUTOCONF)
+	+@$(PWD)/scripts/gen-compat-config.sh > $(PWD)/$(COMPAT_CONFIG)
+	+@$(PWD)/scripts/gen-compat-autoconf.sh $(COMPAT_CONFIG) > $(PWD)/$(COMPAT_AUTOCONF)
 	@$(MAKE) -C $(PWD) modules
 
 install: modules
