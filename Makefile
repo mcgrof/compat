@@ -57,7 +57,6 @@ install: modules
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) $(KMODDIR_ARG) $(KMODPATH_ARG) \
 		modules_install
 	depmod -a
-	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) clean
 
 $(COMPAT_AUTOCONF): ;
 
