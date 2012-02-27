@@ -58,11 +58,11 @@ install: modules
 		modules_install
 	depmod -a
 
-$(COMPAT_AUTOCONF): ;
+$(COMPAT_AUTOCONF): $(COMPAT_CONFIG)
+	+@$(PWD)/scripts/gen-compat-autoconf.sh $(COMPAT_CONFIG) > $(COMPAT_AUTOCONF)
 
 $(COMPAT_CONFIG):
 	+@$(PWD)/scripts/gen-compat-config.sh > $(COMPAT_CONFIG)
-	+@$(PWD)/scripts/gen-compat-autoconf.sh $(COMPAT_CONFIG) > $(COMPAT_AUTOCONF)
 	@$(MAKE) -C $(PWD) modules
 
 install: modules
