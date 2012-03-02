@@ -40,7 +40,7 @@ void crc8_populate_msb(u8 table[CRC8_TABLE_SIZE], u8 polynomial)
 			table[i+j] = table[j] ^ t;
 	}
 }
-EXPORT_SYMBOL(crc8_populate_msb);
+EXPORT_SYMBOL_GPL(crc8_populate_msb);
 
 /*
  * crc8_populate_lsb - fill crc table for given polynomial in regular bit order.
@@ -61,7 +61,7 @@ void crc8_populate_lsb(u8 table[CRC8_TABLE_SIZE], u8 polynomial)
 			table[i+j] = table[j] ^ t;
 	}
 }
-EXPORT_SYMBOL(crc8_populate_lsb);
+EXPORT_SYMBOL_GPL(crc8_populate_lsb);
 
 /*
  * crc8 - calculate a crc8 over the given input data.
@@ -79,7 +79,7 @@ u8 crc8(const u8 table[CRC8_TABLE_SIZE], u8 *pdata, size_t nbytes, u8 crc)
 
 	return crc;
 }
-EXPORT_SYMBOL(crc8);
+EXPORT_SYMBOL_GPL(crc8);
 
 MODULE_DESCRIPTION("CRC8 (by Williams, Ross N.) function");
 MODULE_AUTHOR("Broadcom Corporation");

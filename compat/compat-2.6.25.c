@@ -92,6 +92,6 @@ int strict_strto##type(const char *cp, unsigned int base, valtype *res)	\
 define_strict_strtoux(l, unsigned long)
 define_strict_strtox(l, long)
 
-EXPORT_SYMBOL(strict_strtoul);
-EXPORT_SYMBOL(strict_strtol);
+EXPORT_SYMBOL_GPL(strict_strtoul);
+EXPORT_SYMBOL_GPL(strict_strtol);
 

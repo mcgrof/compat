@@ -31,4 +31,4 @@ int __netdev_printk(const char *level, const struct net_device *dev,
 
 	return r;
 }
-EXPORT_SYMBOL(__netdev_printk);
+EXPORT_SYMBOL_GPL(__netdev_printk);

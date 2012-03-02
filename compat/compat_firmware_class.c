@@ -754,6 +754,6 @@ static void __exit firmware_class_exit(void)
 fs_initcall(firmware_class_init);
 module_exit(firmware_class_exit);
 
-EXPORT_SYMBOL(release_firmware);
-EXPORT_SYMBOL(request_firmware);
-EXPORT_SYMBOL(request_firmware_nowait);
+EXPORT_SYMBOL_GPL(release_firmware);
+EXPORT_SYMBOL_GPL(request_firmware);
+EXPORT_SYMBOL_GPL(request_firmware_nowait);
