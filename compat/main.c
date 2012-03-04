@@ -32,6 +32,11 @@ module_param(compat_version, charp, 0400);
 MODULE_PARM_DESC(compat_version,
 		 "Version of the kernel compat backport work");
 
+void compat_dependency_symbol(void)
+{
+}
+EXPORT_SYMBOL_GPL(compat_dependency_symbol);
+
 static int __init compat_init(void)
 {
 	/* pm-qos for kernels <= 2.6.24, this is a no-op on newer kernels */

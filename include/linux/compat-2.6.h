@@ -10,6 +10,29 @@
 #include <linux/autoconf.h>
 #endif
 #include <linux/compat_autoconf.h>
+#include <linux/init.h>
+
+/*
+ * The define overwriting module_init is based on the original module_init
+ * which looks like this:
+ * #define module_init(initfn)					\
+ *	static inline initcall_t __inittest(void)		\
+ *	{ return initfn; }					\
+ *	int init_module(void) __attribute__((alias(#initfn)));
+ *
+ * To the call to the initfn we added the symbol dependency on compat
+ * to make sure that compat.ko gets loaded for any compat modules.
+ */
+void compat_dependency_symbol(void);
+
+#undef module_init
+#define module_init(initfn)						\
+	static void __init __init_compat(void)				\
+	{								\
+		compat_dependency_symbol();				\
+		initfn();						\
+	}								\
+	int init_module(void) __attribute__((alias("__init_compat")));
 
 /*
  * Each compat file represents compatibility code for new kernel
