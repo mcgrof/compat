@@ -27,10 +27,10 @@ void compat_dependency_symbol(void);
 
 #undef module_init
 #define module_init(initfn)						\
-	static void __init __init_compat(void)				\
+	static int __init __init_compat(void)				\
 	{								\
 		compat_dependency_symbol();				\
-		initfn();						\
+		return initfn();					\
 	}								\
 	int init_module(void) __attribute__((alias("__init_compat")));
 
