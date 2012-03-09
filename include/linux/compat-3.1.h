@@ -7,6 +7,8 @@
 
 #include <linux/security.h>
 
+#define IS_ENABLED(option) defined(option)
+
 #define genl_dump_check_consistent(cb, user_hdr, family)
 
 #define IFF_TX_SKB_SHARING	0x10000	/* The interface supports sharing
