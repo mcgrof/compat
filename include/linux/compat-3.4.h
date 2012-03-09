@@ -7,6 +7,13 @@
 
 #include <linux/etherdevice.h>
 
+#ifdef CONFIG_X86_X32_ABI
+#define COMPAT_USE_64BIT_TIME \
+	(!!(task_pt_regs(current)->orig_ax & __X32_SYSCALL_BIT))
+#else
+#define COMPAT_USE_64BIT_TIME 0
+#endif
+
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,12))
 static inline void eth_hw_addr_random(struct net_device *dev)
 {
