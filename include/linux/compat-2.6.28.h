@@ -9,12 +9,16 @@
 #include <linux/if_ether.h>
 #include <linux/usb.h>
 #include <linux/types.h>
+#include <linux/types.h>
+#include <linux/cpumask.h>
 
 #ifndef ETH_P_PAE
 #define ETH_P_PAE 0x888E      /* Port Access Entity (IEEE 802.1X) */
 #endif
 
 #include <linux/pci.h>
+
+typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } compat_cpumask_t;
 
 #if defined(CONFIG_X86) || defined(CONFIG_X86_64) || defined(CONFIG_PPC)
 /*

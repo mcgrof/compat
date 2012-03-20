@@ -145,6 +145,30 @@ void compat_flush_scheduled_work(void)
 }
 EXPORT_SYMBOL_GPL(compat_flush_scheduled_work);
 
+/**
+ * work_busy - test whether a work is currently pending or running
+ * @work: the work to be tested
+ *
+ * Test whether @work is currently pending or running.  There is no
+ * synchronization around this function and the test result is
+ * unreliable and only useful as advisory hints or for debugging.
+ * Especially for reentrant wqs, the pending state might hide the
+ * running state.
+ *
+ * RETURNS:
+ * OR'd bitmask of WORK_BUSY_* bits.
+ */
+unsigned int work_busy(struct work_struct *work)
+{
+	unsigned int ret = 0;
+
+	if (work_pending(work))
+		ret |= WORK_BUSY_PENDING;
+
+	return ret;
+}
+EXPORT_SYMBOL_GPL(work_busy);
+
 void compat_system_workqueue_create()
 {
 	system_wq = alloc_workqueue("events", 0, 0);

@@ -168,6 +168,14 @@ int compat_schedule_delayed_work_on(int cpu,
 				    unsigned long delay);
 void compat_flush_scheduled_work(void);
 
+enum {
+	/* bit mask for work_busy() return values */
+	WORK_BUSY_PENDING       = 1 << 0,
+	WORK_BUSY_RUNNING       = 1 << 1,
+};
+
+extern unsigned int work_busy(struct work_struct *work);
+
 #define schedule_work(work) compat_schedule_work(work)
 #define schedule_work_on(cpu, work) compat_schedule_work_on(cpu, work)
 #define schedule_delayed_work(dwork, delay) compat_schedule_delayed_work(dwork, delay)
