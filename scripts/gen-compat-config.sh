@@ -59,5 +59,5 @@ if [[ ${CONFIG_COMPAT_KERNEL_2_6_33} = "y" ]]; then
 fi
 
 if [[ ${CONFIG_COMPAT_KERNEL_2_6_36} = "y" ]]; then
-	echo "CONFIG_COMPAT_KFIFO=m"
+	echo "CONFIG_COMPAT_KFIFO=y"
 fi
