@@ -18,6 +18,20 @@
 #define SDIO_DEVICE_ID_INTEL_IWMC3200GPS	0x1405
 #define SDIO_DEVICE_ID_INTEL_IWMC3200BT		0x1406
 
+/*
+ * Backports 5e928f77a09a07f9dd595bb8a489965d69a83458
+ * run-time power management cannot really be backported
+ * given that the implementation added bus specific
+ * callbacks that we won't have on older kernels. If
+ * you really want run-time power management or good
+ * power management upgrade your kernel. We'll just
+ * compile this out as if run-time power management was
+ * disabled just as the kernel disables run-time power management
+ * when CONFIG_PM_RUNTIME is disabled.
+ */
+static inline void pm_runtime_init(struct device *dev) {}
+static inline void pm_runtime_remove(struct device *dev) {}
+
 static inline void flush_delayed_work(struct delayed_work *dwork)
 {
 	if (del_timer_sync(&dwork->timer)) {
