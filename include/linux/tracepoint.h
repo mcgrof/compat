@@ -28,6 +28,9 @@
 
 /* Force disabling tracing */
 
+#undef PARAMS
+#define PARAMS(args...) args
+
 #undef TRACE_EVENT
 #define TRACE_EVENT(name, proto, ...) \
 DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
