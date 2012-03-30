@@ -39,7 +39,9 @@ NOSTDINC_FLAGS := -I$(M)/include/ \
 	-DCOMPAT_PROJECT="\"Generic kernel\"" \
 	-DCOMPAT_VERSION="\"$(COMPAT_VERSION)\""
 
-include $(COMPAT_CONFIG)
+# Technicallay we can require the inclusion of COMPAT_CONFIG for
+# all targets except clean, so avoid the warnings at clean time.
+-include $(COMPAT_CONFIG)
 endif
 
 obj-y += compat/
