@@ -11,6 +11,7 @@
 #include <linux/kernel.h>
 #include <linux/version.h>
 #include <linux/skbuff.h>
+#include <linux/module.h>
 #include <net/dst.h>
 #include <net/xfrm.h>
 
