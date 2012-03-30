@@ -7,9 +7,8 @@ export KLIB:=          /lib/modules/$(shell uname -r)
 endif
 export KLIB_BUILD ?=    $(KLIB)/build
 
-export PWD := $(shell pwd)
-
 ifeq ($(KERNELRELEASE),)
+export PWD := $(shell pwd)
 export COMPAT_BASE_TREE := "linux-next.git"
 # For this specific tree this is only relevant in
 # terms of the last time we synched code up with upstream
