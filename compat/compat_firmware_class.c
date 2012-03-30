@@ -635,7 +635,7 @@ out:
  *      firmware image for this or any other device.
  **/
 int
-request_firmware(const struct firmware **firmware_p, const char *name,
+compat_request_firmware(const struct firmware **firmware_p, const char *name,
                  struct device *device)
 {
         int uevent = 1;
@@ -646,7 +646,7 @@ request_firmware(const struct firmware **firmware_p, const char *name,
  * release_firmware: - release the resource associated with a firmware image
  * @fw: firmware resource to release
  **/
-void release_firmware(const struct firmware *fw)
+void compat_release_firmware(const struct firmware *fw)
 {
 	if (fw) {
 		if (!fw_is_builtin_firmware(fw))
@@ -705,7 +705,7 @@ static int request_firmware_work_func(void *arg)
  *	in atomic contexts.
  **/
 int
-request_firmware_nowait(
+compat_request_firmware_nowait(
 	struct module *module, int uevent,
 	const char *name, struct device *device, gfp_t gfp, void *context,
 	void (*cont)(const struct firmware *fw, void *context))
