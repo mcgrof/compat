@@ -97,7 +97,6 @@ DECLARE_TRACE(name, PARAMS(proto), PARAMS(args))
 	static inline void						\
 	unregister_trace_##name(void (*probe)(proto))			\
 	{								\
-		return -ENOSYS;						\
 	}								\
 	static inline void check_trace_callback_type_##name(void (*cb)(data_proto)) \
 	{								\
