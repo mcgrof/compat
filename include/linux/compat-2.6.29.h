@@ -18,6 +18,12 @@
 #include <linux/usb.h>
 #include <linux/types.h>
 
+/* backports  */
+static inline void usb_autopm_put_interface_async(struct usb_interface *intf)
+{ }
+static inline int usb_autopm_get_interface_async(struct usb_interface *intf)
+{ return 0; }
+
 #if \
 	defined(CONFIG_ALPHA) || defined(CONFIG_AVR32) || \
 	defined(CONFIG_BLACKFIN) || defined(CONFIG_CRIS) || \
