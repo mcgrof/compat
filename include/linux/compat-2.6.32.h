@@ -64,6 +64,8 @@ static inline void pm_runtime_disable(struct device *dev)
 {
 }
 
+static inline void pm_runtime_put_noidle(struct device *dev) {}
+static inline void pm_runtime_get_noresume(struct device *dev) {}
 
 static inline void flush_delayed_work(struct delayed_work *dwork)
 {
