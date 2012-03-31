@@ -31,6 +31,39 @@
  */
 static inline void pm_runtime_init(struct device *dev) {}
 static inline void pm_runtime_remove(struct device *dev) {}
+static inline int pm_runtime_get(struct device *dev)
+{
+	return 0;
+}
+
+static inline int pm_runtime_get_sync(struct device *dev)
+{
+	return 0;
+}
+
+static inline int pm_runtime_put(struct device *dev)
+{
+	return 0;
+}
+
+static inline int pm_runtime_put_sync(struct device *dev)
+{
+	return 0;
+}
+
+static inline int pm_runtime_set_active(struct device *dev)
+{
+	return 0;
+}
+
+static inline void pm_runtime_set_suspended(struct device *dev)
+{
+}
+
+static inline void pm_runtime_disable(struct device *dev)
+{
+}
+
 
 static inline void flush_delayed_work(struct delayed_work *dwork)
 {
