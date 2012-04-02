@@ -18,6 +18,18 @@
 #include <linux/pci.h>
 #include <linux/in.h>
 #include <linux/errno.h>
+#include <linux/init.h>
+
+/*
+ * Backports 312b1485fb509c9bc32eda28ad29537896658cb8
+ * Author: Sam Ravnborg <sam@ravnborg.org>
+ * Date:   Mon Jan 28 20:21:15 2008 +0100
+ * 
+ * Introduce new section reference annotations tags: __ref, __refdata, __refconst
+ */
+#define __ref		__init_refok
+#define __refdata	__initdata_refok
+#define __ref		__exit_refok
 
 /*
  * backports 2658fa803111dae1353602e7f586de8e537803e2
