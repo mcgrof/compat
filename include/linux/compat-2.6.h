@@ -62,5 +62,6 @@ void compat_dependency_symbol(void);
 #include <linux/compat-3.2.h>
 #include <linux/compat-3.3.h>
 #include <linux/compat-3.4.h>
+#include <linux/compat-3.5.h>
 
 #endif /* LINUX_26_COMPAT_H */
