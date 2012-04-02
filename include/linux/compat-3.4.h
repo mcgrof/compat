@@ -6,6 +6,15 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))
 
 #include <linux/etherdevice.h>
+#include <linux/skbuff.h>
+
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
+#define skb_add_rx_frag(skb, i, page, off, size, truesize) \
+	v2_6_28_skb_add_rx_frag(skb, i, page, off, size)
+#else
+#define skb_add_rx_frag(skb, i, page, off, size, truesize) \
+	skb_add_rx_frag(skb, i, page, off, size)
+#endif
 
 #ifdef CONFIG_X86_X32_ABI
 #define COMPAT_USE_64BIT_TIME \

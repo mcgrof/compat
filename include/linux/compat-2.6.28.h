@@ -246,7 +246,7 @@ static inline void skb_queue_splice_tail(const struct sk_buff_head *list,
 
 unsigned long round_jiffies_up(unsigned long j);
 
-extern void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page,
+extern void v2_6_28_skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page,
 			    int off, int size);
 
 #define wake_up_interruptible_poll(x, m)			\

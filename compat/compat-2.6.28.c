@@ -303,7 +303,7 @@ unsigned long round_jiffies_up(unsigned long j)
 }
 EXPORT_SYMBOL_GPL(round_jiffies_up);
 
-void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page, int off,
+void v2_6_28_skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page, int off,
 		int size)
 {
 	skb_fill_page_desc(skb, i, page, off, size);
@@ -311,7 +311,7 @@ void skb_add_rx_frag(struct sk_buff *skb, int i, struct page *page, int off,
 	skb->data_len += size;
 	skb->truesize += size;
 }
-EXPORT_SYMBOL_GPL(skb_add_rx_frag);
+EXPORT_SYMBOL_GPL(v2_6_28_skb_add_rx_frag);
 
 void tty_write_unlock(struct tty_struct *tty)
 {
