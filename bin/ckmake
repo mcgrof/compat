@@ -29,7 +29,7 @@ LOG="ckmake.log"
 LSB_RED_ID=$(/usr/bin/lsb_release -i -s)
 case $LSB_RED_ID in
 "Ubuntu")
-	for i in $(find /lib/modules/ -type d -name \*generic\* | sort -n -r); do
+	for i in $(find /lib/modules/ -type d -name \*generic\* | sort -n -r | grep -v -E '\-[[:alnum:]]{1,2}\-'); do
 		KLIBS="$KLIBS $i"
 	done
 	;;
