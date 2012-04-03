@@ -71,7 +71,7 @@ for i in $KLIBS; do
 	log_try_kernel $KERNEL | ./scripts/skip-colors >> $LOG
 	log_try_kernel $KERNEL
 
-	ionice -c 3 nice -n 20 make KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable &>> $LOG
+	ionice -c 3 nice -n 20 make -s KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable &>> $LOG
 	if [[ $? -eq 0 ]]; then
 		echo -e "${GREEN}[OK]${NORMAL}" | tee_color_split
 	else
