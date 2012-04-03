@@ -9,6 +9,7 @@
  */
 
 #include <linux/fs.h>
+#include <linux/module.h>
 
 int simple_open(struct inode *inode, struct file *file)
 {
