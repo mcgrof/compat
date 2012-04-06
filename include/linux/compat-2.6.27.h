@@ -256,6 +256,8 @@ static inline __u32 ethtool_cmd_speed(const struct ethtool_cmd *ep)
  */
 #define lower_32_bits(n) ((u32)(n))
 
+#define netif_wake_subqueue netif_start_subqueue
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,27)) */
 
 #endif /* LINUX_26_27_COMPAT_H */
