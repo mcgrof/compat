@@ -29,7 +29,6 @@
  */
 #define __ref		__init_refok
 #define __refdata	__initdata_refok
-#define __ref		__exit_refok
 
 /*
  * backports 2658fa803111dae1353602e7f586de8e537803e2
