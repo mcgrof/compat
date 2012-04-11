@@ -226,6 +226,16 @@ struct net_device_ops {
 #endif
 };
 
+static inline int ndo_do_ioctl(struct net_device *dev,
+			       struct ifreq *ifr,
+			       int cmd)
+{
+	if (dev->do_ioctl)
+		return dev->do_ioctl(dev, ifr, cmd);
+	return -EOPNOTSUPP;
+}
+
+
 void netdev_attach_ops(struct net_device *dev,
 		       const struct net_device_ops *ops);
 
@@ -340,12 +350,25 @@ extern int		init_dummy_netdev(struct net_device *dev);
 		return fn(&pdev->dev);					\
 	}
 
-#else
+#else /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
 
+/* Kernels >= 2.6.29 follows */
+
+/* XXX: this can probably just go upstream ! */
 static inline void netdev_attach_ops(struct net_device *dev,
 		       const struct net_device_ops *ops)
 {
 	dev->netdev_ops = ops;
+}
+
+/* XXX: this can probably just go upstream! */
+static inline int ndo_do_ioctl(struct net_device *dev,
+			       struct ifreq *ifr,
+			       int cmd)
+{
+	if (dev->netdev_ops && dev->netdev_ops->ndo_do_ioctl)
+		return dev->netdev_ops->ndo_do_ioctl(dev, ifr, cmd);
+	return -EOPNOTSUPP;
 }
 
 #define compat_pci_suspend(fn)
