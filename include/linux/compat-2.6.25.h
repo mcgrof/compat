@@ -19,6 +19,10 @@
 #include <linux/in.h>
 #include <linux/errno.h>
 #include <linux/init.h>
+#include <linux/pci.h>
+
+/* Backports b718989da7 */
+int __must_check pci_enable_device_mem(struct pci_dev *dev);
 
 /*
  * Backports 312b1485fb509c9bc32eda28ad29537896658cb8
