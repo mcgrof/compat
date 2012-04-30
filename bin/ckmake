@@ -26,6 +26,7 @@ KERNEL_DIR="/lib/modules"
 KLIBS=""
 LOG="ckmake.log"
 TIME="0"
+RET=""
 
 LSB_RED_ID=$(/usr/bin/lsb_release -i -s)
 case $LSB_RED_ID in
@@ -94,10 +95,17 @@ function run_ckmake()
 		log_try_kernel $KERNEL
 
 		ionice -c 3 nice -n 20 make -s KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable &>> $LOG
-		if [[ $? -eq 0 ]]; then
+		CUR_RET=$?
+
+		if [[ $RET = "" ]]; then
+			RET=$CUR_RET
+		fi
+
+		if [[ $CUR_RET -eq 0 ]]; then
 			echo -e "${GREEN}[OK]${NORMAL}" | tee_color_split
 		else
 			echo -e "${RED}[FAILED]${NORMAL}" | tee_color_split
+			RET=$CUR_RET
 		fi
 
 		nice make clean KLIB=$DIR KLIB_BUILD=$DIR 2>&1 >> $LOG
@@ -108,8 +116,10 @@ nice make clean 2>&1 > $LOG
 
 if [[ $TIME != "1" ]]; then
 	run_ckmake
-	exit 0
+	exit $RET
 fi
 
 time $0
 time $0 | egrep "real|user|sys"
+
+exit $RET
