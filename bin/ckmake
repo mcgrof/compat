@@ -58,24 +58,43 @@ function log_try_kernel()
 
 function usage()
 {
-	echo -e "Usage: $0 [-t]"
+	echo -e "Usage: $0 [-t] <optional-target>"
 	echo -e "-t   will run: 'time ckmake; time ckmake' account for"
 	echo -e "     benchmark how long it takes to compile without ccache"
 	echo -e "     and a run after cache kicks in"
+	echo -e "-q   will ask ckmake to run make with -s to only output errors"
+	echo
+	echo -e "<optional-target>  is the arguments you want to pass to the"
+	echo -e "child make call that ckmake will use. For example if you have"
+	echo -e "a target 'linux' on your Makefile you can run 'cmake linux'"
 }
 
-if [[ $# -gt 1 ]]; then
-	usage
-	exit 1
-fi
+ARGS=""
+QUIET=""
 
-if [[ $# -eq 1 ]]; then
-	if [[ $1 != "-t" ]]; then
-		usage
-		exit 1
-	fi
-	TIME="1"
-fi
+for i in $@ ; do
+	case $1 in
+		"-h")
+			usage
+			exit 1
+			;;
+		"--help")
+			usage
+			exit 1
+			;;
+		"-t")
+			TIME="1"
+			shift
+			;;
+		"-q")
+			QUIET="-s"
+			shift
+			;;
+		*)
+			ARGS="${ARGS} $1"
+			shift
+	esac
+done
 
 function run_ckmake()
 {
@@ -94,7 +113,7 @@ function run_ckmake()
 		log_try_kernel $KERNEL | ./scripts/skip-colors >> $LOG
 		log_try_kernel $KERNEL
 
-		ionice -c 3 nice -n 20 make -s KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable &>> $LOG
+		ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable $ARGS &>> $LOG
 		CUR_RET=$?
 
 		if [[ $RET = "" ]]; then
