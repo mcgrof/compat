@@ -26,6 +26,9 @@ KERNEL_DIR="/lib/modules"
 KLIBS=""
 LOG="ckmake.log"
 TIME="0"
+QUIET=""
+ARGS=""
+
 RET=""
 
 LSB_RED_ID=$(/usr/bin/lsb_release -i -s)
@@ -69,9 +72,6 @@ function usage()
 	echo -e "a target 'linux' on your Makefile you can run 'cmake linux'"
 }
 
-ARGS=""
-QUIET=""
-
 for i in $@ ; do
 	case $1 in
 		"-h")
@@ -86,7 +86,7 @@ for i in $@ ; do
 			TIME="1"
 			shift
 			;;
-		"-q")
+		"-s")
 			QUIET="-s"
 			shift
 			;;
@@ -138,7 +138,7 @@ if [[ $TIME != "1" ]]; then
 	exit $RET
 fi
 
-time $0
-time $0 | egrep "real|user|sys"
+time $0 $QUIET $ARGS
+time $0 $QUIET $ARGS | egrep "real|user|sys"
 
 exit $RET
