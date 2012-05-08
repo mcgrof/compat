@@ -9,6 +9,7 @@
 extern int simple_open(struct inode *inode, struct file *file);
 
 /* Backports tty_lock: Localise the lock */
+#define tty_lock(__tty) tty_lock()
 #define tty_unlock(__tty) tty_unlock()
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)) */
