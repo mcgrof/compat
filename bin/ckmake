@@ -38,6 +38,11 @@ case $LSB_RED_ID in
 		KLIBS="$KLIBS $i"
 	done
 	;;
+"Fedora")
+	for i in $(find /lib/modules/ -type d -name '*.fc*' | sort -n -r); do
+		KLIBS="$KLIBS $i"
+	done
+	;;
 *)
 	echo -e "Unsupported distribution"
 	exit
