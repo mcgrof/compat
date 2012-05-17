@@ -18,6 +18,10 @@ export COMPAT_BASE_TREE := "linux-next.git"
 export COMPAT_BASE_TREE_VERSION := "next-20100517"
 export COMPAT_VERSION := $(shell git describe)
 
+# This is used to annotate what version of
+# compat.git was used.
+export COMPAT_BASE := $(shell git describe)
+
 # to check config and compat autoconf
 export COMPAT_CONFIG=$(PWD)/.config
 export COMPAT_AUTOCONF=$(PWD)/include/linux/compat_autoconf.h
@@ -33,6 +37,7 @@ else
 NOSTDINC_FLAGS := -I$(M)/include/ \
 	-include $(M)/include/linux/compat-2.6.h \
 	$(CFLAGS) \
+	-DCOMPAT_BASE="\"$(COMPAT_BASE)\"" \
 	-DCOMPAT_BASE_TREE="\"$(COMPAT_BASE_TREE)\"" \
 	-DCOMPAT_BASE_TREE_VERSION="\"$(COMPAT_BASE_TREE_VERSION)\"" \
 	-DCOMPAT_PROJECT="\"Generic kernel\"" \
