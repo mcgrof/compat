@@ -49,7 +49,6 @@ EXPORT_SYMBOL_GPL(compat_dependency_symbol);
 
 static int __init compat_init(void)
 {
-	/* pm-qos for kernels <= 2.6.24, this is a no-op on newer kernels */
 	compat_pm_qos_power_init();
 	compat_system_workqueue_create();
 	init_compat_mmc_pm_flags();
