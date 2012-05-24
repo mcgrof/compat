@@ -8,6 +8,8 @@
 #include <linux/etherdevice.h>
 #include <linux/skbuff.h>
 
+extern int simple_open(struct inode *inode, struct file *file);
+
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
 #define skb_add_rx_frag(skb, i, page, off, size, truesize) \
 	v2_6_28_skb_add_rx_frag(skb, i, page, off, size)
