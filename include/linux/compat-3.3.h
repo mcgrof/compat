@@ -8,6 +8,19 @@
 /* include to override NL80211_FEATURE_SK_TX_STATUS */
 #include <linux/nl80211.h>
 #include <linux/skbuff.h>
+#include <net/sch_generic.h>
+
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,37))
+static inline void qdisc_cb_private_validate(const struct sk_buff *skb, int sz)
+{
+	BUILD_BUG_ON(sizeof(skb->cb) < sizeof(struct qdisc_skb_cb) + sz);
+}
+#else
+static inline void qdisc_cb_private_validate(const struct sk_buff *skb, int sz)
+{
+	/* XXX ? */
+}
+#endif
 
 extern struct sk_buff *__pskb_copy(struct sk_buff *skb,
 				   int headroom, gfp_t gfp_mask);

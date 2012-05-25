@@ -58,6 +58,9 @@ struct codel_sched_data {
 	struct codel_vars	vars;
 	struct codel_stats	stats;
 	u32			drop_overlimit;
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	u32 limit;
+#endif
 };
 
 /* This is the specific function called from codel_dequeue()
@@ -95,11 +98,16 @@ static int codel_qdisc_enqueue(struct sk_buff *skb, struct Qdisc *sch)
 {
 	struct codel_sched_data *q;
 
+	q = qdisc_priv(sch);
+
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	if (likely(qdisc_qlen(sch) < q->limit)) {
+#else
 	if (likely(qdisc_qlen(sch) < sch->limit)) {
+#endif
 		codel_set_enqueue_time(skb);
 		return qdisc_enqueue_tail(skb, sch);
 	}
-	q = qdisc_priv(sch);
 	q->drop_overlimit++;
 	return qdisc_drop(skb, sch);
 }
@@ -140,13 +148,21 @@ static int codel_change(struct Qdisc *sch, struct nlattr *opt)
 	}
 
 	if (tb[TCA_CODEL_LIMIT])
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+		q->limit = nla_get_u32(tb[TCA_CODEL_LIMIT]);
+#else
 		sch->limit = nla_get_u32(tb[TCA_CODEL_LIMIT]);
+#endif
 
 	if (tb[TCA_CODEL_ECN])
 		q->params.ecn = !!nla_get_u32(tb[TCA_CODEL_ECN]);
 
 	qlen = sch->q.qlen;
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	while (sch->q.qlen > q->limit) {
+#else
 	while (sch->q.qlen > sch->limit) {
+#endif
 		struct sk_buff *skb = __skb_dequeue(&sch->q);
 
 		sch->qstats.backlog -= qdisc_pkt_len(skb);
@@ -162,7 +178,11 @@ static int codel_init(struct Qdisc *sch, struct nlattr *opt)
 {
 	struct codel_sched_data *q = qdisc_priv(sch);
 
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	q->limit = DEFAULT_CODEL_LIMIT;
+#else
 	sch->limit = DEFAULT_CODEL_LIMIT;
+#endif
 
 	codel_params_init(&q->params);
 	codel_vars_init(&q->vars);
@@ -175,7 +195,11 @@ static int codel_init(struct Qdisc *sch, struct nlattr *opt)
 			return err;
 	}
 
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	if (q->limit >= 1)
+#else
 	if (sch->limit >= 1)
+#endif
 		sch->flags |= TCQ_F_CAN_BYPASS;
 	else
 		sch->flags &= ~TCQ_F_CAN_BYPASS;
@@ -195,7 +219,11 @@ static int codel_dump(struct Qdisc *sch, struct sk_buff *skb)
 	if (nla_put_u32(skb, TCA_CODEL_TARGET,
 			codel_time_to_us(q->params.target)) ||
 	    nla_put_u32(skb, TCA_CODEL_LIMIT,
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+			q->limit) ||
+#else
 			sch->limit) ||
+#endif
 	    nla_put_u32(skb, TCA_CODEL_INTERVAL,
 			codel_time_to_us(q->params.interval)) ||
 	    nla_put_u32(skb, TCA_CODEL_ECN,
@@ -248,7 +276,9 @@ static struct Qdisc_ops codel_qdisc_ops __read_mostly = {
 
 	.enqueue	=	codel_qdisc_enqueue,
 	.dequeue	=	codel_qdisc_dequeue,
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,28))
 	.peek		=	qdisc_peek_dequeued,
+#endif
 	.init		=	codel_init,
 	.reset		=	codel_reset,
 	.change 	=	codel_change,

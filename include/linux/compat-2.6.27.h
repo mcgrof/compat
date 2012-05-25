@@ -22,6 +22,21 @@
 #include <net/sch_generic.h>
 #include <linux/ethtool.h>
 
+struct qdisc_skb_cb {
+	unsigned int            pkt_len;
+	char                    data[];
+};
+
+static inline struct qdisc_skb_cb *qdisc_skb_cb(struct sk_buff *skb)
+{
+	return (struct qdisc_skb_cb *)skb->cb;
+}
+
+static inline unsigned int qdisc_pkt_len(struct sk_buff *skb)
+{
+	return qdisc_skb_cb(skb)->pkt_len;
+}
+
 #define PCI_PM_CAP_PME_SHIFT	11
 
 /* I can't find a more suitable replacement... */

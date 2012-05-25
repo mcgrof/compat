@@ -1,3 +1,9 @@
+#include <linux/version.h>
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0))
+#include_next <net/codel.h>
+#else
+
 #ifndef __NET_SCHED_CODEL_H
 #define __NET_SCHED_CODEL_H
 
@@ -85,7 +91,11 @@ struct codel_skb_cb {
 static struct codel_skb_cb *get_codel_cb(const struct sk_buff *skb)
 {
 	qdisc_cb_private_validate(skb, sizeof(struct codel_skb_cb));
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,37))
+	return (struct codel_skb_cb *)qdisc_skb_cb((struct sk_buff *) skb)->data;
+#else
 	return (struct codel_skb_cb *)qdisc_skb_cb(skb)->data;
+#endif
 }
 
 static codel_time_t codel_get_enqueue_time(const struct sk_buff *skb)
@@ -219,10 +229,19 @@ static bool codel_should_drop(const struct sk_buff *skb,
 	}
 
 	vars->ldelay = now - codel_get_enqueue_time(skb);
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,37))
+	sch->qstats.backlog -= qdisc_pkt_len((struct sk_buff *)skb);
+#else
 	sch->qstats.backlog -= qdisc_pkt_len(skb);
+#endif
 
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,37))
+	if (unlikely(qdisc_pkt_len((struct sk_buff *)skb) > stats->maxpacket))
+		stats->maxpacket = qdisc_pkt_len((struct sk_buff *)skb);
+#else
 	if (unlikely(qdisc_pkt_len(skb) > stats->maxpacket))
 		stats->maxpacket = qdisc_pkt_len(skb);
+#endif
 
 	if (codel_time_before(vars->ldelay, params->target) ||
 	    sch->qstats.backlog <= stats->maxpacket) {
@@ -339,4 +358,5 @@ static struct sk_buff *codel_dequeue(struct Qdisc *sch,
 end:
 	return skb;
 }
+#endif
 #endif

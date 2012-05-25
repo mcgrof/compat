@@ -10,6 +10,14 @@
 #include <net/iw_handler.h>
 #include <linux/workqueue.h>
 #include <net/genetlink.h>
+#include <net/sch_generic.h>
+
+#define TCQ_F_CAN_BYPASS        4
+
+static inline int qdisc_qlen(const struct Qdisc *q)
+{
+	return q->q.qlen;
+}
 
 #define SDIO_VENDOR_ID_INTEL			0x0089
 #define SDIO_DEVICE_ID_INTEL_IWMC3200WIMAX	0x1402
