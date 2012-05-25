@@ -64,7 +64,7 @@ if [[ ${CONFIG_COMPAT_KERNEL_2_6_36} = "y" ]]; then
 fi
 
 if [[ ${CONFIG_COMPAT_KERNEL_3_5} = "y" ]]; then
-	# We don't have 2.6.24 backport support yet for Codel
+	# We don't have 2.6.24 backport support yet for Codel / FQ CoDel
 	# For those who want to try this is what is required that I can tell
 	# so far:
 	#  * struct Qdisc_ops
@@ -72,5 +72,6 @@ if [[ ${CONFIG_COMPAT_KERNEL_3_5} = "y" ]]; then
 	# 	- you need to parse data received from userspace differently
 	if [[ ${CONFIG_COMPAT_KERNEL_2_6_25} != "y" ]]; then
 		echo "export CONFIG_COMPAT_NET_SCH_CODEL=m"
+		echo "export CONFIG_COMPAT_NET_SCH_FQ_CODEL=m"
 	fi
 fi

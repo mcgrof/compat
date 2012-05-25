@@ -65,6 +65,9 @@ struct fq_codel_sched_data {
 
 	struct list_head new_flows;	/* list of new flows */
 	struct list_head old_flows;	/* list of old flows */
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	u32 limit;
+#endif
 };
 
 static unsigned int fq_codel_hash(const struct fq_codel_sched_data *q,
@@ -196,7 +199,11 @@ static int fq_codel_enqueue(struct sk_buff *skb, struct Qdisc *sch)
 		flow->deficit = q->quantum;
 		flow->dropped = 0;
 	}
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	if (++sch->q.qlen < q->limit)
+#else
 	if (++sch->q.qlen < sch->limit)
+#endif
 		return NET_XMIT_SUCCESS;
 
 	q->drop_overlimit++;
@@ -334,7 +341,11 @@ static int fq_codel_change(struct Qdisc *sch, struct nlattr *opt)
 	}
 
 	if (tb[TCA_FQ_CODEL_LIMIT])
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+		q->limit = nla_get_u32(tb[TCA_FQ_CODEL_LIMIT]);
+#else
 		sch->limit = nla_get_u32(tb[TCA_FQ_CODEL_LIMIT]);
+#endif
 
 	if (tb[TCA_FQ_CODEL_ECN])
 		q->cparams.ecn = !!nla_get_u32(tb[TCA_FQ_CODEL_ECN]);
@@ -342,7 +353,11 @@ static int fq_codel_change(struct Qdisc *sch, struct nlattr *opt)
 	if (tb[TCA_FQ_CODEL_QUANTUM])
 		q->quantum = max(256U, nla_get_u32(tb[TCA_FQ_CODEL_QUANTUM]));
 
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	while (sch->q.qlen > q->limit) {
+#else
 	while (sch->q.qlen > sch->limit) {
+#endif
 		struct sk_buff *skb = fq_codel_dequeue(sch);
 
 		kfree_skb(skb);
@@ -378,7 +393,11 @@ static void fq_codel_destroy(struct Qdisc *sch)
 {
 	struct fq_codel_sched_data *q = qdisc_priv(sch);
 
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,25))
 	tcf_destroy_chain(&q->filter_list);
+#else
+	tcf_destroy_chain(q->filter_list);
+#endif
 	fq_codel_free(q->backlogs);
 	fq_codel_free(q->flows);
 }
@@ -388,7 +407,11 @@ static int fq_codel_init(struct Qdisc *sch, struct nlattr *opt)
 	struct fq_codel_sched_data *q = qdisc_priv(sch);
 	int i;
 
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	q->limit = 10*1024;
+#else
 	sch->limit = 10*1024;
+#endif
 	q->flows_cnt = 1024;
 	q->quantum = psched_mtu(qdisc_dev(sch));
 	q->perturbation = net_random();
@@ -420,7 +443,11 @@ static int fq_codel_init(struct Qdisc *sch, struct nlattr *opt)
 			INIT_LIST_HEAD(&flow->flowchain);
 		}
 	}
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+	if (q->limit >= 1)
+#else
 	if (sch->limit >= 1)
+#endif
 		sch->flags |= TCQ_F_CAN_BYPASS;
 	else
 		sch->flags &= ~TCQ_F_CAN_BYPASS;
@@ -439,7 +466,11 @@ static int fq_codel_dump(struct Qdisc *sch, struct sk_buff *skb)
 	if (nla_put_u32(skb, TCA_FQ_CODEL_TARGET,
 			codel_time_to_us(q->cparams.target)) ||
 	    nla_put_u32(skb, TCA_FQ_CODEL_LIMIT,
+#if (LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,39))
+			q->limit) ||
+#else
 			sch->limit) ||
+#endif
 	    nla_put_u32(skb, TCA_FQ_CODEL_INTERVAL,
 			codel_time_to_us(q->cparams.interval)) ||
 	    nla_put_u32(skb, TCA_FQ_CODEL_ECN,
@@ -599,7 +630,9 @@ static struct Qdisc_ops fq_codel_qdisc_ops __read_mostly = {
 	.priv_size	=	sizeof(struct fq_codel_sched_data),
 	.enqueue	=	fq_codel_enqueue,
 	.dequeue	=	fq_codel_dequeue,
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,28))
 	.peek		=	qdisc_peek_dequeued,
+#endif
 	.drop		=	fq_codel_drop,
 	.init		=	fq_codel_init,
 	.reset		=	fq_codel_reset,

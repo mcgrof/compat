@@ -36,7 +36,6 @@ int __must_check pci_enable_device_mem(struct pci_dev *dev);
 
 /*
  * backports 2658fa803111dae1353602e7f586de8e537803e2
- * We skip proto_ports_offset() as I'm lazy.
  */
 
 static inline bool ipv4_is_loopback(__be32 addr)

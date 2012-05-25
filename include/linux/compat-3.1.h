@@ -7,6 +7,13 @@
 
 #include <linux/security.h>
 #include <linux/skbuff.h>
+#include <net/ip.h>
+
+/* Backports 56f8a75c */
+static inline bool ip_is_fragment(const struct iphdr *iph)
+{
+	return (iph->frag_off & htons(IP_MF | IP_OFFSET)) != 0;
+}
 
 static inline struct sk_buff *__netdev_alloc_skb_ip_align(struct net_device *dev,
 							  unsigned int length, gfp_t gfp)

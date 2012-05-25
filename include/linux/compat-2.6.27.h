@@ -22,6 +22,20 @@
 #include <net/sch_generic.h>
 #include <linux/ethtool.h>
 
+static inline struct net_device *qdisc_dev(const struct Qdisc *qdisc)
+{
+	return qdisc->dev;
+}
+
+/*
+ * Backports 378a2f09 and c27f339a
+ * This may need a bit more work.
+ */
+enum net_xmit_qdisc_t {
+	__NET_XMIT_STOLEN = 0x00010000,
+	__NET_XMIT_BYPASS = 0x00020000,
+};
+
 struct qdisc_skb_cb {
 	unsigned int            pkt_len;
 	char                    data[];
