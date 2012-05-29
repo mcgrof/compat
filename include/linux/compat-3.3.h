@@ -10,6 +10,7 @@
 #include <linux/skbuff.h>
 #include <net/sch_generic.h>
 
+#if !((LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,9) && LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)) || (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,23) && LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0)))
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,37))
 static inline void qdisc_cb_private_validate(const struct sk_buff *skb, int sz)
 {
@@ -20,6 +21,7 @@ static inline void qdisc_cb_private_validate(const struct sk_buff *skb, int sz)
 {
 	/* XXX ? */
 }
+#endif
 #endif
 
 extern struct sk_buff *__pskb_copy(struct sk_buff *skb,
