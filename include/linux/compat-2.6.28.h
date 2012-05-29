@@ -214,6 +214,10 @@ static inline void skb_queue_splice_tail(const struct sk_buff_head *list,
 	}
 }
 
+#define skb_queue_walk_from(queue, skb)						\
+		for (; skb != (struct sk_buff *)(queue);			\
+		     skb = skb->next)
+
 #ifndef DECLARE_TRACE
 
 #define TP_PROTO(args...)	args
