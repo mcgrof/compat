@@ -108,9 +108,13 @@ function get_ubuntu_kernels() {
 	KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-headers-3.2.2-030202-generic_3.2.2-030202.201201252035_${TARGET}.deb"
 	KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-image-3.2.2-030202-generic_3.2.2-030202.201201252035_${TARGET}.deb"
 
-	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-headers-3.3.0-030300rc2_3.3.0-030300rc2.201201311735_all.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-headers-3.3.0-030300rc2-generic_3.3.0-030300rc2.201201311735_${TARGET}.deb"
-	KERNELS="$KERNELS ${KPATH}/v3.3-rc2-precise/linux-image-3.3.0-030300rc2-generic_3.3.0-030300rc2.201201311735_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.3.7-precise/linux-headers-3.3.7-030307_3.3.7-030307.201205211535_all.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.3.7-precise/linux-headers-3.3.7-030307-generic_3.3.7-030307.201205211535_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.3.7-precise/linux-image-3.3.7-030307-generic_3.3.7-030307.201205211535_${TARGET}.deb"
+
+	KERNELS="$KERNELS ${KPATH}/v3.4-precise/linux-headers-3.4.0-030400_3.4.0-030400.201205210521_all.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.4-precise/linux-headers-3.4.0-030400-generic_3.4.0-030400.201205210521_${TARGET}.deb"
+	KERNELS="$KERNELS ${KPATH}/v3.4-precise/linux-image-3.4.0-030400-generic_3.4.0-030400.201205210521_${TARGET}.deb"
 
 	for i in $KERNELS; do
 		FILE=$(basename $i)
