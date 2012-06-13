@@ -8,6 +8,10 @@
 #include <linux/skbuff.h>
 #include <linux/dma-mapping.h>
 
+/* backports b4625dab */
+#define  SDIO_CCCR_REV_3_00    3       /* CCCR/FBR Version 3.00 */
+#define  SDIO_SDIO_REV_3_00    4       /* SDIO Spec Version 3.00 */
+
 #define PMSG_IS_AUTO(msg)	(((msg).event & PM_EVENT_AUTO) != 0)
 
 /**
