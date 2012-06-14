@@ -25,6 +25,8 @@ UNDERLINE="\033[02m"
 KERNEL_DIR="/lib/modules"
 KLIBS=""
 LOG="ckmake.log"
+LOG_TMP="ckmake-tmp.log"
+REPORT="ckmake-report.log"
 TIME="0"
 QUIET=""
 ARGS=""
@@ -38,7 +40,7 @@ done
 function tee_color_split()
 {
 	while read; do
-		echo -e $REPLY | ./scripts/skip-colors >> $LOG
+		echo -e $REPLY | ./scripts/skip-colors >> $1
 		echo -e $REPLY
 	done
 }
@@ -112,9 +114,9 @@ function run_ckmake()
 		fi
 
 		if [[ $CUR_RET -eq 0 ]]; then
-			echo -e "${GREEN}[OK]${NORMAL}" | tee_color_split
+			echo -e "${GREEN}[OK]${NORMAL}" | tee_color_split $LOG
 		else
-			echo -e "${RED}[FAILED]${NORMAL}" | tee_color_split
+			echo -e "${RED}[FAILED]${NORMAL}" | tee_color_split $LOG
 			RET=$CUR_RET
 		fi
 
@@ -122,14 +124,28 @@ function run_ckmake()
 	done
 }
 
+for i in $LOG $LOG_TMP $REPORT; do
+	echo > $i
+done
+
 nice make clean 2>&1 > $LOG
 
 if [[ $TIME != "1" ]]; then
-	run_ckmake
+	run_ckmake | tee_color_split $REPORT
+
+	cat $LOG $REPORT > $LOG_TMP
+	mv $LOG_TMP $LOG
+	rm -f $LOG_TMP
+
 	exit $RET
 fi
 
-time $0 $QUIET $ARGS
-time $0 $QUIET $ARGS | egrep "real|user|sys"
+time $0 $QUIET $ARGS | tee_color_split $REPORT
+time $0 $QUIET $ARGS | egrep "real|user|sys" | tee_color_split $REPORT
+
+cat $LOG $REPORT > $LOG_TMP
+mv $LOG_TMP $LOG
+
+rm -f $LOG_TMP
 
 exit $RET
