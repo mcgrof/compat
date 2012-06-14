@@ -8,6 +8,26 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
 
+/* switcheroo is available on >= 2.6.34 */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
+#include <linux/vga_switcheroo.h>
+/*
+ * This backports:
+ *
+ *   From 26ec685ff9d9c16525d8ec4c97e52fcdb187b302 Mon Sep 17 00:00:00 2001
+ *   From: Takashi Iwai <tiwai@suse.de>
+ *   Date: Fri, 11 May 2012 07:51:17 +0200
+ *   Subject: [PATCH] vga_switcheroo: Introduce struct vga_switcheroo_client_ops
+ *
+ */
+
+struct vga_switcheroo_client_ops {
+    void (*set_gpu_state)(struct pci_dev *dev, enum vga_switcheroo_state);
+    void (*reprobe)(struct pci_dev *dev);
+    bool (*can_switch)(struct pci_dev *dev);
+};
+#endif
+
 /*
  * This backports:
  *
