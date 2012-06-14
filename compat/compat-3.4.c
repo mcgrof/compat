@@ -5,7 +5,7 @@
  * it under the terms of the GNU General Public License version 2 as
  * published by the Free Software Foundation.
  *
- * Compatibility file for Linux wireless for kernels 3.5.
+ * Compatibility file for Linux wireless for kernels 3.4.
  */
 
 #include <linux/fs.h>
