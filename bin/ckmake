@@ -106,7 +106,8 @@ function run_ckmake()
 		log_try_kernel $KERNEL | ./scripts/skip-colors >> $LOG
 		log_try_kernel $KERNEL
 
-		ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable $ARGS &>> $LOG
+		#ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable $ARGS &>> $LOG
+		ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j6 $ARGS &>> $LOG
 		CUR_RET=$?
 
 		if [[ $RET = "" ]]; then
