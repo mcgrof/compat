@@ -30,6 +30,7 @@ REPORT="ckmake-report.log"
 TIME="0"
 QUIET=""
 ARGS=""
+RET_FILE="ret-tmp.txt"
 
 RET=""
 
@@ -123,6 +124,10 @@ function run_ckmake()
 
 		nice make clean KLIB=$DIR KLIB_BUILD=$DIR 2>&1 >> $LOG
 	done
+	# Bash doesn't do what we expect with the variables...
+	# and using return $RET here won't work here either given
+	# that we end up piping the result anyway.
+	echo $RET > $RET_FILE
 }
 
 for i in $LOG $LOG_TMP $REPORT; do
@@ -138,6 +143,8 @@ if [[ $TIME != "1" ]]; then
 	mv $LOG_TMP $LOG
 	rm -f $LOG_TMP
 
+	RET=$(cat $RET_FILE)
+	rm -f $RET_FILE
 	exit $RET
 fi
 
@@ -148,5 +155,8 @@ cat $LOG $REPORT > $LOG_TMP
 mv $LOG_TMP $LOG
 
 rm -f $LOG_TMP
+
+RET=$(cat $RET_FILE)
+rm -f $RET_FILE
 
 exit $RET
