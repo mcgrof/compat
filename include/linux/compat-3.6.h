@@ -5,6 +5,10 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
 
+#include <net/genetlink.h>
+
+#define GENLMSG_DEFAULT_SIZE (NLMSG_DEFAULT_SIZE - GENL_HDRLEN)
+
 /*
  * Backports 
  * 
