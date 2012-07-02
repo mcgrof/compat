@@ -9,6 +9,20 @@
 #include <linux/skbuff.h>
 #include <net/ip.h>
 #include <linux/idr.h>
+#include <asm/div64.h>
+
+
+/* This backports:
+ *
+ * commit 36a26c69b4c70396ef569c3452690fba0c1dec08
+ * Author: Nicholas Bellinger <nab@linux-iscsi.org>
+ * Date:   Tue Jul 26 00:35:26 2011 -0700
+ *
+ * 	kernel.h: Add DIV_ROUND_UP_ULL and DIV_ROUND_UP_SECTOR_T macro usage
+ */
+
+#define DIV_ROUND_UP_ULL(ll,d) \
+	({ unsigned long long _tmp = (ll)+(d)-1; do_div(_tmp, d); _tmp; })
 
 /* Backports 56f8a75c */
 static inline bool ip_is_fragment(const struct iphdr *iph)
