@@ -8,6 +8,10 @@
 #include <linux/etherdevice.h>
 #include <linux/skbuff.h>
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
+extern const struct i2c_algorithm i2c_bit_algo;
+#endif
+
 extern int simple_open(struct inode *inode, struct file *file);
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
