@@ -93,6 +93,24 @@ struct vga_switcheroo_client_ops {
     void (*reprobe)(struct pci_dev *dev);
     bool (*can_switch)(struct pci_dev *dev);
 };
+
+/* Wrap around the old code and redefine vga_switcheroo_register_client()
+ * for older kernels < 3.5.0.
+ */
+static inline int compat_vga_switcheroo_register_client(struct pci_dev *dev,
+		const struct vga_switcheroo_client_ops *ops) {
+
+	return vga_switcheroo_register_client(dev,
+					      ops->set_gpu_state,
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,38))
+					      ops->reprobe,
+#endif
+					      ops->can_switch);
+}
+
+#define vga_switcheroo_register_client(_dev, _ops) \
+	compat_vga_switcheroo_register_client(_dev, _ops)
+
 #endif
 
 /*
