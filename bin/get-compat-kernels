@@ -143,43 +143,32 @@ function get_ubuntu_kernels() {
 		fi
 	done
 
-	LSB_RED_ID=$(/usr/bin/lsb_release -i -s)
-	case $LSB_RED_ID in
-	"Ubuntu")
-		# Install with dpkg
-		sudo dpkg -i *.deb
-		;;
-	*)
-		# For every other distribution around
+	# Create a temporary directory first
+	TEMP_DIR=`mktemp -d`
 
-		# Create a temporary directory first
-		TEMP_DIR=`mktemp -d`
-
-		for deb in $(ls linux-*.deb); do
-			DIR_NAME=$(echo $deb | awk -F"_" '{print $1}')
-			if [[ ! -d /usr/src/$DIR_NAME ]]; then
-				echo "Extracting $deb..."
-				ar p $deb data.tar.gz | sudo tar xz --exclude=usr/share -C $TEMP_DIR
-			fi
-		done
-
-		# Move the extracted folders into the system
-		if [[ -d $TEMP_DIR/lib/modules ]]; then
-			mv $TEMP_DIR/lib/modules/* /lib/modules
+	for deb in $(ls linux-*.deb); do
+		DIR_NAME=$(echo $deb | awk -F"_" '{print $1}')
+		if [[ ! -d /usr/src/$DIR_NAME ]]; then
+			echo "Extracting $deb..."
+			ar p $deb data.tar.gz | sudo tar xz --exclude=usr/share -C $TEMP_DIR
 		fi
-		if [[ -d $TEMP_DIR/usr/src ]]; then
-			# Because of a bug in make < 3.82, mixed implicit and normal
-			# rules do not cause harm. Since the bug is fixed in the new make
-			# we have to adjust older kernel's Makefiles to fix the bug.
-			sed -i 's#^/ %/:#%/:#' $TEMP_DIR/usr/src/linux-headers-2.6.2[45678]-0*/Makefile &>/dev/null
+	done
 
-			mv $TEMP_DIR/usr/src/* /usr/src
-		fi
+	# Move the extracted folders into the system
+	if [[ -d $TEMP_DIR/lib/modules ]]; then
+		mv $TEMP_DIR/lib/modules/* /lib/modules
+	fi
+	if [[ -d $TEMP_DIR/usr/src ]]; then
+		# Because of a bug in make < 3.82, mixed implicit and normal
+		# rules do not cause harm. Since the bug is fixed in the new make
+		# we have to adjust older kernel's Makefiles to fix the bug.
+		sed -i 's#^/ %/:#%/:#' $TEMP_DIR/usr/src/linux-headers-2.6.2[45678]-0*/Makefile &>/dev/null
 
-		# Remove the temporary directory
-		rm -rf $TEMP_DIR
-		;;
-	esac
+		mv $TEMP_DIR/usr/src/* /usr/src
+	fi
+
+	# Remove the temporary directory
+	rm -rf $TEMP_DIR
 }
 
 function usage() {
@@ -202,6 +191,13 @@ fi
 
 if [[ $# -eq 1 && $1 = "-i" ]]; then
 	INSTALL_IMAGES="y"
+fi
+
+which ar 2>&1 > /dev/null
+if [[ $? -ne 0 ]]; then
+	echo -e "${GREEN}ar${NORMAL} is not avilable, typically this is available through a package called binutils"
+	echo -e "Install binutils and run this script again..."
+	exit 1
 fi
 
 echo -e "This will download ${YELLOW}21${NORMAL} kernel headers to allow you to"
