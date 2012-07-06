@@ -10,6 +10,16 @@
 # to test compile the Linux kernel compatibility module. You can
 # then use ckmake to cross compile against all supported kernels.
 
+# Pretty colors
+GREEN="\033[01;32m"
+YELLOW="\033[01;33m"
+NORMAL="\033[00m"
+BLUE="\033[34m"
+RED="\033[31m"
+PURPLE="\033[35m"
+CYAN="\033[36m"
+UNDERLINE="\033[02m"
+
 KERNELS=""
 KPATH="http://kernel.ubuntu.com/~kernel-ppa/mainline/"
 
@@ -189,6 +199,24 @@ fi
 
 if [[ $# -eq 1 && $1 = "-i" ]]; then
 	INSTALL_IMAGES="y"
+fi
+
+echo -e "This will download ${YELLOW}21${NORMAL} kernel headers to allow you to"
+echo -e "cross compile any module over these kernels with ${GREEN}ckmake${NORMAL}."
+echo -e "The download payload is about ${YELLOW}~220 ${CYAN}MiB${NORMAL}, once uncompressed"
+echo -e "it will use ${GREEN}sudo${NORMAL} to stash kernel header files under ${BLUE}/usr/src/${NORMAL}"
+echo -e "and consume about ${YELLOW}2 ${RED}GiB${NORMAL} of space."
+echo -e ""
+echo -e "The kernel headers used are from ${PURPLE}${UNDERLINE}Vanilla${NORMAL} kernels"
+echo -e "from the Ubuntu mainline / vanilla kernel PPA:"
+echo -e ""
+echo -e "${BLUE}http://kernel.ubuntu.com/~kernel-ppa/mainline/${NORMAL}"
+echo -e ""
+
+read -p "Do you still want to continue (y/N)? "
+if [[ "${REPLY}" != "y" ]]; then
+	echo -e "Bailing out !"
+	exit 1
 fi
 
 get_ubuntu_kernels
