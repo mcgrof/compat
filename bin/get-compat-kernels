@@ -156,19 +156,19 @@ function get_ubuntu_kernels() {
 
 	# Move the extracted folders into the system
 	if [[ -d $TEMP_DIR/lib/modules ]]; then
-		mv $TEMP_DIR/lib/modules/* /lib/modules
+		sudo mv $TEMP_DIR/lib/modules/* /lib/modules
 	fi
 	if [[ -d $TEMP_DIR/usr/src ]]; then
 		# Because of a bug in make < 3.82, mixed implicit and normal
 		# rules do not cause harm. Since the bug is fixed in the new make
 		# we have to adjust older kernel's Makefiles to fix the bug.
-		sed -i 's#^/ %/:#%/:#' $TEMP_DIR/usr/src/linux-headers-2.6.2[45678]-0*/Makefile &>/dev/null
+		sudo sed -i 's#^/ %/:#%/:#' $TEMP_DIR/usr/src/linux-headers-2.6.2[45678]-0*/Makefile &>/dev/null
 
-		mv $TEMP_DIR/usr/src/* /usr/src
+		sudo mv $TEMP_DIR/usr/src/* /usr/src
 	fi
 
 	# Remove the temporary directory
-	rm -rf $TEMP_DIR
+	sudo rm -rf $TEMP_DIR
 }
 
 function usage() {
