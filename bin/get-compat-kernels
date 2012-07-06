@@ -200,11 +200,18 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
-echo -e "This will download ${YELLOW}21${NORMAL} kernel headers to allow you to"
+NUM_KERNELS=$(for i in $KERNELS; do echo $i; done | awk -F"v" '{print $2}' | awk -F"/" '{print $1}'| sort| uniq | wc -l)
+# ~ 101 MiB for installed space on /usr/src/ and /lib/modules/
+SPACE_PER_KERNEL="101"
+
+# ~13 MiB of both deb files
+SPACE_PER_KERNEL_DEB="13"
+
+echo -e "This will download ${YELLOW}${NUM_KERNELS}${NORMAL} kernel headers to allow you to"
 echo -e "cross compile any module over these kernels with ${GREEN}ckmake${NORMAL}."
-echo -e "The download payload is about ${YELLOW}~220 ${CYAN}MiB${NORMAL}, once uncompressed"
-echo -e "it will use ${GREEN}sudo${NORMAL} to stash kernel header files under ${BLUE}/usr/src/${NORMAL}"
-echo -e "and consume about ${YELLOW}2 ${RED}GiB${NORMAL} of space."
+echo -e "The download payload is about ${YELLOW}~ $((${SPACE_PER_KERNEL_DEB} * ${NUM_KERNELS})) ${CYAN}MiB${NORMAL}, once uncompressed"
+echo -e "it will use ${GREEN}sudo${NORMAL} to stash kernel header files under ${BLUE}/usr/src/${NORMAL} and ${BLUE}/lib/modules/${NORMAL}"
+echo -e "and consume about ~ ${YELLOW}$((${NUM_KERNELS} * ${SPACE_PER_KERNEL})) ${RED}MiB${NORMAL} of space."
 echo -e ""
 echo -e "The kernel headers used are from ${PURPLE}${UNDERLINE}Vanilla${NORMAL} kernels"
 echo -e "from the Ubuntu mainline / vanilla kernel PPA:"
