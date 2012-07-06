@@ -13,3 +13,4 @@ compat/*.ko
 modules.order
 modules
 *.patch
+debs/

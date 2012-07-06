@@ -125,6 +125,9 @@ function get_ubuntu_kernels() {
 	KERNELS="$KERNELS ${KPATH}/v3.4.4-quantal/linux-headers-3.4.4-030404-generic_3.4.4-030404.201206221555_${TARGET}.deb"
 	KERNELS="$KERNELS ${KPATH}/v3.4.4-quantal/linux-image-3.4.4-030404-generic_3.4.4-030404.201206221555_${TARGET}.deb"
 
+	mkdir -p debs
+	cd debs
+
 	for i in $KERNELS; do
 		FILE=$(basename $i)
 		PKG=$(echo $FILE | awk -F"_" '{print $1}')
