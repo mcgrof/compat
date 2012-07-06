@@ -144,7 +144,6 @@ if [[ $TIME != "1" ]]; then
 	rm -f $LOG_TMP
 
 	RET=$(cat $RET_FILE)
-	rm -f $RET_FILE
 	exit $RET
 fi
 
