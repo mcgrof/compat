@@ -7,6 +7,8 @@ export KLIB:=          /lib/modules/$(shell uname -r)
 endif
 export KLIB_BUILD ?=    $(KLIB)/build
 
+DESTDIR?=
+
 ifeq ($(KERNELRELEASE),)
 export PWD := $(shell pwd)
 export COMPAT_BASE_TREE := "linux-next.git"
@@ -68,6 +70,10 @@ $(COMPAT_CONFIG):
 	+@$(PWD)/scripts/gen-compat-config.sh > $(COMPAT_CONFIG)
 
 install: modules
+
+install-ckmake:
+	@mkdir -p $(DESTDIR)/usr/bin/
+	@install bin/ckmake $(DESTDIR)/usr/bin/
 
 clean:
 	$(MAKE) -C $(KLIB_BUILD) M=$(PWD) clean
