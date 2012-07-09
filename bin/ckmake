@@ -41,7 +41,7 @@ done
 function tee_color_split()
 {
 	while read; do
-		echo -e $REPLY | ./scripts/skip-colors >> $1
+		echo -e $REPLY | perl -pe 's|(\e)\[(\d+)(;*)(\d*)(\w)||g' >> $1
 		echo -e $REPLY
 	done
 }
@@ -104,7 +104,7 @@ function run_ckmake()
 		# We cannot use tee_color_split() as bash read only spits
 		# out output when a newline comes in. We can modif IFS but
 		# I am still not sure how to do this properly.
-		log_try_kernel $KERNEL | ./scripts/skip-colors >> $LOG
+		log_try_kernel $KERNEL | perl -pe 's|(\e)\[(\d+)(;*)(\d*)(\w)||g' >> $LOG
 		log_try_kernel $KERNEL
 
 		#ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable $ARGS &>> $LOG
