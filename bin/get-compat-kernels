@@ -23,6 +23,18 @@ UNDERLINE="\033[02m"
 KERNELS=""
 KPATH="http://kernel.ubuntu.com/~kernel-ppa/mainline/"
 
+KSRC_PREFIX=
+# Check whether we're running as root or not
+# If we're root stuff things into /usr/src and /lib/modules
+# else, use $HOME/compat-ksrc for enabling user-mode builds.
+if [[ "$EUID" != "0" ]]; then
+	KSRC_PREFIX="$HOME/compat-ksrc"
+fi
+
+# Create target directories if they doesn't exist
+mkdir -p $KSRC_PREFIX/{usr/src,lib/modules}
+
+# List of currently supported kernels that will be downloaded
 KERNELS="$KERNELS ${KPATH}/v2.6.24/linux-headers-2.6.24-020624_2.6.24-020624_all.deb"
 KERNELS="$KERNELS ${KPATH}/v2.6.25/linux-headers-2.6.25-020625_2.6.25-020625_all.deb"
 KERNELS="$KERNELS ${KPATH}/v2.6.26/linux-headers-2.6.26-020626_2.6.26-020626_all.deb"
@@ -44,6 +56,15 @@ KERNELS="$KERNELS ${KPATH}/v3.1.10-precise/linux-headers-3.1.10-030110_3.1.10-03
 KERNELS="$KERNELS ${KPATH}/v3.2.2-precise/linux-headers-3.2.2-030202_3.2.2-030202.201201252035_all.deb"
 KERNELS="$KERNELS ${KPATH}/v3.3.7-precise/linux-headers-3.3.7-030307_3.3.7-030307.201205211535_all.deb"
 KERNELS="$KERNELS ${KPATH}/v3.4.4-quantal/linux-headers-3.4.4-030404_3.4.4-030404.201206221555_all.deb"
+
+# Number of kernels
+NUM_KERNELS=$(echo $KERNELS | wc -w)
+
+# ~ 101 MiB for installed space on $KSRC_PREFIX/usr/src/ and $KSRC_PREFIX/lib/modules/
+SPACE_PER_KERNEL="101"
+
+# ~13 MiB of both deb files
+SPACE_PER_KERNEL_DEB="13"
 
 function get_ubuntu_kernels() {
 
@@ -71,7 +92,7 @@ function get_ubuntu_kernels() {
 		PKG=$(echo $FILE | awk -F"_" '{print $1}')
 
 		# Do not download if installed or deb exists
-		if [[ ! -d /usr/src/$PKG && ! -f $FILE ]]; then
+		if [[ ! -d $KSRC_PREFIX/usr/src/$PKG && ! -f $FILE ]]; then
 			# Download the _all.deb
 			wget -c $i
 
@@ -81,32 +102,52 @@ function get_ubuntu_kernels() {
 		fi
 	done
 
+	# List of downloaded debs
+	DEB_LIST=`ls linux-*.deb 2>/dev/null`
+
+	if [[ -z $DEB_LIST ]]; then
+		echo "All kernel sources are found in $KSRC_PREFIX/usr/src."
+		exit
+	fi
+
 	# Create a temporary directory first
 	TEMP_DIR=`mktemp -d`
 
-	for deb in $(ls linux-*.deb); do
+	for deb in $DEB_LIST; do
 		DIR_NAME=$(echo $deb | awk -F"_" '{print $1}')
-		if [[ ! -d /usr/src/$DIR_NAME ]]; then
+		if [[ ! -d $KSRC_PREFIX/usr/src/$DIR_NAME ]]; then
 			echo "Extracting $deb..."
-			ar p $deb data.tar.gz | sudo tar xz --exclude=usr/share -C $TEMP_DIR
+			ar p $deb data.tar.gz | tar xz --exclude=usr/share -C $TEMP_DIR
 		fi
 	done
 
 	# Move the extracted folders into the system
 	if [[ -d $TEMP_DIR/lib/modules ]]; then
-		sudo mv $TEMP_DIR/lib/modules/* /lib/modules
+
+		# Relink lib/modules/*/build/ directories relatively to make it work
+		# for regular user based workflows
+		if [[ -n $KSRC_PREFIX ]]; then
+			echo "Adjusting build/ symlinks for non-root installation..."
+
+			for kernel in $(ls -d $TEMP_DIR/lib/modules/*generic); do
+				unlink $kernel/build
+				ln -s ../../../usr/src/linux-headers-`basename $kernel` $kernel/build
+			done
+		fi
+
+		mv $TEMP_DIR/lib/modules/* $KSRC_PREFIX/lib/modules
 	fi
 	if [[ -d $TEMP_DIR/usr/src ]]; then
 		# Because of a bug in make < 3.82, mixed implicit and normal
 		# rules do not cause harm. Since the bug is fixed in the new make
 		# we have to adjust older kernel's Makefiles to fix the bug.
-		sudo sed -i 's#^/ %/:#%/:#' $TEMP_DIR/usr/src/linux-headers-2.6.2[45678]-0*/Makefile &>/dev/null
+		sed -i 's#^/ %/:#%/:#' $TEMP_DIR/usr/src/linux-headers-2.6.2[45678]-0*/Makefile &>/dev/null
 
-		sudo mv $TEMP_DIR/usr/src/* /usr/src
+		mv $TEMP_DIR/usr/src/* $KSRC_PREFIX/usr/src
 	fi
 
 	# Remove the temporary directory
-	sudo rm -rf $TEMP_DIR
+	rm -rf $TEMP_DIR
 }
 
 function usage() {
@@ -115,9 +156,10 @@ function usage() {
 
 if [[ $# -gt 1 ]]; then
 	usage
-	exit
+	exit 1
 fi
 
+# Check for the availability of 'ar' before continuing
 which ar 2>&1 > /dev/null
 if [[ $? -ne 0 ]]; then
 	echo -e "${GREEN}ar${NORMAL} is not avilable, typically this is available through a package called binutils"
@@ -125,18 +167,20 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
-NUM_KERNELS=$(echo $KERNELS | wc -w)
-# ~ 101 MiB for installed space on /usr/src/ and /lib/modules/
-SPACE_PER_KERNEL="101"
+echo -e ""
 
-# ~13 MiB of both deb files
-SPACE_PER_KERNEL_DEB="13"
+if [[ -n $KSRC_PREFIX ]]; then
+	echo -e "** Running as a non-privileged user!"
+	echo -e "** If you want to force using system-wide ${BLUE}/lib/modules${NORMAL} and ${BLUE}/usr/src${NORMAL}, you have to"
+	echo -e "** run this script as root or using ${GREEN}sudo${NORMAL}."
+	echo -e ""
+fi
 
 echo -e "This will download ${YELLOW}${NUM_KERNELS}${NORMAL} kernel headers to allow you to"
 echo -e "cross compile any module over these kernels with ${GREEN}ckmake${NORMAL}."
 echo -e "The download payload is about ${YELLOW}~ $((${SPACE_PER_KERNEL_DEB} * ${NUM_KERNELS})) ${CYAN}MiB${NORMAL}, once uncompressed"
-echo -e "it will use ${GREEN}sudo${NORMAL} to stash kernel header files under ${BLUE}/usr/src/${NORMAL}"
-echo -e "and ${BLUE}/lib/modules/${NORMAL} and consume about ~ ${YELLOW}$((${NUM_KERNELS} * ${SPACE_PER_KERNEL})) ${RED}MiB${NORMAL} of space."
+echo -e "it will stash kernel header files under ${BLUE}$KSRC_PREFIX/usr/src/${NORMAL}"
+echo -e "and ${BLUE}$KSRC_PREFIX/lib/modules/${NORMAL} and consume about ~ ${YELLOW}$((${NUM_KERNELS} * ${SPACE_PER_KERNEL})) ${RED}MiB${NORMAL} of space."
 echo -e ""
 echo -e "Note: you will need ${CYAN}libc${NORMAL} > ${GREEN}2.14${NORMAL} otherwise compilation may"
 echo -e "fail with Linux ${CYAN}3.4.4${NORMAL}"

@@ -34,7 +34,14 @@ RET_FILE="ret-tmp.txt"
 
 RET=""
 
-for i in $(find /lib/modules/ -type d -name \*generic\* | sort -n -r | grep -v -E '\-[[:alnum:]]{1,2}\-'); do
+# If $HOME/compat-ksrc is found use that, otherwise use system-wide
+# sources in /usr/src.
+KSRC_PREFIX=
+if [[ -d "$HOME/compat-ksrc" ]]; then
+	KSRC_PREFIX="$HOME/compat-ksrc"
+fi
+
+for i in $(find $KSRC_PREFIX/lib/modules/ -type d -name \*generic\* | sort -n -r | grep -v -E '\-[[:alnum:]]{1,2}\-'); do
 	KLIBS="$KLIBS $i"
 done
 
