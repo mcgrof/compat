@@ -1,0 +1,79 @@
+#!/bin/bash
+#
+# Copyright (C) 2012, Luis R. Rodriguez <mcgrof@frijolero.org>
+#
+# This program is free software; you can redistribute it and/or modify
+# it under the terms of the GNU General Public License version 2 as
+# published by the Free Software Foundation.
+#
+# You can use this script to install all mainline kernels used
+# to test compile the Linux kernel compatibility module. You can
+# then use ckmake to cross compile against all supported kernels.
+
+# Pretty colors
+GREEN="\033[01;32m"
+YELLOW="\033[01;33m"
+NORMAL="\033[00m"
+BLUE="\033[34m"
+RED="\033[31m"
+PURPLE="\033[35m"
+CYAN="\033[36m"
+UNDERLINE="\033[02m"
+
+PREFIX=$HOME/
+
+GIT_TREES="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
+GIT_TREES="$GIT_TREES git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git"
+GIT_TREES="$GIT_TREES git://github.com/mcgrof/compat.git"
+GIT_TREES="$GIT_TREES git://github.com/mcgrof/compat-wireless.git"
+
+LINUX_GIT="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
+
+echo -e "This will download xxx amount of code from git trees."
+
+read -p "Do you still want to continue (y/N)? "
+if [[ "${REPLY}" != "y" ]]; then
+	echo -e "Bailing out !"
+	exit 1
+fi
+
+mkdir -p $PREFIX
+cd $PREFIX
+
+for i in $GIT_TREES; do
+	TREE=$(echo ${i} | awk -F"/" '{print $NF}')
+
+	if [[ -d $PREFIX/$TREE ]]; then
+		echo "${GREEN}${TREE}${NORMAL} is already present, skipping..."
+		continue
+	fi
+
+	echo -e "Cloning ${GREEN}${TREE}${NORMAL}..."
+
+	case $TREE in
+	"linux-stable.git")
+		cd $PREFIX/
+		git clone $i
+
+		cd $PREFIX/linux-stable
+		# This lets us bake releases off of Linus' RC releases by
+		# simply git fetch'ing "linus" and reseting the tree afterwards.
+		git remote add linus $LINUX_GIT
+		;;
+	"linux-next.git")
+		cd $PREFIX
+		git clone $i --reference $PREFIX/linux-stable/.git/
+		;;
+	"compat-wireless.git")
+		# This is just what scripts are tested for. Probably best to
+		# unify all into one place but this will do for now.
+		mkdir -p $PREFIX/devel/
+		cd $PREFIX/devel/
+		git clone $i
+		;;
+	*)
+		cd $PREFIX
+		git clone $i
+		;;
+	esac
+done
