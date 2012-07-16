@@ -35,7 +35,9 @@ if [[ $? -ne 0 ]]; then
 	exit 1
 fi
 
-echo -e "This will download xxx amount of code from git trees."
+echo -e "This will typically take ~ ${YELLOW}10 ${CYAN}minutes${NORMAL}, download about "
+echo -e "~ ${YELLOW}1 ${CYAN}GiB${NORMAL} of data over your network, and then consume about "
+echo -e "~ ${YELLOW}2 ${CYAN}GiB${NORMAL} of hard drive space."
 
 read -p "Do you still want to continue (y/N)? "
 if [[ "${REPLY}" != "y" ]]; then
