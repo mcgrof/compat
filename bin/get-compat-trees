@@ -29,6 +29,12 @@ GIT_TREES="$GIT_TREES git://github.com/mcgrof/compat-wireless.git"
 
 LINUX_GIT="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
 
+which git
+if [[ $? -ne 0 ]]; then
+	echo -e "You need to install ${PURPLE}git${NORMAL}"
+	exit 1
+fi
+
 echo -e "This will download xxx amount of code from git trees."
 
 read -p "Do you still want to continue (y/N)? "
