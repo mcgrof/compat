@@ -29,8 +29,14 @@ LOG_TMP="ckmake-tmp.log"
 REPORT="ckmake-report.log"
 TIME="0"
 QUIET=""
+DEBUG=""
 ARGS=""
 RET_FILE="ret-tmp.txt"
+
+# First and last kernels to use
+FIRST=""
+LAST=""
+RANGE=""
 
 RET=""
 
@@ -40,10 +46,6 @@ KSRC_PREFIX=
 if [[ -d "$HOME/compat-ksrc" ]]; then
 	KSRC_PREFIX="$HOME/compat-ksrc"
 fi
-
-for i in $(find $KSRC_PREFIX/lib/modules/ -type d -name \*generic\* | sort -n -r | grep -v -E '\-[[:alnum:]]{1,2}\-'); do
-	KLIBS="$KLIBS $i"
-done
 
 function tee_color_split()
 {
@@ -62,7 +64,7 @@ function log_try_kernel()
 
 function usage()
 {
-	echo -e "Usage: $0 [-t] <optional-target>"
+	echo -e "Usage: $0 [-t] <optional-target> <first_kernel..last_kernel>"
 	echo -e "-t   will run: 'time ckmake; time ckmake' account for"
 	echo -e "     benchmark how long it takes to compile without ccache"
 	echo -e "     and a run after cache kicks in"
@@ -71,6 +73,10 @@ function usage()
 	echo -e "<optional-target>  is the arguments you want to pass to the"
 	echo -e "child make call that ckmake will use. For example if you have"
 	echo -e "a target 'linux' on your Makefile you can run 'cmake linux'"
+	echo -e ""
+	echo -e "<first_kernel..last_kernel> are the kernels you want to test"
+	echo -e "compile against. This consists of a range. The third extraversion"
+	echo -e "number is ignored"
 }
 
 for i in $@ ; do
@@ -91,7 +97,20 @@ for i in $@ ; do
 			QUIET="-s"
 			shift
 			;;
+		"-d")
+			DEBUG="1"
+			shift
+			;;
 		*)
+			echo $i | grep "\.\." 2>&1 > /dev/null
+			if [[ $? -eq 0 ]]; then
+				FIRST=$(echo $i | sed 's|\.\.|-|' | awk -F"-" '{print $1}')
+				LAST=$(echo $i | sed 's|\.\.|-|' | awk -F"-" '{print $2}')
+				RANGE="${FIRST}..${LAST}"
+				echo -e "Going to use kernel ranges: ${BLUE}${FIRST}${NORMAL}..${BLUE}${LAST}${NORMAL}"
+				shift
+			fi
+
 			ARGS="${ARGS} $1"
 			shift
 	esac
@@ -137,6 +156,56 @@ function run_ckmake()
 	echo $RET > $RET_FILE
 }
 
+# This mimic's the kernel's own algorithm:
+#
+# KERNEL_VERSION(a,b,c) (((a) << 16) + ((b) << 8) + (c))
+function kernel_version_orig {
+	echo "$@" | awk -F. '{ printf("%d\n", lshift($1,16) + lshift($2, 8) + $3); }'
+}
+
+function kernel_version_26 {
+	kernel_version_orig $@
+}
+
+# Ignores the last extraversion number
+function kernel_version_30 {
+	echo "$@" | awk -F. '{ printf("%d\n", lshift($1,16) + lshift($2, 8) ); }'
+}
+
+# If we're using 3.0 kernels we do not require an extraversion,
+# although one could be supplied. For purposes of this script
+# though the 2.6.29..3.1 ranges are acceptable. If we forced usage
+# of kernel_version_orig() for 3.0 it means we'd have to require a user
+# to be very specific and specific 2.6.29..3.1.0 or whatever. Lets
+# instead be flexible.
+function kernel_version {
+	if [[ $(kernel_version_orig $@ ) -lt $(kernel_version_orig "3.0") ]] ; then
+		echo $(kernel_version_26 $@)
+	else
+		echo $(kernel_version_30 $@)
+	fi
+}
+
+for i in $(find $KSRC_PREFIX/lib/modules/ -type d -name \*generic\* | sort -n -r | grep -v -E '\-[[:alnum:]]{1,2}\-'); do
+	KERNEL=$(echo ${i} | awk -F"/" '{print $NF}' | awk -F"-" '{print $1}')
+
+	if [[ ! -z $FIRST && ! -z $LAST ]]; then
+		if [[ $(kernel_version $KERNEL ) -lt $(kernel_version $FIRST) ]] ; then
+			continue;
+		fi
+
+		if [[ $(kernel_version $KERNEL ) -gt $(kernel_version $LAST) ]] ; then
+			continue;
+		fi
+
+		if [[ ! -z $DEBUG ]]; then
+			echo -e "${CYAN}${FIRST}${NORMAL} $(kernel_version $FIRST) <= ${GREEN}${KERNEL}${NORMAL} $(kernel_version $KERNEL) <= ${CYAN}${LAST}${NORMAL} $(kernel_version $LAST)"
+		fi
+	fi
+
+	KLIBS="$KLIBS $i"
+done
+
 for i in $LOG $LOG_TMP $REPORT; do
 	echo > $i
 done
@@ -154,8 +223,8 @@ if [[ $TIME != "1" ]]; then
 	exit $RET
 fi
 
-time $0 $QUIET $ARGS | tee_color_split $REPORT
-time $0 $QUIET $ARGS | egrep "real|user|sys" | tee_color_split $REPORT
+time $0 $QUIET ${RANGE} $ARGS | tee_color_split $REPORT
+time $0 $QUIET ${RANGE} $ARGS | egrep "real|user|sys" | tee_color_split $REPORT
 
 cat $LOG $REPORT > $LOG_TMP
 mv $LOG_TMP $LOG
