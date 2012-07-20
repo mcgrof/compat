@@ -19,6 +19,16 @@
 
 void irq_modify_status(unsigned int irq, unsigned long clr, unsigned long set);
 
+static inline void irq_set_status_flags(unsigned int irq, unsigned long set)
+{
+	irq_modify_status(irq, 0, set);
+}
+
+static inline void irq_clear_status_flags(unsigned int irq, unsigned long clr)
+{
+	irq_modify_status(irq, clr, 0);
+}
+
 #define SDIO_CLASS_BT_AMP	0x09	/* Type-A Bluetooth AMP interface */
 
 extern struct kobj_ns_type_operations net_ns_type_operations;
