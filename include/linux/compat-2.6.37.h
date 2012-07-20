@@ -7,6 +7,17 @@
 
 #include <linux/skbuff.h>
 #include <linux/leds.h>
+#include <linux/irq.h>
+
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
+#define IRQ_MOVE_PCNTXT         0x01000000      /* IRQ migration from process context */
+#endif
+
+#define IRQF_MODIFY_MASK       \
+	(IRQ_TYPE_SENSE_MASK | IRQ_NOPROBE | IRQ_NOREQUEST | \
+	IRQ_NOAUTOEN | IRQ_MOVE_PCNTXT | IRQ_LEVEL)
+
+void irq_modify_status(unsigned int irq, unsigned long clr, unsigned long set);
 
 #define SDIO_CLASS_BT_AMP	0x09	/* Type-A Bluetooth AMP interface */
 
