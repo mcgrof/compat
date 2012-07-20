@@ -21,6 +21,16 @@
 
 void irq_modify_status(unsigned int irq, unsigned long clr, unsigned long set);
 
+static inline void irq_set_status_flags(unsigned int irq, unsigned long set)
+{
+	irq_modify_status(irq, 0, set);
+}
+
+static inline void irq_clear_status_flags(unsigned int irq, unsigned long clr)
+{
+	irq_modify_status(irq, clr, 0);
+}
+
 static inline int proto_ports_offset(int proto)
 {
 	switch (proto) {
