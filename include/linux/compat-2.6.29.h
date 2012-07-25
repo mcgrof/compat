@@ -184,6 +184,11 @@ struct net_device_ops {
 						   struct neigh_parms *);
 	void			(*ndo_tx_timeout) (struct net_device *dev);
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36))
+	struct rtnl_link_stats64* (*ndo_get_stats64)(struct net_device *dev,
+						     struct rtnl_link_stats64 *storage);
+#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,36)) */
+
 	struct net_device_stats* (*ndo_get_stats)(struct net_device *dev);
 
 	void			(*ndo_vlan_rx_register)(struct net_device *dev,
