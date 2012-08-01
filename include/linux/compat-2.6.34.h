@@ -8,6 +8,7 @@
 #include <linux/netdevice.h>
 #include <linux/usb.h>
 #include <linux/mmc/sdio_func.h>
+#include <net/sock.h>
 
 /*
  * Backports da68c4eb25
@@ -324,6 +325,11 @@ extern struct hlist_node *seq_hlist_start_head(struct hlist_head *head,
 
 extern struct hlist_node *seq_hlist_next(void *v, struct hlist_head *head,
 					 loff_t *ppos);
+
+static inline struct sock *sk_entry(const struct hlist_node *node)
+{
+	return hlist_entry(node, struct sock, sk_node);
+}
 
 #else /* Kernels >= 2.6.34 */
 
