@@ -319,6 +319,12 @@ static inline int lockdep_rtnl_is_held(void)
 }
 #endif /* #ifdef CONFIG_PROVE_LOCKING */
 
+extern struct hlist_node *seq_hlist_start_head(struct hlist_head *head,
+					       loff_t pos);
+
+extern struct hlist_node *seq_hlist_next(void *v, struct hlist_head *head,
+					 loff_t *ppos);
+
 #else /* Kernels >= 2.6.34 */
 
 static inline void init_compat_mmc_pm_flags(void)
