@@ -11,6 +11,7 @@
 #include <net/dst.h>
 #include <net/genetlink.h>
 #include <linux/ethtool.h>
+#include <net/sock.h>
 
 /*
  * These macros allow us to backport rfkill without any
@@ -214,6 +215,39 @@ extern long long atomic64_add_return(long long a, atomic64_t *v);
 #define atomic64_inc_return(v)          atomic64_add_return(1LL, (v))
 
 #endif
+
+/**
+ * sk_rmem_alloc_get - returns read allocations
+ * @sk: socket
+ *
+ * Returns sk_rmem_alloc
+ */
+static inline int sk_rmem_alloc_get(const struct sock *sk)
+{
+	return atomic_read(&sk->sk_rmem_alloc);
+}
+
+/**
+ * sk_wmem_alloc_get - returns write allocations
+ * @sk: socket
+ *
+ * Returns sk_wmem_alloc minus initial offset of one
+ */
+static inline int sk_wmem_alloc_get(const struct sock *sk)
+{
+	return atomic_read(&sk->sk_wmem_alloc) - 1;
+}
+
+/**
+ * sk_has_allocations - check if allocations are outstanding
+ * @sk: socket
+ *
+ * Returns true if socket has write or read allocations
+ */
+static inline bool sk_has_allocations(const struct sock *sk)
+{
+	return sk_wmem_alloc_get(sk) || sk_rmem_alloc_get(sk);
+}
 
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,31)) */
