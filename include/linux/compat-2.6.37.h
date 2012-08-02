@@ -9,27 +9,6 @@
 #include <linux/leds.h>
 #include <linux/in.h>
 #include <linux/errno.h>
-#include <linux/irq.h>
-
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
-#define IRQ_MOVE_PCNTXT         0x01000000      /* IRQ migration from process context */
-#endif
-
-#define IRQF_MODIFY_MASK       \
-	(IRQ_TYPE_SENSE_MASK | IRQ_NOPROBE | IRQ_NOREQUEST | \
-	IRQ_NOAUTOEN | IRQ_MOVE_PCNTXT | IRQ_LEVEL)
-
-void irq_modify_status(unsigned int irq, unsigned long clr, unsigned long set);
-
-static inline void irq_set_status_flags(unsigned int irq, unsigned long set)
-{
-	irq_modify_status(irq, 0, set);
-}
-
-static inline void irq_clear_status_flags(unsigned int irq, unsigned long clr)
-{
-	irq_modify_status(irq, clr, 0);
-}
 
 static inline int proto_ports_offset(int proto)
 {
