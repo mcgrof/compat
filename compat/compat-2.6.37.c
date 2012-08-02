@@ -13,32 +13,6 @@
 #include <net/sock.h>
 #include <linux/nsproxy.h>
 #include <linux/vmalloc.h>
-#include <linux/irq.h>
-#include <linux/irqnr.h>
-#include <linux/spinlock.h>
-
-#if LINUX_VERSION_CODE <= KERNEL_VERSION(2,6,27)
-#define irq_to_desc(irq) (irq_desc + irq)
-#endif
-
-void irq_modify_status(unsigned int irq, unsigned long clr, unsigned long set)
-{
-	struct irq_desc *desc = irq_to_desc(irq);
-	unsigned long flags;
-
-	if (!desc)
-		return;
-
-	/* Sanitize flags */
-	set &= IRQF_MODIFY_MASK;
-	clr &= IRQF_MODIFY_MASK;
-
-	spin_lock_irqsave(&desc->lock, flags);
-	desc->status &= ~clr;
-	desc->status |= set;
-	spin_unlock_irqrestore(&desc->lock, flags);
-}
-EXPORT_SYMBOL_GPL(irq_modify_status);
 
 #if LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,35)
 static const void *net_current_ns(void)
