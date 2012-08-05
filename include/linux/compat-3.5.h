@@ -147,7 +147,10 @@ static inline int compat_vga_switcheroo_register_client(struct pci_dev *dev,
  *   Subject: [PATCH] codel: Controlled Delay AQM
  */
 
+#ifndef TCA_CODEL_MAX
 /* CODEL */
+
+#define COMPAT_CODEL_BACKPORT
 
 enum {
 	TCA_CODEL_UNSPEC,
@@ -234,6 +237,7 @@ struct tc_fq_codel_xstats {
 		struct tc_fq_codel_cl_stats class_stats;
 	};
 };
+#endif /* TCA_CODEL_MAX */
 
 
 /* Backports tty_lock: Localise the lock */
