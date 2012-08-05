@@ -141,4 +141,3 @@ ipv6:
 
 	return true;
 }
-EXPORT_SYMBOL_GPL(skb_flow_dissect);
