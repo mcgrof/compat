@@ -1,6 +1,7 @@
 #include <linux/version.h>
+#include <linux/pkt_sched.h>
 
-#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0))
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,5,0)) || defined(TCA_CODEL_MAX)
 #include_next <net/codel.h>
 #else
 
