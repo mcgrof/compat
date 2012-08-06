@@ -133,7 +133,7 @@ int compat_schedule_delayed_work_on(int cpu,
 }
 EXPORT_SYMBOL_GPL(compat_schedule_delayed_work_on);
 
-#undef flush_scheduled_work(a)
+#undef flush_scheduled_work
 void compat_flush_scheduled_work(void)
 {
 	/*
