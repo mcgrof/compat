@@ -5,6 +5,27 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
 
+/**
+ * Backports
+ *
+ * commit cdcac9cd7741af2c2b9255cbf060f772596907bb
+ * Author: Dave Airlie <airlied@redhat.com>
+ * Date:   Wed Jun 27 08:35:52 2012 +0100
+ *
+ * 	pci_regs: define LNKSTA2 pcie cap + bits.
+ *
+ * 	We need these for detecting the max link speed for drm drivers.
+ *
+ * 	Acked-by: Bjorn Helgaas <bhelgass@google.com>
+ * 	Signed-off-by: Dave Airlie <airlied@redhat.com>
+ */
+
+#define  PCI_EXP_LNKCAP2 		44	/* Link Capability 2 */
+#define  PCI_EXP_LNKCAP2_SLS_2_5GB 	0x01	/* Current Link Speed 2.5GT/s */
+#define  PCI_EXP_LNKCAP2_SLS_5_0GB 	0x02	/* Current Link Speed 5.0GT/s */
+#define  PCI_EXP_LNKCAP2_SLS_8_0GB 	0x04	/* Current Link Speed 8.0GT/s */
+#define  PCI_EXP_LNKCAP2_CROSSLINK 	0x100 /* Crosslink supported */
+
 #include <net/genetlink.h>
 #include <linux/etherdevice.h>
 
