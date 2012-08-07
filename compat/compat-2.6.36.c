@@ -141,6 +141,7 @@ void compat_flush_scheduled_work(void)
 	 * go with the old kernel's one first for now (keventd_wq) and
 	 * if think its reasonable later we can flip this around.
 	 */
+	flush_workqueue(system_wq);
 	flush_scheduled_work();
 }
 EXPORT_SYMBOL_GPL(compat_flush_scheduled_work);
