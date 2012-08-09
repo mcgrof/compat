@@ -177,9 +177,9 @@ function usage() {
 	echo -e "   this option if you've already ran this script and"
 	echo -e "   just need to fix the libc versions against which"
 	echo -e "   the binaries in the headers files are linked against. "
-	echo -e "   This was added since kernels >= 3.4 used require"
+	echo -e "   This was added since kernels >= 3.4 require"
 	echo -e "   a glibc >= 2.14 for memcpy(), and not all Linux"
-	echo -e "   Linux distributions have such glibc."
+	echo -e "   distributions have such versions of glibc."
 }
 
 if [[ $# -gt 2 ]]; then
