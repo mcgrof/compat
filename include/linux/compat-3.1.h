@@ -30,6 +30,8 @@ static inline bool ip_is_fragment(const struct iphdr *iph)
 	return (iph->frag_off & htons(IP_MF | IP_OFFSET)) != 0;
 }
 
+/* mask __netdev_alloc_skb_ip_align as RHEL6 backports this */
+#define __netdev_alloc_skb_ip_align(a,b,c) compat__netdev_alloc_skb_ip_align(a,b,c)
 static inline struct sk_buff *__netdev_alloc_skb_ip_align(struct net_device *dev,
 							  unsigned int length, gfp_t gfp)
 {
@@ -98,9 +100,19 @@ static inline void security_sk_clone(const struct sock *sk, struct sock *newsk)
 #include <asm-generic/atomic64.h>
 #endif
 
+/* mask ida_simple_get as RHEL6 backports this */
+#define ida_simple_get(a,b,c,d) compat_ida_simple_get(a,b,c,d)
+
 int ida_simple_get(struct ida *ida, unsigned int start, unsigned int end,
 		   gfp_t gfp_mask);
+
+/* mask ida_simple_remove as RHEL6 backports this */
+#define ida_simple_remove(a,b) compat_ida_simple_remove(a,b)
+
 void ida_simple_remove(struct ida *ida, unsigned int id);
+
+/* mask cpufreq_quick_get_max as RHEL6 backports this */
+#define cpufreq_quick_get_max(a) compat_cpufreq_quick_get_max(a)
 
 unsigned int cpufreq_quick_get_max(unsigned int cpu);
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0)) */

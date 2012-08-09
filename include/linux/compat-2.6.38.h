@@ -55,8 +55,14 @@ struct ewma {
 	unsigned long weight;
 };
 
+/* mask ewma_init as RHEL6 backports this */
+#define ewma_init(a,b,c) compat_ewma_init(a,b,c)
+
 extern void ewma_init(struct ewma *avg, unsigned long factor,
 		      unsigned long weight);
+
+/* mask ewma_add as RHEL6 backports this */
+#define ewma_add(a,b) compat_ewma_add(a,b)
 
 extern struct ewma *ewma_add(struct ewma *avg, unsigned long val);
 
