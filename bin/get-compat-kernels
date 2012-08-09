@@ -151,13 +151,45 @@ function get_ubuntu_kernels() {
 	rm -rf $TEMP_DIR
 }
 
-function usage() {
-	echo -e "Usage: $0"
+function rebuild_header_binary_deps() {
+	if [[ ! -d ${KSRC_PREFIX}/lib/modules/ ]]; then
+		echo "You do not seem to have any vanilla kernels available to fix"
+		exit 1
+	fi
+
+	COUNT=$(ls -d ${KSRC_PREFIX}/lib/modules/*generic | wc -l)
+	if [[ $COUNT -le 0 ]]; then
+		echo "You do not seem to have any vanilla kernels available to fix"
+		exit 1
+	fi
+
+	for kernel in $(ls -d ${KSRC_PREFIX}/lib/modules/*generic | tail -3); do
+		echo $kernel
+		make -C ${kernel}/build/ M=scripts/mod/
+		make -C ${kernel}/build/ M=scripts/basic/
+		make -C ${kernel}/build/ M=scripts/genksyms
+	done
 }
 
-if [[ $# -gt 1 ]]; then
+function usage() {
+	echo -e "Usage: $0 [ -r ] "
+	echo -e "-r Rebuilds binaries required in kernel headers. Use"
+	echo -e "   this option if you've already ran this script and"
+	echo -e "   just need to fix the libc versions against which"
+	echo -e "   the binaries in the headers files are linked against. "
+	echo -e "   This was added since kernels >= 3.4 used require"
+	echo -e "   a glibc >= 2.14 for memcpy(), and not all Linux"
+	echo -e "   Linux distributions have such glibc."
+}
+
+if [[ $# -gt 2 ]]; then
 	usage
 	exit 1
+fi
+
+if [[ $1 == "-r" ]]; then
+	rebuild_header_binary_deps
+	exit
 fi
 
 # Check for the availability of 'ar' before continuing
@@ -200,3 +232,7 @@ if [[ "${REPLY}" != "y" ]]; then
 fi
 
 get_ubuntu_kernels
+echo -e "Vanilla kernels headers ${BLUE}installed${NORMAL}, "
+echo -e "now going to ${GREEN}rebuild${NORMAL} some binary dependencies..."
+sleep 1
+rebuild_header_binary_deps
