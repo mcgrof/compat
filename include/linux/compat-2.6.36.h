@@ -101,7 +101,7 @@ struct pm_qos_request_list {
 /* mask no_printk as RHEL6 backports this */
 #define no_printk(...) compat_no_printk(...)
 static inline __attribute__ ((format (printf, 1, 2)))
-int no_printk(const char *s, ...) { return 0; }
+int compat_no_printk(const char *s, ...) { return 0; }
 
 #ifndef alloc_workqueue
 #define alloc_workqueue(name, flags, max_active) __create_workqueue(name, flags, max_active, 0)
