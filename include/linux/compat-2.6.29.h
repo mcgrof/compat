@@ -325,6 +325,30 @@ static inline struct net *read_pnet(struct net * const *pnet)
 
 extern int		init_dummy_netdev(struct net_device *dev);
 
+#else /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
+
+/* Kernels >= 2.6.29 follows */
+
+/* XXX: this can probably just go upstream ! */
+static inline void netdev_attach_ops(struct net_device *dev,
+		       const struct net_device_ops *ops)
+{
+	dev->netdev_ops = ops;
+}
+
+/* XXX: this can probably just go upstream! */
+static inline int ndo_do_ioctl(struct net_device *dev,
+			       struct ifreq *ifr,
+			       int cmd)
+{
+	if (dev->netdev_ops && dev->netdev_ops->ndo_do_ioctl)
+		return dev->netdev_ops->ndo_do_ioctl(dev, ifr, cmd);
+	return -EOPNOTSUPP;
+}
+
+#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
+
+#if LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)
 #define compat_pci_suspend(fn)						\
 	int fn##_compat(struct pci_dev *pdev, pm_message_t state) 	\
 	{								\
@@ -354,31 +378,41 @@ extern int		init_dummy_netdev(struct net_device *dev);
 									\
 		return fn(&pdev->dev);					\
 	}
+#elif LINUX_VERSION_CODE == KERNEL_VERSION(2,6,29)
+#define compat_pci_suspend(fn)						\
+	int fn##_compat(struct device *dev)			 	\
+	{								\
+		struct pci_dev *pdev = to_pci_dev(dev);			\
+		int r;							\
+									\
+		r = fn(&pdev->dev);					\
+		if (r)							\
+			return r;					\
+									\
+		pci_save_state(pdev);					\
+		pci_disable_device(pdev);				\
+		pci_set_power_state(pdev, PCI_D3hot);			\
+									\
+		return 0;						\
+	}
 
-#else /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
-
-/* Kernels >= 2.6.29 follows */
-
-/* XXX: this can probably just go upstream ! */
-static inline void netdev_attach_ops(struct net_device *dev,
-		       const struct net_device_ops *ops)
-{
-	dev->netdev_ops = ops;
-}
-
-/* XXX: this can probably just go upstream! */
-static inline int ndo_do_ioctl(struct net_device *dev,
-			       struct ifreq *ifr,
-			       int cmd)
-{
-	if (dev->netdev_ops && dev->netdev_ops->ndo_do_ioctl)
-		return dev->netdev_ops->ndo_do_ioctl(dev, ifr, cmd);
-	return -EOPNOTSUPP;
-}
-
+#define compat_pci_resume(fn)						\
+	int fn##_compat(struct device *dev)				\
+	{								\
+		struct pci_dev *pdev = to_pci_dev(dev);			\
+		int r;							\
+									\
+		pci_set_power_state(pdev, PCI_D0);			\
+		r = pci_enable_device(pdev);				\
+		if (r)							\
+			return r;					\
+		pci_restore_state(pdev);				\
+									\
+		return fn(&pdev->dev);					\
+	}
+#else
 #define compat_pci_suspend(fn)
 #define compat_pci_resume(fn)
-
-#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
+#endif
 
 #endif /*  LINUX_26_29_COMPAT_H */
