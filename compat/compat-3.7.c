@@ -9,11 +9,13 @@
  */
 
 #include <linux/workqueue.h>
+#include <linux/export.h>
 
 bool mod_delayed_work(struct workqueue_struct *wq, struct delayed_work *dwork,
 		      unsigned long delay)
 {
 	cancel_delayed_work(dwork);
 	queue_delayed_work(wq, dwork, delay);
+	return false;
 }
 EXPORT_SYMBOL_GPL(mod_delayed_work);
