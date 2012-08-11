@@ -167,6 +167,19 @@ static inline long __must_check IS_ERR_OR_NULL(const void *ptr)
 	return !ptr || IS_ERR_VALUE((unsigned long)ptr);
 }
 
+#if (LINUX_VERSION_CODE == KERNEL_VERSION(2,6,32))
+#undef SIMPLE_DEV_PM_OPS
+#define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn) \
+const struct dev_pm_ops name = { \
+	.suspend = suspend_fn, \
+	.resume = resume_fn, \
+	.freeze = suspend_fn, \
+	.thaw = resume_fn, \
+	.poweroff = suspend_fn, \
+	.restore = resume_fn, \
+}
+#endif /* (LINUX_VERSION_CODE == KERNEL_VERSION(2,6,32)) */
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,33)) */
 
 #endif /* LINUX_26_33_COMPAT_H */

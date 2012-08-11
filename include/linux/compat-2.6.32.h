@@ -128,46 +128,14 @@ typedef enum netdev_tx netdev_tx_t;
  * weren't included yet though, so include them here.
  */
 #if (LINUX_VERSION_CODE == KERNEL_VERSION(2,6,29))
-/*
- * Note the lack of "static" in this definition. The code may put
- * a "static" in front of using the define, which makes it impossible
- * to put static here. We lose that static if it is present (it ends
- * up being on the suspend_fn) but that doesn't really matter much
- * unless a driver defines multiple pm_ops structs with the same name
- * (in which case we'll need to fix it)
- */
 #define SIMPLE_DEV_PM_OPS(name, suspend_fn, resume_fn)		\
-int __compat_suspend_fn_ ## name(struct device *dev)		\
-{								\
-	int ret = suspend_fn(dev);				\
-	if (ret)						\
-		return ret;					\
-	if (dev->bus == &pci_bus_type) {			\
-		pci_save_state(to_pci_dev(dev));		\
-		pci_disable_device(to_pci_dev(dev));		\
-		pci_set_power_state(to_pci_dev(dev), PCI_D3hot);\
-	}							\
-	return 0;						\
-}								\
-int __compat_resume_fn_ ## name(struct device *dev)		\
-{								\
-	int ret;						\
-	if (dev->bus == &pci_bus_type) {			\
-		pci_set_power_state(to_pci_dev(dev), PCI_D0);	\
-		ret = pci_enable_device(to_pci_dev(dev));	\
-		if (ret)					\
-			return ret;				\
-		pci_restore_state(to_pci_dev(dev));		\
-	}							\
-	return resume_fn(dev);					\
-}								\
 struct dev_pm_ops name = {					\
-	.suspend = __compat_suspend_fn_ ## name,		\
-	.resume = __compat_resume_fn_ ## name,			\
-	.freeze = __compat_suspend_fn_ ## name,			\
-	.thaw = __compat_resume_fn_ ## name,			\
-	.poweroff = __compat_suspend_fn_ ## name,		\
-	.restore = __compat_resume_fn_ ## name,			\
+	.suspend = suspend_fn ## _compat,			\
+	.resume = resume_fn ## _compat,				\
+	.freeze = suspend_fn ## _compat,			\
+	.thaw = resume_fn ## _compat,				\
+	.poweroff = suspend_fn ## _compat,			\
+	.restore = resume_fn ## _compat,			\
 }
 #elif (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,30))
 /*
