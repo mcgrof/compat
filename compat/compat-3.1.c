@@ -10,7 +10,7 @@
 
 #include <linux/idr.h>
 
-static DEFINE_SPINLOCK(simple_ida_lock);
+static DEFINE_SPINLOCK(compat_simple_ida_lock);
 
 /**
  * ida_simple_get - get a new id.
@@ -24,7 +24,7 @@ static DEFINE_SPINLOCK(simple_ida_lock);
  *
  * Use ida_simple_remove() to get rid of an id.
  */
-int ida_simple_get(struct ida *ida, unsigned int start, unsigned int end,
+int compat_ida_simple_get(struct ida *ida, unsigned int start, unsigned int end,
 		   gfp_t gfp_mask)
 {
 	int ret, id;
@@ -45,7 +45,7 @@ again:
 	if (!ida_pre_get(ida, gfp_mask))
 		return -ENOMEM;
 
-	spin_lock_irqsave(&simple_ida_lock, flags);
+	spin_lock_irqsave(&compat_simple_ida_lock, flags);
 	ret = ida_get_new_above(ida, start, &id);
 	if (!ret) {
 		if (id > max) {
@@ -55,29 +55,29 @@ again:
 			ret = id;
 		}
 	}
-	spin_unlock_irqrestore(&simple_ida_lock, flags);
+	spin_unlock_irqrestore(&compat_simple_ida_lock, flags);
 
 	if (unlikely(ret == -EAGAIN))
 		goto again;
 
 	return ret;
 }
-EXPORT_SYMBOL(ida_simple_get);
+EXPORT_SYMBOL(compat_ida_simple_get);
 
 /**
  * ida_simple_remove - remove an allocated id.
  * @ida: the (initialized) ida.
  * @id: the id returned by ida_simple_get.
  */
-void ida_simple_remove(struct ida *ida, unsigned int id)
+void compat_ida_simple_remove(struct ida *ida, unsigned int id)
 {
 	unsigned long flags;
 
 	BUG_ON((int)id < 0);
-	spin_lock_irqsave(&simple_ida_lock, flags);
+	spin_lock_irqsave(&compat_simple_ida_lock, flags);
 	ida_remove(ida, id);
-	spin_unlock_irqrestore(&simple_ida_lock, flags);
+	spin_unlock_irqrestore(&compat_simple_ida_lock, flags);
 }
-EXPORT_SYMBOL(ida_simple_remove);
+EXPORT_SYMBOL(compat_ida_simple_remove);
 /* source lib/idr.c */
 

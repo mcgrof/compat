@@ -10,6 +10,9 @@
 
 #define PMSG_IS_AUTO(msg)	(((msg).event & PM_EVENT_AUTO) != 0)
 
+/* mask skb_frag_page as RHEL6 backports this */
+#define skb_frag_page(a) compat_skb_frag_page(a)
+
 /**
  * skb_frag_page - retrieve the page refered to by a paged fragment
  * @frag: the paged fragment
@@ -20,6 +23,9 @@ static inline struct page *skb_frag_page(const skb_frag_t *frag)
 {
 	return frag->page;
 }
+
+/* mask skb_frag_dma_map as RHEL6 backports this */
+#define skb_frag_dma_map(a,b,c,d,e) compat_skb_frag_dma_map(a,b,c,d,e)
 
 /**
  * skb_frag_dma_map - maps a paged fragment via the DMA API
@@ -42,6 +48,9 @@ static inline dma_addr_t skb_frag_dma_map(struct device *dev,
 }
 
 #define ETH_P_TDLS	0x890D          /* TDLS */
+
+/* mask skb_frag_size as RHEL6 backports this */
+#define skb_frag_size(a) compat_skb_frag_size(a)
 
 static inline unsigned int skb_frag_size(const skb_frag_t *frag)
 {

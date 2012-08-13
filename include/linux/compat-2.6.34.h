@@ -29,8 +29,11 @@ void init_compat_mmc_pm_flags(void);
 #define netdev_mc_count(dev) ((dev)->mc_count)
 #define netdev_mc_empty(dev) (netdev_mc_count(dev) == 0)
 
+/* mask netdev_for_each_mc_addr as RHEL6 backports this */
+#if !defined(netdev_for_each_mc_addr)
 #define netdev_for_each_mc_addr(mclist, dev) \
 	for (mclist = dev->mc_list; mclist; mclist = mclist->next)
+#endif
 /* source: include/linux/netdevice.h */
 
 
@@ -234,6 +237,8 @@ do {							\
 #define sysfs_attr_init(attr) do {} while(0)
 #endif
 
+/* mask sysfs_bin_attr_init as RHEL6 backports this */
+#if !defined(sysfs_bin_attr_init)
 /**
  *	sysfs_bin_attr_init - initialize a dynamically allocated bin_attribute
  *	@attr: struct bin_attribute to initialize
@@ -245,6 +250,7 @@ do {							\
  *	added to sysfs if you don't have this.
  */
 #define sysfs_bin_attr_init(bin_attr) sysfs_attr_init(&(bin_attr)->attr)
+#endif
 
 #define usb_alloc_coherent(dev, size, mem_flags, dma) usb_buffer_alloc(dev, size, mem_flags, dma)
 #define usb_free_coherent(dev, size, addr, dma) usb_buffer_free(dev, size, addr, dma)

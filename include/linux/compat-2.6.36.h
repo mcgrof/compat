@@ -98,6 +98,8 @@ struct pm_qos_request_list {
  * Dummy printk for disabled debugging statements to use whilst maintaining
  * gcc's format and side-effect checking.
  */
+/* mask no_printk as RHEL6 backports this */
+#define no_printk(a, ...) compat_no_printk(a, ##__VA_ARGS__)
 static inline __attribute__ ((format (printf, 1, 2)))
 int no_printk(const char *s, ...) { return 0; }
 
