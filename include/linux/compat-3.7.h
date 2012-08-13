@@ -6,9 +6,14 @@
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0))
 
 #include <linux/workqueue.h>
+#include <linux/tty.h>
 
 bool mod_delayed_work(struct workqueue_struct *wq, struct delayed_work *dwork,
 		      unsigned long delay);
+
+/* Backports tty_lock: Localise the lock */
+#define tty_lock(__tty) tty_lock()
+#define tty_unlock(__tty) tty_unlock()
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0)) */
 

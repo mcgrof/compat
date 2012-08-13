@@ -239,11 +239,6 @@ struct tc_fq_codel_xstats {
 };
 #endif /* TCA_CODEL_MAX */
 
-
-/* Backports tty_lock: Localise the lock */
-#define tty_lock(__tty) tty_lock()
-#define tty_unlock(__tty) tty_unlock()
-
 /* Backport ether_addr_equal */
 static inline bool ether_addr_equal(const u8 *addr1, const u8 *addr2)
 {
