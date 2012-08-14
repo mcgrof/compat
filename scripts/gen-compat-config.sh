@@ -56,7 +56,9 @@ if [[ ! -z ${RHEL_MAJOR} ]]; then
 fi
 
 if [[ ${CONFIG_COMPAT_KERNEL_2_6_33} = "y" ]]; then
-	echo "export CONFIG_COMPAT_FIRMWARE_CLASS=m"
+	if [[ ! ${CONFIG_COMPAT_RHEL_6_0} = "y" ]]; then
+		echo "export CONFIG_COMPAT_FIRMWARE_CLASS=m"
+	fi
 fi
 
 if [[ ${CONFIG_COMPAT_KERNEL_2_6_36} = "y" ]]; then
