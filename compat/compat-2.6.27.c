@@ -34,7 +34,7 @@
  * @dev: PCI device to handle.
  * @state: PCI state from which device will issue PME#.
  *
- * This is the backport code for older kernels for compat-wireless, we read stuff
+ * This is the backport code for older kernels for compat-drivers, we read stuff
  * from the initialization stuff from pci_pm_init().
  */
 bool pci_pme_capable(struct pci_dev *dev, pci_power_t state)

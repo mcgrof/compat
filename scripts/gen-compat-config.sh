@@ -6,7 +6,7 @@
 # CONFIG_COMPAT_KERNEL_3_0 .. etc for each kernel release you need an object
 # for.
 #
-# Note: this is part of the compat.git project, not compat-wireless.git,
+# Note: this is part of the compat.git project, not compat-drivers,
 # send patches against compat.git.
 
 if [[ ! -f ${KLIB_BUILD}/Makefile ]]; then

@@ -25,7 +25,7 @@ PREFIX=$HOME/
 GIT_TREES="git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git"
 GIT_TREES="$GIT_TREES git://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git"
 GIT_TREES="$GIT_TREES git://github.com/mcgrof/compat.git"
-GIT_TREES="$GIT_TREES git://github.com/mcgrof/compat-wireless.git"
+GIT_TREES="$GIT_TREES git://github.com/mcgrof/compat-drivers.git"
 
 LINUX_GIT="git://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git"
 
@@ -72,7 +72,7 @@ for i in $GIT_TREES; do
 		cd $PREFIX
 		git clone $i --reference $PREFIX/linux-stable/.git/
 		;;
-	"compat-wireless.git")
+	"compat-drivers.git")
 		# This is just what scripts are tested for. Probably best to
 		# unify all into one place but this will do for now.
 		mkdir -p $PREFIX/devel/
