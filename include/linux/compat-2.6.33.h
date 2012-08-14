@@ -15,6 +15,7 @@
 #include <linux/firmware.h>
 #include <linux/input.h>
 
+#if defined(CONFIG_COMPAT_FIRMWARE_CLASS)
 #if defined(CONFIG_FW_LOADER) || defined(CONFIG_FW_LOADER_MODULE)
 #define release_firmware compat_release_firmware
 #define request_firmware compat_request_firmware
@@ -48,6 +49,7 @@ static inline int compat_request_firmware_nowait(
 static inline void compat_release_firmware(const struct firmware *fw)
 {
 }
+#endif
 #endif
 
 /* mask KEY_RFKILL as RHEL6 backports this */
