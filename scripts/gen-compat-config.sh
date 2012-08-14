@@ -60,7 +60,9 @@ if [[ ${CONFIG_COMPAT_KERNEL_2_6_33} = "y" ]]; then
 fi
 
 if [[ ${CONFIG_COMPAT_KERNEL_2_6_36} = "y" ]]; then
-	echo "export CONFIG_COMPAT_KFIFO=y"
+	if [[ ! ${CONFIG_COMPAT_RHEL_6_1} = "y" ]]; then
+		echo "export CONFIG_COMPAT_KFIFO=y"
+	fi
 fi
 
 if [[ ${CONFIG_COMPAT_KERNEL_3_5} = "y" ]]; then
