@@ -48,7 +48,7 @@ done
 # The RHEL checks seem to annotate the existance of RHEL minor versions.
 RHEL_MAJOR=$(grep ^RHEL_MAJOR ${KLIB_BUILD}/Makefile | sed -n 's/.*= *\(.*\)/\1/p')
 if [[ ! -z ${RHEL_MAJOR} ]]; then
-	RHEL_MINOR=$(grep ^RHEL_MINOR $(KLIB_BUILD)/Makefile | sed -n 's/.*= *\(.*\)/\1/p')
+	RHEL_MINOR=$(grep ^RHEL_MINOR ${KLIB_BUILD}/Makefile | sed -n 's/.*= *\(.*\)/\1/p')
 	for i in $(seq 0 ${RHEL_MINOR}); do
 		eval CONFIG_COMPAT_${RHEL_MAJOR}_${i}=y
 		echo "export CONFIG_COMPAT_${RHEL_MAJOR}_${i}=y"
