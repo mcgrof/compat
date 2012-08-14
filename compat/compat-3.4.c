@@ -10,6 +10,35 @@
 
 #include <linux/fs.h>
 #include <linux/module.h>
+#include <linux/wait.h>
+
+/* __wake_up_common was declared as part of the wait.h until
+ * 2.6.31 in which they made it private to the scheduler. Prefix it with
+ * compat to avoid double declaration issues.
+ */
+static void compat_wake_up_common(wait_queue_head_t *q, unsigned int mode,
+			int nr_exclusive, int wake_flags, void *key)
+{
+	wait_queue_t *curr, *next;
+
+	list_for_each_entry_safe(curr, next, &q->task_list, task_list) {
+		unsigned flags = curr->flags;
+
+		if (curr->func(curr, mode, wake_flags, key) &&
+				(flags & WQ_FLAG_EXCLUSIVE) && !--nr_exclusive)
+			break;
+	}
+}
+
+/* The last 'nr' parameter was added to the __wake_up_locked() function
+ * in 3.4 kernel. Define a new one prefixed with compat_ for the new API.
+ */
+void compat_wake_up_locked(wait_queue_head_t *q, unsigned int mode, int nr)
+{
+	compat_wake_up_common(q, mode, nr, 0, NULL);
+}
+EXPORT_SYMBOL_GPL(compat_wake_up_locked);
+
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
 #include <linux/i2c.h>
