@@ -48,6 +48,17 @@
 #include <linux/etherdevice.h>
 
 /**
+ * eth_broadcast_addr - Assign broadcast address
+ * @addr: Pointer to a six-byte array containing the Ethernet address
+ *
+ * Assign the broadcast address to the given address array.
+ */
+static inline void eth_broadcast_addr(u8 *addr)
+{
+	memset(addr, 0xff, ETH_ALEN);
+}
+
+/**
  * eth_random_addr - Generate software assigned random Ethernet address
  * @addr: Pointer to a six-byte array containing the Ethernet address
  *
