@@ -17,6 +17,7 @@
 #include <linux/skbuff.h>
 #include <linux/usb.h>
 #include <linux/types.h>
+#include <linux/pci_regs.h>
 
 /* backports  */
 static inline void usb_autopm_put_interface_async(struct usb_interface *intf)
@@ -414,5 +415,7 @@ static inline int ndo_do_ioctl(struct net_device *dev,
 #define compat_pci_suspend(fn)
 #define compat_pci_resume(fn)
 #endif
+
+#define  PCI_EXP_SLTSTA_PDS	0x0040  /* Presence Detect State */
 
 #endif /*  LINUX_26_29_COMPAT_H */

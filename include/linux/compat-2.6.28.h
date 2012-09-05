@@ -17,6 +17,7 @@
 #endif
 
 #include <linux/pci.h>
+#include <linux/pci_regs.h>
 
 typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } compat_cpumask_t;
 
@@ -266,6 +267,11 @@ int pci_wake_from_d3(struct pci_dev *dev, bool enable);
 #ifndef pr_fmt
 #define pr_fmt(fmt) fmt
 #endif
+
+#define PCI_EXP_DEVCAP2		36      /* Device Capabilities 2 */
+#define  PCI_EXP_DEVCAP2_ARI  	0x20    /* Alternative Routing-ID */
+#define PCI_EXP_DEVCTL2		40      /* Device Control 2 */
+#define  PCI_EXP_DEVCTL2_ARI	0x20    /* Alternative Routing-ID */
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28)) */
 
