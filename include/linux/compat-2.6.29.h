@@ -35,7 +35,7 @@ static inline int usb_autopm_get_interface_async(struct usb_interface *intf)
 	defined(CONFIG_SUPERH) || defined(CONFIG_SPARC) || \
 	defined(CONFIG_FRV) || defined(CONFIG_X86) || \
 	defined(CONFIG_M32R) || defined(CONFIG_M68K) || \
-	defined(CONFIG_MN10300) || defined(CONFIG_XTENSA) \
+	defined(CONFIG_MN10300) || defined(CONFIG_XTENSA) || \
 	defined(CONFIG_ARM)
 #include <asm/atomic.h>
 #else
