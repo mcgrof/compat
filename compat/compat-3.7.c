@@ -29,7 +29,7 @@ EXPORT_SYMBOL_GPL(mod_delayed_work);
  * pci_dev but if we found it we likely would remove it from
  * the kernel anyway right? Bite me.
  */
-static inline u16 pcie_flags_reg(const struct pci_dev *dev)
+static inline u16 pcie_flags_reg(struct pci_dev *dev)
 {
 	int pos;
 	u16 reg16;
@@ -43,12 +43,12 @@ static inline u16 pcie_flags_reg(const struct pci_dev *dev)
 	return reg16;
 }
 
-static inline int pci_pcie_type(const struct pci_dev *dev)
+static inline int pci_pcie_type(struct pci_dev *dev)
 {
 	return (pcie_flags_reg(dev) & PCI_EXP_FLAGS_TYPE) >> 4;
 }
 
-static inline int pcie_cap_version(const struct pci_dev *dev)
+static inline int pcie_cap_version(struct pci_dev *dev)
 {
 	return pcie_flags_reg(dev) & PCI_EXP_FLAGS_VERS;
 }
@@ -58,7 +58,7 @@ static inline bool pcie_cap_has_devctl(const struct pci_dev *dev)
 	return true;
 }
 
-static inline bool pcie_cap_has_lnkctl(const struct pci_dev *dev)
+static inline bool pcie_cap_has_lnkctl(struct pci_dev *dev)
 {
 	int type = pci_pcie_type(dev);
 
@@ -68,7 +68,7 @@ static inline bool pcie_cap_has_lnkctl(const struct pci_dev *dev)
 	       type == PCI_EXP_TYPE_LEG_END;
 }
 
-static inline bool pcie_cap_has_sltctl(const struct pci_dev *dev)
+static inline bool pcie_cap_has_sltctl(struct pci_dev *dev)
 {
 	int type = pci_pcie_type(dev);
 
@@ -78,7 +78,7 @@ static inline bool pcie_cap_has_sltctl(const struct pci_dev *dev)
 		pcie_flags_reg(dev) & PCI_EXP_FLAGS_SLOT);
 }
 
-static inline bool pcie_cap_has_rtctl(const struct pci_dev *dev)
+static inline bool pcie_cap_has_rtctl(struct pci_dev *dev)
 {
 	int type = pci_pcie_type(dev);
 
