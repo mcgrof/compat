@@ -10,6 +10,10 @@
 #include <linux/pci.h>
 #include <linux/pci_regs.h>
 
+#define netlink_notify_portid(__notify) (__notify->pid)
+#define genl_info_snd_portid(__genl_info) (__genl_info->snd_pid)
+#define NETLINK_CB_PORTID(__skb) NETLINK_CB(cb->skb).pid
+
 bool mod_delayed_work(struct workqueue_struct *wq, struct delayed_work *dwork,
 		      unsigned long delay);
 
@@ -55,6 +59,10 @@ static inline int pcie_capability_clear_dword(struct pci_dev *dev, int pos,
 
 #define PCI_EXP_LNKSTA2			50      /* Link Status 2 */
 
+#else /* (LINUX_VERSION_CODE > KERNEL_VERSION(3,7,0)) */
+#define netlink_notify_portid(__notify) (__notify->portid)
+#define genl_info_snd_portid(__genl_info) (__genl_info->snd_portid)
+#define NETLINK_CB_PORTID(__skb) NETLINK_CB(cb->skb).portid
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,0)) */
 
 #endif /* LINUX_3_7_COMPAT_H */
