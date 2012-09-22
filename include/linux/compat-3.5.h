@@ -6,9 +6,33 @@
 #include <linux/etherdevice.h>
 #include <linux/net.h>
 
+#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0))
+#include <linux/usb.h>
+/**
+ * Backports
+ *
+ * commit d81a5d1956731c453b85c141458d4ff5d6cc5366
+ * Author: Gustavo Padovan <gustavo.padovan@collabora.co.uk>
+ * Date:   Tue Jul 10 19:10:06 2012 -0300
+ *
+ * 	USB: add USB_VENDOR_AND_INTERFACE_INFO() macro
+ * This is actually from 3.6 but some 'stable' patches
+ * are being submitted that add new devices using this
+ * interface, so we cherry pick it here...
+ */
+#define USB_VENDOR_AND_INTERFACE_INFO(vend, cl, sc, pr) \
+       .match_flags = USB_DEVICE_ID_MATCH_INT_INFO \
+               | USB_DEVICE_ID_MATCH_VENDOR, \
+       .idVendor = (vend), \
+       .bInterfaceClass = (cl), \
+       .bInterfaceSubClass = (sc), \
+       .bInterfaceProtocol = (pr)
+#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,6,0) */
+
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0))
 
 #include <linux/pkt_sched.h>
+
 
 /*
  * This backports:
