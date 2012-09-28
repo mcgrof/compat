@@ -10,8 +10,35 @@
 #include <linux/pci.h>
 #include <linux/pci_regs.h>
 #include <linux/mm.h>
+#include <linux/user_namespace.h>
+#include <linux/file.h>
+#include <linux/seq_file.h>
 
 #define VM_DONTDUMP    VM_NODUMP
+
+#ifdef CONFIG_USER_NS
+
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,38))
+static inline struct user_namespace *seq_user_ns(struct seq_file *seq)
+{
+	struct file *f = container_of((void *) seq, struct file, private_data);
+
+	return f->f_cred->user_ns;
+}
+#else
+static inline struct user_namespace *seq_user_ns(struct seq_file *seq)
+{
+	return current_user_ns();
+}
+#endif /* (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,38)) */
+
+#else
+static inline struct user_namespace *seq_user_ns(struct seq_file *seq)
+{
+	extern struct user_namespace init_user_ns;
+	return &init_user_ns;
+}
+#endif /* CONFIG_USER_NS */
 
 #define netlink_notify_portid(__notify) (__notify->pid)
 #define genl_info_snd_portid(__genl_info) (__genl_info->snd_pid)
