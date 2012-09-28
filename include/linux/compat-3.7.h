@@ -9,6 +9,9 @@
 #include <linux/tty.h>
 #include <linux/pci.h>
 #include <linux/pci_regs.h>
+#include <linux/mm.h>
+
+#define VM_DONTDUMP    VM_NODUMP
 
 #define netlink_notify_portid(__notify) (__notify->pid)
 #define genl_info_snd_portid(__genl_info) (__genl_info->snd_pid)
