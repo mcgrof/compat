@@ -45,6 +45,9 @@ compat-$(CONFIG_COMPAT_KERNEL_3_2) += compat-3.2.o
 compat-$(CONFIG_COMPAT_KERNEL_3_3) += \
 	compat-3.3.o
 compat-$(CONFIG_COMPAT_KERNEL_3_4) += compat-3.4.o
+compat-$(CONFIG_COMPAT_KERNEL_3_5) += \
+	compat-3.5.o \
+	user_namespace.o
 compat-$(CONFIG_COMPAT_KERNEL_3_7) += compat-3.7.o
 
 compat-$(CONFIG_COMPAT_CORDIC) += cordic.o

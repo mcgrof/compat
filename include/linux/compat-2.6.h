@@ -11,6 +11,7 @@
 #endif
 #include <linux/compat_autoconf.h>
 #include <linux/init.h>
+#include <linux/uidgid.h>
 
 /*
  * The define overwriting module_init is based on the original module_init
