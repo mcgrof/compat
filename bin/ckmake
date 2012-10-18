@@ -238,7 +238,8 @@ for i in $LOG $LOG_TMP $REPORT; do
 	echo > $i
 done
 
-nice make clean 2>&1 > $LOG
+DIR="$(echo $KLIBS | awk '{print $1}')/build"
+nice make clean KLIB=$DIR KLIB_BUILD=$DIR 2>&1 >> $LOG
 
 if [[ $TIME != "1" ]]; then
 	run_ckmake | tee_color_split $REPORT
