@@ -9,6 +9,49 @@
  */
 
 #include <linux/compat.h>
+#include <linux/device.h>
+#include <linux/usb.h>
+#include <linux/pm_runtime.h>
+
+#ifdef CONFIG_USB_SUSPEND
+/**
+ * usb_autopm_get_interface_no_resume - increment a USB interface's PM-usage counter
+ * @intf: the usb_interface whose counter should be incremented
+ *
+ * This routine increments @intf's usage counter but does not carry out an
+ * autoresume.
+ *
+ * This routine can run in atomic context.
+ */
+void usb_autopm_get_interface_no_resume(struct usb_interface *intf)
+{
+	struct usb_device       *udev = interface_to_usbdev(intf);
+
+	usb_mark_last_busy(udev);
+	atomic_inc(&intf->pm_usage_cnt);
+	pm_runtime_get_noresume(&intf->dev);
+}
+EXPORT_SYMBOL_GPL(usb_autopm_get_interface_no_resume);
+
+/**
+ * usb_autopm_put_interface_no_suspend - decrement a USB interface's PM-usage counter
+ * @intf: the usb_interface whose counter should be decremented
+ *
+ * This routine decrements @intf's usage counter but does not carry out an
+ * autosuspend.
+ *
+ * This routine can run in atomic context.
+ */
+void usb_autopm_put_interface_no_suspend(struct usb_interface *intf)
+{
+	struct usb_device       *udev = interface_to_usbdev(intf);
+
+	usb_mark_last_busy(udev);
+	atomic_dec(&intf->pm_usage_cnt);
+	pm_runtime_put_noidle(&intf->dev);
+}
+EXPORT_SYMBOL_GPL(usb_autopm_put_interface_no_suspend);
+#endif /* CONFIG_USB_SUSPEND */
 
 #if defined(CONFIG_PCCARD) || defined(CONFIG_PCCARD_MODULE)
 

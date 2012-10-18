@@ -7,6 +7,7 @@
 
 #include <linux/skbuff.h>
 #include <linux/pci.h>
+#include <linux/usb.h>
 #if defined(CONFIG_PCCARD) || defined(CONFIG_PCCARD_MODULE)
 #include <pcmcia/cs_types.h>
 #include <pcmcia/cistpl.h>
@@ -14,6 +15,20 @@
 #endif
 #include <linux/firmware.h>
 #include <linux/input.h>
+
+#ifdef CONFIG_USB_SUSPEND
+extern void usb_autopm_get_interface_no_resume(struct usb_interface *intf);
+extern void usb_autopm_put_interface_no_suspend(struct usb_interface *intf);
+#else
+static inline void usb_autopm_get_interface_no_resume(struct usb_interface *intf)
+{
+	atomic_inc(&intf->pm_usage_cnt);
+}
+static inline void usb_autopm_put_interface_no_suspend(struct usb_interface *intf)
+{
+	atomic_dec(&intf->pm_usage_cnt);
+}
+#endif /* CONFIG_USB_SUSPEND */
 
 #if defined(CONFIG_COMPAT_FIRMWARE_CLASS)
 #if defined(CONFIG_FW_LOADER) || defined(CONFIG_FW_LOADER_MODULE)
