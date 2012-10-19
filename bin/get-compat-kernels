@@ -203,11 +203,16 @@ fi
 
 echo -e ""
 
-if [[ -n $KSRC_PREFIX ]]; then
-	echo -e "** Running as a non-privileged user!"
-	echo -e "** If you want to force using system-wide ${BLUE}/lib/modules${NORMAL} and ${BLUE}/usr/src${NORMAL}, you have to"
-	echo -e "** run this script as root or using ${GREEN}sudo${NORMAL}."
+if [[ ! -n $KSRC_PREFIX ]]; then
+	echo -e "** Running as a privileged user!"
+	echo -e "** You are trying to force using system-wide ${BLUE}/lib/modules${NORMAL} and ${BLUE}/usr/src${NORMAL} ..."
+	echo -e "** This is a terrible idea. Consider running as a regular user."
 	echo -e ""
+	read -p "Do you still want to continue (y/N)? "
+	if [[ "${REPLY}" != "y" ]]; then
+		echo -e "Bailing out !"
+		exit 1
+	fi
 fi
 
 echo -e "This will download ${YELLOW}${NUM_KERNELS}${NORMAL} kernel headers to allow you to"
