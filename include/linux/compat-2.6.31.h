@@ -249,6 +249,7 @@ static inline bool sk_has_allocations(const struct sock *sk)
 	return sk_wmem_alloc_get(sk) || sk_rmem_alloc_get(sk);
 }
 
+#define USB_SUBCLASS_VENDOR_SPEC	0xff
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,31)) */
 
