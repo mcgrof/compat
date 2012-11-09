@@ -31,6 +31,7 @@ LAST=""
 RANGE=""
 
 RET=""
+NUM_CPUS=$(echo $(($(cat /proc/cpuinfo | grep processor | tail -1 | awk '{print $3}')+1)))
 
 # If $HOME/compat-ksrc is found use that, otherwise use system-wide
 # sources in /usr/src.
@@ -161,8 +162,8 @@ function run_ckmake()
 		NOCOLOR="1" log_try_kernel $KERNEL >> $LOG
 		log_try_kernel $KERNEL
 
-		#ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j6 -Wunused-but-set-variable $ARGS &>> $LOG
-		ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j6 $ARGS &>> $LOG
+		#ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j${NUM_CPUS} -Wunused-but-set-variable $ARGS &>> $LOG
+		ionice -c 3 nice -n 20 make $QUIET KLIB=$DIR KLIB_BUILD=$DIR -j${NUM_CPUS} $ARGS &>> $LOG
 		CUR_RET=$?
 
 		if [[ $RET = "" ]]; then
