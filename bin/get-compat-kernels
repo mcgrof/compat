@@ -167,16 +167,15 @@ function rebuild_header_binary_deps() {
 	for kernel in $(ls -d ${KSRC_PREFIX}/lib/modules/*generic | tail -3); do
 		echo $kernel
 
-		for i in mod basic genksyms; do
-			make -C ${kernel}/build/ M=scripts/${i}/ clean > /dev/null 2>&1
-		done
-
-		for i in mod basic genksyms; do
-			make -C ${kernel}/build/ M=scripts/${i}/ > /dev/null 2>&1
-		done
-
-		for i in mod basic genksyms; do
-			make -C ${kernel}/build/ M=scripts/${i}/ > /dev/null 2>&1
+		count=0
+		while [[ $count -ne 3 ]]; do
+			for i in basic mod genksyms; do
+				if [[ $count -eq 0 ]]; then
+					make -C ${kernel}/build/ M=scripts/${i}/ clean > /dev/null 2>&1
+				fi
+				make -C ${kernel}/build/ M=scripts/${i}/ > /dev/null 2>&1
+			done
+			let count=$count+1
 		done
 	done
 }
