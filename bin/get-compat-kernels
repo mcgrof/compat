@@ -168,7 +168,7 @@ function rebuild_header_binary_deps() {
 		echo $kernel
 
 		count=0
-		while [[ $count -ne 3 ]]; do
+		while [[ $count -ne 4 ]]; do
 			for i in basic mod genksyms; do
 				if [[ $count -eq 0 ]]; then
 					make -C ${kernel}/build/ M=scripts/${i}/ clean > /dev/null 2>&1
