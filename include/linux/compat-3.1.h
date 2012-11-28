@@ -111,10 +111,12 @@ int ida_simple_get(struct ida *ida, unsigned int start, unsigned int end,
 
 void ida_simple_remove(struct ida *ida, unsigned int id);
 
+#ifdef CONFIG_CPU_FREQ
 /* mask cpufreq_quick_get_max as RHEL6 backports this */
 #define cpufreq_quick_get_max(a) compat_cpufreq_quick_get_max(a)
 
 unsigned int cpufreq_quick_get_max(unsigned int cpu);
+#endif
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0)) */
 
 #endif /* LINUX_3_1_COMPAT_H */

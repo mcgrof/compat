@@ -18,7 +18,7 @@
  *
  * 	cpufreq: expose a cpufreq_quick_get_max routine
  */
-
+#ifdef CONFIG_CPU_FREQ
 unsigned int compat_cpufreq_quick_get_max(unsigned int cpu)
 {
 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
@@ -32,7 +32,7 @@ unsigned int compat_cpufreq_quick_get_max(unsigned int cpu)
 	return ret_freq;
 }
 EXPORT_SYMBOL(compat_cpufreq_quick_get_max);
-
+#endif
 
 static DEFINE_SPINLOCK(compat_simple_ida_lock);
 
