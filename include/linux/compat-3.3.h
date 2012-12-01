@@ -12,6 +12,43 @@
 #include <linux/skbuff.h>
 #include <net/sch_generic.h>
 #include <linux/mii.h>
+#include <linux/netdevice.h>
+
+/*
+ * BQL was added as of v3.3 but some Linux distributions
+ * have backported BQL to their v3.2 kernels or older. To
+ * address this we assume that they also enabled CONFIG_BQL
+ * and test for that here and simply avoid adding the static
+ * inlines if it was defined
+ */
+#ifndef CONFIG_BQL
+static inline void netdev_tx_sent_queue(struct netdev_queue *dev_queue,
+					unsigned int bytes)
+{
+}
+
+static inline void netdev_sent_queue(struct net_device *dev, unsigned int bytes)
+{
+}
+
+static inline void netdev_tx_completed_queue(struct netdev_queue *dev_queue,
+					     unsigned pkts, unsigned bytes)
+{
+}
+
+static inline void netdev_completed_queue(struct net_device *dev,
+					  unsigned pkts, unsigned bytes)
+{
+}
+
+static inline void netdev_tx_reset_queue(struct netdev_queue *q)
+{
+}
+
+static inline void netdev_reset_queue(struct net_device *dev_queue)
+{
+}
+#endif /* CONFIG_BQL */
 
 /**
  * ethtool_adv_to_mii_adv_t
