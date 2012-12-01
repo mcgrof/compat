@@ -9,6 +9,8 @@
 #include <linux/irq.h>
 #include <linux/kernel.h>
 
+#define NETIF_F_RXCSUM
+
 #define tiocmget(tty) tiocmget(tty, NULL)
 #define tiocmset(tty, set, clear) tiocmset(tty, NULL, set, clear)
 
