@@ -10,6 +10,8 @@
 #include <linux/etherdevice.h>
 #include <net/sch_generic.h>
 
+#define   PCI_MSIX_ENTRY_CTRL_MASKBIT  1
+
 #define alloc_etherdev_mqs(sizeof_priv, tx_q, rx_q) alloc_etherdev_mq(sizeof_priv, tx_q)
 
 /* MSI-X entry's format */
