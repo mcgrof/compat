@@ -8,6 +8,15 @@
 #include <linux/tty.h>
 #include <linux/irq.h>
 #include <linux/kernel.h>
+#include <linux/err.h>
+
+static inline int __must_check PTR_RET(const void *ptr)
+{
+	if (IS_ERR(ptr))
+		return PTR_ERR(ptr);
+	else
+		return 0;
+}
 
 #define NETIF_F_RXCSUM 0
 
