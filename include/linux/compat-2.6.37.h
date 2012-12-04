@@ -9,6 +9,18 @@
 #include <linux/leds.h>
 #include <linux/in.h>
 #include <linux/errno.h>
+#include <linux/netdevice.h>
+
+#ifdef CONFIG_RPS
+extern int netif_set_real_num_rx_queues(struct net_device *dev,
+					unsigned int rxq);
+#else
+static inline int netif_set_real_num_rx_queues(struct net_device *dev,
+					       unsigned int rxq)
+{
+	return 0;
+}
+#endif
 
 static inline int proto_ports_offset(int proto)
 {
