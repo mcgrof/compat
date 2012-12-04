@@ -13,6 +13,18 @@
 #include <linux/ethtool.h>
 #include <net/sock.h>
 
+#define SUPPORTED_Backplane            (1 << 16)
+#define SUPPORTED_1000baseKX_Full      (1 << 17)
+#define SUPPORTED_10000baseKX4_Full    (1 << 18)
+#define SUPPORTED_10000baseKR_Full     (1 << 19)
+#define SUPPORTED_10000baseR_FEC       (1 << 20)
+
+#define ADVERTISED_Backplane           (1 << 16)
+#define ADVERTISED_1000baseKX_Full     (1 << 17)
+#define ADVERTISED_10000baseKX4_Full   (1 << 18)
+#define ADVERTISED_10000baseKR_Full    (1 << 19)
+#define ADVERTISED_10000baseR_FEC      (1 << 20)
+
 /*
  * These macros allow us to backport rfkill without any
  * changes on cfg80211 through compat.diff. Note that this
