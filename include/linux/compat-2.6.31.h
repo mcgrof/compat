@@ -51,6 +51,30 @@
 #endif
 #endif
 
+/*
+ * These changes allow us to backport and forward port
+ * the driver/net/mdio module. What we do is simply
+ * rename the exported symbols to other symbols and
+ * rely on the fact that compat-drivers will take care
+ * of renaming that module. This allows in-place drivers
+ * to use the old module and have the newer supplied
+ * drivers through compat-drivers to use the new bacported
+ * module.
+ *
+ * XXX: maybe we should have a COMPAT_EXPORT_SYMBOL() that
+ * takes care of renaming the symbols with a compat_ prefix?
+ * There are other ideas of using a separate namespace for
+ * modules supplied by compat -- someone already did the work
+ * but never sent the patches ;) who are you out there ?
+ */
+#define mdio45_probe			compat_mdio45_probe
+#define mdio_set_flag			compat_mdio_set_flag
+#define mdio45_links_ok			compat_mdio45_links_ok
+#define mdio45_nway_restart		compat_mdio45_nway_restart
+#define mdio45_ethtool_gset_npage	compat_mdio45_ethtool_gset_npage
+#define mdio45_ethtool_spauseparam_an	compat_mdio45_ethtool_spauseparam_an
+#define mdio_mii_ioctl			compat_mdio_mii_ioctl
+
 #ifndef NETDEV_PRE_UP
 #define NETDEV_PRE_UP		0x000D
 #endif
