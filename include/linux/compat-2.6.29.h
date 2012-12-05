@@ -19,6 +19,8 @@
 #include <linux/types.h>
 #include <linux/pci_regs.h>
 
+#define napi_gro_receive(napi, skb) netif_receive_skb(skb)
+
 /* backports  */
 static inline void usb_autopm_put_interface_async(struct usb_interface *intf)
 { }
