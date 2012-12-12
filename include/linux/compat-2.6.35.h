@@ -11,6 +11,9 @@
 #include <linux/spinlock.h>
 #include <net/sch_generic.h>
 
+#define HID_QUIRK_NO_IGNORE                    0x40000000
+#define HID_QUIRK_HIDDEV_FORCE                 0x00000010
+
 /* added on linux/kernel.h */
 #define USHRT_MAX      ((u16)(~0U))
 #define SHRT_MAX       ((s16)(USHRT_MAX>>1))
