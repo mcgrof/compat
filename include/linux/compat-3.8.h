@@ -7,6 +7,11 @@
 
 #include <linux/hid.h>
 
+#define HID_USB_DEVICE(ven, prod)                              \
+	.bus = BUS_USB, .vendor = (ven), .product = (prod)
+#define HID_BLUETOOTH_DEVICE(ven, prod)                                        \
+	.bus = BUS_BLUETOOTH, .vendor = (ven), .product = (prod)
+
 #define HID_BUS_ANY                            0xffff
 #define HID_GROUP_ANY                          0x0000
 
