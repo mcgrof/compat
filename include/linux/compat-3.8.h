@@ -10,6 +10,9 @@
 #define HID_BUS_ANY                            0xffff
 #define HID_GROUP_ANY                          0x0000
 
+#define  PCI_EXP_LNKCTL_ASPM_L0S  0x01 /* L0s Enable */
+#define  PCI_EXP_LNKCTL_ASPM_L1   0x02 /* L1 Enable */
+
 extern bool hid_ignore(struct hid_device *);
 
 /* This backports:
