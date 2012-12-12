@@ -11,6 +11,7 @@
 #include <linux/idr.h>
 #include <asm/div64.h>
 
+#define HID_TYPE_USBNONE 2
 
 /* This backports:
  *
