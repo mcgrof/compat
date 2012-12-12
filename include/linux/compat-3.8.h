@@ -5,6 +5,13 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0))
 
+#include <linux/hid.h>
+
+#define HID_BUS_ANY                            0xffff
+#define HID_GROUP_ANY                          0x0000
+
+extern bool hid_ignore(struct hid_device *);
+
 /* This backports:
  *
  * commit 4b20db3de8dab005b07c74161cb041db8c5ff3a7
