@@ -8,6 +8,8 @@
 #include <linux/device.h>
 #include <linux/pci_regs.h>
 
+#define HID_QUIRK_IGNORE                       0x00000004
+
 #ifndef TP_PROTO
 #define TP_PROTO(args...)	TPPROTO(args)
 #endif
