@@ -29,6 +29,10 @@ struct hid_device_id {
 
 #include <linux/pci.h>
 #include <linux/pci_regs.h>
+#include <linux/platform_device.h>
+
+extern struct platform_device *platform_device_register_data(struct device *,
+		const char *, int, const void *, size_t);
 
 typedef struct cpumask { DECLARE_BITMAP(bits, NR_CPUS); } compat_cpumask_t;
 
