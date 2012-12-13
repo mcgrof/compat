@@ -11,6 +11,17 @@
 #include <linux/types.h>
 #include <linux/types.h>
 #include <linux/cpumask.h>
+#include <linux/mod_devicetable.h>
+
+#define HID_ANY_ID                             (~0)
+
+struct hid_device_id {
+	__u16 bus;
+	__u32 vendor;
+	__u32 product;
+	kernel_ulong_t driver_data
+		__attribute__((aligned(sizeof(kernel_ulong_t))));
+};
 
 #ifndef ETH_P_PAE
 #define ETH_P_PAE 0x888E      /* Port Access Entity (IEEE 802.1X) */
