@@ -317,24 +317,37 @@ bool hid_ignore(struct hid_device *hdev)
 			return true;
 		break;
 	case USB_VENDOR_ID_JESS:
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28))
 		if (hdev->product == USB_DEVICE_ID_JESS_YUREX &&
 				hdev->type == HID_TYPE_USBNONE)
 			return true;
+#else
+		if (hdev->product == USB_DEVICE_ID_JESS_YUREX)
+			return true;
+#endif
 		break;
 	case USB_VENDOR_ID_DWAV:
 		/* These are handled by usbtouchscreen. hdev->type is probably
 		 * HID_TYPE_USBNONE, but we say !HID_TYPE_USBMOUSE to match
 		 * usbtouchscreen. */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28))
 		if ((hdev->product == USB_DEVICE_ID_EGALAX_TOUCHCONTROLLER ||
 		     hdev->product == USB_DEVICE_ID_DWAV_TOUCHCONTROLLER) &&
 		    hdev->type != HID_TYPE_USBMOUSE)
 			return true;
+#else
+		if (hdev->product == USB_DEVICE_ID_EGALAX_TOUCHCONTROLLER ||
+		     hdev->product == USB_DEVICE_ID_DWAV_TOUCHCONTROLLER)
+			return true;
+#endif
 		break;
 	}
 
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,28))
 	if (hdev->type == HID_TYPE_USBMOUSE &&
 			hid_match_id(hdev, hid_mouse_ignore_list))
 		return true;
+#endif
 
 	return !!hid_match_id(hdev, hid_ignore_list);
 }
