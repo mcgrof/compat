@@ -61,6 +61,7 @@ KERNELS="$KERNELS ${KPATH}/v3.3.8-quantal/linux-headers-3.3.8-030308_3.3.8-03030
 KERNELS="$KERNELS ${KPATH}/v3.4.17-quantal/linux-headers-3.4.17-030417_3.4.17-030417.201210311354_all.deb"
 KERNELS="$KERNELS ${KPATH}/v3.5.7-quantal/linux-headers-3.5.7-030507_3.5.7-030507.201210130556_all.deb"
 KERNELS="$KERNELS ${KPATH}/v3.6.5-raring/linux-headers-3.6.5-030605_3.6.5-030605.201211011211_all.deb"
+KERNELS="$KERNELS ${KPATH}/v3.7-raring/linux-headers-3.7.0-030700_3.7.0-030700.201212102335_all.deb"
 
 # Number of kernels
 NUM_KERNELS=$(echo $KERNELS | wc -w)
