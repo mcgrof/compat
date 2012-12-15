@@ -23,6 +23,7 @@ UNDERLINE="\033[02m"
 KERNELS=""
 KPATH="http://kernel.ubuntu.com/~kernel-ppa/mainline/"
 
+FORCE="0"
 KSRC_PREFIX=
 # Check whether we're running as root or not
 # If we're root stuff things into /usr/src and /lib/modules
@@ -185,7 +186,7 @@ function rebuild_header_binary_deps() {
 }
 
 function usage() {
-	echo -e "Usage: $0 [ -r ] "
+	echo -e "Usage: $0 [ -r ] [ -f ] "
 	echo -e "-r Rebuilds binaries required in kernel headers. Use"
 	echo -e "   this option if you've already ran this script and"
 	echo -e "   just need to fix the libc versions against which"
@@ -193,9 +194,11 @@ function usage() {
 	echo -e "   This was added since kernels >= 3.4 require"
 	echo -e "   a glibc >= 2.14 for memcpy(), and not all Linux"
 	echo -e "   distributions have such versions of glibc."
+	echo -e ""
+	echo -e "-f Force running, do not ask"
 }
 
-if [[ $# -gt 2 ]]; then
+if [[ $# -gt 3 ]]; then
 	usage
 	exit 1
 fi
@@ -203,6 +206,11 @@ fi
 if [[ $1 == "-r" ]]; then
 	rebuild_header_binary_deps
 	exit
+fi
+
+if [[ $1 == "-f" ]]; then
+	FORCE="1"
+	shift
 fi
 
 # Check for the availability of 'ar' before continuing
@@ -240,10 +248,12 @@ echo -e ""
 echo -e "${BLUE}http://kernel.ubuntu.com/~kernel-ppa/mainline/${NORMAL}"
 echo -e ""
 
-read -p "Do you still want to continue (y/N)? "
-if [[ "${REPLY}" != "y" ]]; then
-	echo -e "Bailing out !"
-	exit 1
+if [[ "$FORCE" != "1" ]]; then
+	read -p "Do you still want to continue (y/N)? "
+	if [[ "${REPLY}" != "y" ]]; then
+		echo -e "Bailing out !"
+		exit 1
+	fi
 fi
 
 get_ubuntu_kernels
