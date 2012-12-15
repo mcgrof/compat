@@ -29,7 +29,10 @@ KSRC_PREFIX=
 # else, use $HOME/compat-ksrc for enabling user-mode builds.
 if [[ "$EUID" != "0" ]]; then
 	KSRC_PREFIX="$HOME/compat-ksrc"
+else
+	KSRC_PREFIX="${PWD}"
 fi
+
 
 # Create target directories if they doesn't exist
 mkdir -p $KSRC_PREFIX/{usr/src,lib/modules}
@@ -213,7 +216,7 @@ echo -e ""
 
 if [[ ! -n $KSRC_PREFIX ]]; then
 	echo -e "** Running as a privileged user!"
-	echo -e "** You are trying to force using system-wide ${BLUE}/lib/modules${NORMAL} and ${BLUE}/usr/src${NORMAL} ..."
+	echo -e "** You are trying to force using ${BLUE}${KSRC_PREFIX}/lib/modules${NORMAL} and ${BLUE}${KSRC_PREFIX}/usr/src${NORMAL} ..."
 	echo -e "** This is a terrible idea. Consider running as a regular user."
 	echo -e ""
 	read -p "Do you still want to continue (y/N)? "
