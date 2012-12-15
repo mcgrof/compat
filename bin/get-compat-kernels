@@ -169,7 +169,7 @@ function rebuild_header_binary_deps() {
 		exit 1
 	fi
 
-	for kernel in $(ls -d ${KSRC_PREFIX}/lib/modules/*generic | grep -E "/3.[4-9]|/[4-9]"); do
+	for kernel in $(ls -d ${KSRC_PREFIX}/lib/modules/*generic | grep -E "/3.[2-9]|/[4-9]"); do
 		echo $kernel
 
 		count=0
