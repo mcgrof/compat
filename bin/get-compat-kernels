@@ -30,7 +30,7 @@ KSRC_PREFIX=
 if [[ "$EUID" != "0" ]]; then
 	KSRC_PREFIX="$HOME/compat-ksrc"
 else
-	KSRC_PREFIX="${PWD}"
+	KSRC_PREFIX="${PWD}/compat-ksrc"
 fi
 
 
