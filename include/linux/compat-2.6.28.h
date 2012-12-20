@@ -12,8 +12,15 @@
 #include <linux/types.h>
 #include <linux/cpumask.h>
 #include <linux/mod_devicetable.h>
+#include <linux/input.h>
 
 #define HID_ANY_ID                             (~0)
+
+#define HID_USB_DEVICE(ven, prod)                              \
+	.bus = BUS_USB, .vendor = (ven), .product = (prod)
+#define HID_BLUETOOTH_DEVICE(ven, prod)                                        \
+	.bus = BUS_BLUETOOTH, .vendor = (ven), .product = (prod)
+
 
 struct hid_device_id {
 	__u16 bus;
