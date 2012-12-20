@@ -144,7 +144,8 @@ def process_kernel(num, kset):
 		# XXX: figure out how to properly address logging
 		# without this nasty ass hack.
 		log = ' > %(log)s 2>&1' % { "log": log_file }
-		cmd = 'make ' + jobs + make_args + log
+		nice = 'ionice -c 3 nice -n 20 '
+		cmd = nice + 'make ' + jobs + make_args + log
 
 		kset.baking(rel)
 
