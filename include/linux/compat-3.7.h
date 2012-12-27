@@ -184,7 +184,11 @@ static inline s8 nla_get_s8(const struct nlattr *nla)
  * nla_get_s64 - return payload of s64 attribute
  * @nla: s64 netlink attribute
  */
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,29))
 static inline s64 nla_get_s64(const struct nlattr *nla)
+#else
+static inline s64 nla_get_s64(struct nlattr *nla)
+#endif
 {
 	s64 tmp;
 
