@@ -42,12 +42,14 @@ int netif_set_real_num_tx_queues(struct net_device *dev, unsigned int txq)
 		dev->real_num_tx_queues = txq;
 		qdisc_reset_all_tx_gt(dev, txq);
 	}
+	return 0;
 }
 #else
 int netif_set_real_num_tx_queues(struct net_device *dev, unsigned int txq)
 {
 	dev->egress_subqueue_count = txq;
 	/* XXX: consider qdisc reset for older kernels */
+	return 0;
 }
 #endif
 EXPORT_SYMBOL_GPL(netif_set_real_num_tx_queues);
