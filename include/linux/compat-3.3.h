@@ -22,28 +22,34 @@
  * inlines if it was defined
  */
 #ifndef CONFIG_BQL
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,26))
 static inline void netdev_tx_sent_queue(struct netdev_queue *dev_queue,
 					unsigned int bytes)
 {
 }
+#endif
 
 static inline void netdev_sent_queue(struct net_device *dev, unsigned int bytes)
 {
 }
 
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,26))
 static inline void netdev_tx_completed_queue(struct netdev_queue *dev_queue,
 					     unsigned pkts, unsigned bytes)
 {
 }
+#endif
 
 static inline void netdev_completed_queue(struct net_device *dev,
 					  unsigned pkts, unsigned bytes)
 {
 }
 
+#if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,26))
 static inline void netdev_tx_reset_queue(struct netdev_queue *q)
 {
 }
+#endif
 
 static inline void netdev_reset_queue(struct net_device *dev_queue)
 {
