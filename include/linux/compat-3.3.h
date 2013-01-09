@@ -267,6 +267,8 @@ static inline u32 ethtool_rxfh_indir_default(u32 index, u32 n_rx_rings)
 	return index % n_rx_rings;
 }
 
+#define ETHTOOL_FWVERS_LEN	32
+
 #if !((LINUX_VERSION_CODE >= KERNEL_VERSION(3,2,9) && LINUX_VERSION_CODE < KERNEL_VERSION(3,3,0)) || (LINUX_VERSION_CODE >= KERNEL_VERSION(3,0,23) && LINUX_VERSION_CODE < KERNEL_VERSION(3,1,0)))
 #if (LINUX_VERSION_CODE > KERNEL_VERSION(2,6,37))
 /* mask qdisc_cb_private_validate as RHEL6 backports this */
