@@ -29,7 +29,11 @@ void usb_autopm_get_interface_no_resume(struct usb_interface *intf)
 	struct usb_device       *udev = interface_to_usbdev(intf);
 
 	usb_mark_last_busy(udev);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
 	atomic_inc(&intf->pm_usage_cnt);
+#else
+	intf->pm_usage_cnt++;
+#endif
 	pm_runtime_get_noresume(&intf->dev);
 }
 EXPORT_SYMBOL_GPL(usb_autopm_get_interface_no_resume);
@@ -48,7 +52,11 @@ void usb_autopm_put_interface_no_suspend(struct usb_interface *intf)
 	struct usb_device       *udev = interface_to_usbdev(intf);
 
 	usb_mark_last_busy(udev);
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,32))
 	atomic_dec(&intf->pm_usage_cnt);
+#else
+	intf->pm_usage_cnt--;
+#endif
 	pm_runtime_put_noidle(&intf->dev);
 }
 EXPORT_SYMBOL_GPL(usb_autopm_put_interface_no_suspend);
