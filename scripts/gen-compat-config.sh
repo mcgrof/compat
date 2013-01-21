@@ -17,7 +17,7 @@ fi
 KERNEL_VERSION=$(${MAKE} -C ${KLIB_BUILD} kernelversion | sed -n 's/^\([0-9]\)\..*/\1/p')
 
 # 3.0 kernel stuff
-COMPAT_LATEST_VERSION="7"
+COMPAT_LATEST_VERSION="8"
 KERNEL_SUBLEVEL="-1"
 
 # Note that this script will export all variables explicitly,
