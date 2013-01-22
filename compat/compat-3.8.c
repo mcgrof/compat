@@ -19,7 +19,7 @@ void netdev_set_default_ethtool_ops(struct net_device *dev,
 	if (!dev->ethtool_ops)
 		dev->ethtool_ops = ops;
 }
-#else /* kernel is between 3.7.0 and 3.7.4 */;
+#else /* kernel is between 3.7.0 and 3.7.4 */
 void netdev_set_default_ethtool_ops(struct net_device *dev,
 				    const struct ethtool_ops *ops)
 {
