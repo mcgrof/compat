@@ -22,6 +22,7 @@ import signal
 from Queue import *
 from threading import Thread, Lock
 from shutil import copytree, ignore_patterns, rmtree, copyfileobj
+from time import sleep
 
 releases_processed = []
 releases_baking = []
@@ -277,6 +278,7 @@ class kernel_set():
 	def kick_threads(self):
 		for rel in self.releases:
 			self.queue.put(rel)
+			sleep(1)
 	def wait_threads(self):
 		self.queue.join()
 	def update_status(self, rel, status):
