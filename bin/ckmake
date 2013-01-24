@@ -141,9 +141,13 @@ def process_kernel(num, kset):
 		nice = 'ionice -c 3 nice -n 20 '
 		cmd = nice + 'make ' + jobs + make_args + log
 
+		my_env = os.environ.copy()
+		my_env["KCFLAGS"] = "-Wno-unused-but-set-variable"
+
 		kset.baking(rel)
 
 		p = subprocess.Popen([cmd],
+				     env = my_env,
 				     cwd = work_dir,
 				     stdout=None,
 				     stderr=None,
