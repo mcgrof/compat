@@ -62,8 +62,6 @@ def get_processed_rel(i):
 def get_status_name(status):
 	if (status == 0):
 		return 'OK'
-	if (status == 2):
-		return 'OK'
 	elif (status == 130):
 		return 'TERM'
 	elif (status == 1234):
@@ -76,8 +74,6 @@ def get_status_name(status):
 def get_stat_pos(status):
 	if (status == 0):
 		return 34
-	if (status == 2):
-		return 34
 	elif (status == 130):
 		return 33
 	elif (status == 1234):
@@ -89,8 +85,6 @@ def get_stat_pos(status):
 
 def get_status_color(status):
 	if (status == 0):
-		return curses.color_pair(1)
-	if (status == 2):
 		return curses.color_pair(1)
 	elif (status == 130):
 		return curses.color_pair(2)
