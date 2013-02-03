@@ -13,6 +13,7 @@
 #include <linux/user_namespace.h>
 #include <linux/file.h>
 #include <linux/seq_file.h>
+#include <linux/tty_flip.h>
 #include <net/netlink.h>
 
 #define VM_DONTDUMP    VM_NODUMP
@@ -196,6 +197,9 @@ static inline s64 nla_get_s64(struct nlattr *nla)
 
 	return tmp;
 }
+
+#define tty_flip_buffer_push(port) tty_flip_buffer_push((port)->tty)
+#define tty_insert_flip_string(port, chars, size) tty_insert_flip_string((port)->tty, chars, size)
 
 #else /* (LINUX_VERSION_CODE > KERNEL_VERSION(3,7,0)) */
 #define netlink_notify_portid(__notify) (__notify->portid)
