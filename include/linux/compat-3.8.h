@@ -9,10 +9,8 @@
 #include <linux/netdevice.h>
 #include <linux/efi.h>
 
-#if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,5))
 extern void netdev_set_default_ethtool_ops(struct net_device *dev,
 					   const struct ethtool_ops *ops);
-#endif
 
 #define HID_BUS_ANY                            0xffff
 #define HID_GROUP_ANY                          0x0000
