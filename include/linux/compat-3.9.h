@@ -11,6 +11,8 @@
 #include <linux/rculist.h>
 #endif
 #include <net/sock.h>
+#include <linux/tty.h>
+#include <linux/tty_flip.h>
 
 /* include this before changing hlist_for_each_* to use the old versions. */
 #include <net/sch_generic.h>
@@ -115,6 +117,9 @@ static inline void idr_preload_end(void)
 #undef sk_for_each
 #define sk_for_each(__sk, list) \
 	hlist_for_each_entry(__sk, list, sk_node)
+
+#define tty_flip_buffer_push(port) tty_flip_buffer_push((port)->tty)
+#define tty_insert_flip_string(port, chars, size) tty_insert_flip_string((port)->tty, chars, size)
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,9,0)) */
 
