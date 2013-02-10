@@ -58,6 +58,8 @@ static inline int __must_check kref_get_unless_zero(struct kref *kref)
  *     efi: Make 'efi_enabled' a function to query EFI facilities
  *
  */
+/* check first if this was already backported */
+#ifndef EFI_BOOT
 /*
  * We play games with efi_enabled so that the compiler will, if
  * possible, remove EFI-related code altogether.
@@ -101,6 +103,7 @@ static inline int compat_efi_enabled(int facility)
 #undef efi_enabled
 #endif
 #define efi_enabled(facility) compat_efi_enabled(facility)
+#endif /* EFI_BOOT */
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,8,0)) */
 
