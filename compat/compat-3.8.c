@@ -17,4 +17,3 @@ void netdev_set_default_ethtool_ops(struct net_device *dev,
 		dev->ethtool_ops = ops;
 }
 EXPORT_SYMBOL_GPL(netdev_set_default_ethtool_ops);
-#endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,5) */
