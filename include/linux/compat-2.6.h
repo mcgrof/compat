@@ -68,6 +68,7 @@ void compat_dependency_symbol(void);
 #include <linux/compat-3.5.h>
 #include <linux/compat-3.6.h>
 #include <linux/compat-3.7.h>
+#include <linux/compat-3.8.h>
 
 #endif /* __ASSEMBLY__ */
 
