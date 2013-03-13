@@ -8,6 +8,12 @@
 #include <linux/hid.h>
 #include <linux/netdevice.h>
 #include <linux/efi.h>
+#include <linux/random.h>
+
+/* backports 496f2f9 */
+#define prandom_seed(_seed)		srandom32(_seed)
+#define prandom_u32()			random32()
+#define prandom_u32_state(_state)	prandom32(_state)
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,8))
 extern void netdev_set_default_ethtool_ops(struct net_device *dev,
