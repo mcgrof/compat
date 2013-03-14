@@ -20,6 +20,52 @@
 #include <linux/errno.h>
 #include <linux/init.h>
 #include <linux/pci.h>
+#define __inet_lookup_established __inet_lookup_established_old
+#include <net/inet_hashtables.h>
+#undef __inet_lookup_established
+#include <linux/compat-3.9.h>
+/*
+ * Sockets in TCP_CLOSE state are _always_ taken out of the hash, so we need
+ * not check it for lookups anymore, thanks Alexey. -DaveM
+ *
+ * Local BH must be disabled here.
+ */
+static inline struct sock *
+	__inet_lookup_established(struct inet_hashinfo *hashinfo,
+				  const __be32 saddr, const __be16 sport,
+				  const __be32 daddr, const u16 hnum,
+				  const int dif)
+{
+	INET_ADDR_COOKIE(acookie, saddr, daddr)
+	const __portpair ports = INET_COMBINED_PORTS(sport, hnum);
+	struct sock *sk;
+	/* Optimize here for direct hit, only listening connections can
+	 * have wildcards anyways.
+	 */
+	unsigned int hash = inet_ehashfn(daddr, hnum, saddr, sport);
+	struct inet_ehash_bucket *head = inet_ehash_bucket(hashinfo, hash);
+	rwlock_t *lock = inet_ehash_lockp(hashinfo, hash);
+
+	prefetch(head->chain.first);
+	read_lock(lock);
+	sk_for_each(sk, &head->chain) {
+		if (INET_MATCH(sk, hash, acookie, saddr, daddr, ports, dif))
+			goto hit; /* You sunk my battleship! */
+	}
+
+	/* Must check for a TIME_WAIT'er before going to listener hash. */
+	sk_for_each(sk, &head->twchain) {
+		if (INET_TW_MATCH(sk, hash, acookie, saddr, daddr, ports, dif))
+			goto hit;
+	}
+	sk = NULL;
+out:
+	read_unlock(lock);
+	return sk;
+hit:
+	sock_hold(sk);
+	goto out;
+}
 
 /* Backports b718989da7 */
 int __must_check pci_enable_device_mem(struct pci_dev *dev);
