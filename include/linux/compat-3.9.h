@@ -13,9 +13,33 @@
 #include <net/sock.h>
 #include <linux/tty.h>
 #include <linux/tty_flip.h>
+#include <linux/printk.h>
 
 /* include this before changing hlist_for_each_* to use the old versions. */
 #include <net/sch_generic.h>
+
+/* backports 7a555613 */
+#if defined(CONFIG_DYNAMIC_DEBUG)
+#define dynamic_hex_dump(prefix_str, prefix_type, rowsize,     \
+			 groupsize, buf, len, ascii)            \
+do {                                                           \
+	DEFINE_DYNAMIC_DEBUG_METADATA(descriptor,               \
+	__builtin_constant_p(prefix_str) ? prefix_str : "hexdump");\
+	if (unlikely(descriptor.flags & _DPRINTK_FLAGS_PRINT))  \
+		print_hex_dump(KERN_DEBUG, prefix_str,          \
+			       prefix_type, rowsize, groupsize, \
+			       buf, len, ascii);                \
+} while (0)
+#define print_hex_dump_debug(prefix_str, prefix_type, rowsize, \
+			     groupsize, buf, len, ascii)        \
+	dynamic_hex_dump(prefix_str, prefix_type, rowsize,      \
+			 groupsize, buf, len, ascii)
+#else
+#define print_hex_dump_debug(prefix_str, prefix_type, rowsize,         \
+			     groupsize, buf, len, ascii)                \
+	print_hex_dump(KERN_DEBUG, prefix_str, prefix_type, rowsize,    \
+		       groupsize, buf, len, ascii)
+#endif /* defined(CONFIG_DYNAMIC_DEBUG) */
 
 
 /**
