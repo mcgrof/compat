@@ -52,6 +52,7 @@
  *
  * - lsb first: poly = 10101011(1) = 0xAB
  */
+#define crc8_populate_lsb LINUX_BACKPORT(crc8_populate_lsb)
 void crc8_populate_lsb(u8 table[CRC8_TABLE_SIZE], u8 polynomial);
 
 /**
@@ -70,6 +71,7 @@ void crc8_populate_lsb(u8 table[CRC8_TABLE_SIZE], u8 polynomial);
  *
  * - msb first: poly = (1)11010101 = 0xD5
  */
+#define crc8_populate_msb LINUX_BACKPORT(crc8_populate_msb)
 void crc8_populate_msb(u8 table[CRC8_TABLE_SIZE], u8 polynomial);
 
 /**
@@ -96,6 +98,7 @@ void crc8_populate_msb(u8 table[CRC8_TABLE_SIZE], u8 polynomial);
  * Williams, Ross N., ross<at>ross.net
  * (see URL http://www.ross.net/crc/download/crc_v3.txt).
  */
+#define crc8 LINUX_BACKPORT(crc8)
 u8 crc8(const u8 table[CRC8_TABLE_SIZE], u8 *pdata, size_t nbytes, u8 crc);
 
 #endif /* __CRC8_H_ */
