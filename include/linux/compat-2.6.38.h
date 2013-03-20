@@ -66,17 +66,14 @@ struct ewma {
 	unsigned long weight;
 };
 
-/* mask ewma_init as RHEL6 backports this */
-#define ewma_init(a,b,c) compat_ewma_init(a,b,c)
-
+#define ewma_init LINUX_BACKPORT(ewma_init)
 extern void ewma_init(struct ewma *avg, unsigned long factor,
 		      unsigned long weight);
 
-/* mask ewma_add as RHEL6 backports this */
-#define ewma_add(a,b) compat_ewma_add(a,b)
-
+#define ewma_add LINUX_BACKPORT(ewma_add)
 extern struct ewma *ewma_add(struct ewma *avg, unsigned long val);
 
+#define ewma_read LINUX_BACKPORT(ewma_read)
 /**
  * ewma_read() - Get average value
  * @avg: Average structure

@@ -22,14 +22,14 @@
  *
  * Initialize the EWMA parameters for a given struct ewma @avg.
  */
-void compat_ewma_init(struct ewma *avg, unsigned long factor, unsigned long weight)
+void ewma_init(struct ewma *avg, unsigned long factor, unsigned long weight)
 {
 	WARN_ON(weight <= 1 || factor == 0);
 	avg->internal = 0;
 	avg->weight = weight;
 	avg->factor = factor;
 }
-EXPORT_SYMBOL_GPL(compat_ewma_init);
+EXPORT_SYMBOL_GPL(ewma_init);
 
 /**
  * ewma_add() - Exponentially weighted moving average (EWMA)
@@ -38,7 +38,7 @@ EXPORT_SYMBOL_GPL(compat_ewma_init);
  *
  * Add a sample to the average.
  */
-struct ewma *compat_ewma_add(struct ewma *avg, unsigned long val)
+struct ewma *ewma_add(struct ewma *avg, unsigned long val)
 {
 	avg->internal = avg->internal  ?
 		(((avg->internal * (avg->weight - 1)) +
@@ -46,5 +46,5 @@ struct ewma *compat_ewma_add(struct ewma *avg, unsigned long val)
 		(val * avg->factor);
 	return avg;
 }
-EXPORT_SYMBOL_GPL(compat_ewma_add);
+EXPORT_SYMBOL_GPL(ewma_add);
 
