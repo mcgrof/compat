@@ -51,9 +51,11 @@ static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
 #include <linux/skbuff.h>
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,34))
+#define i2c_bit_algo LINUX_BACKPORT(i2c_bit_algo)
 extern const struct i2c_algorithm i2c_bit_algo;
 #endif
 
+#define simple_open LINUX_BACKPORT(simple_open)
 extern int simple_open(struct inode *inode, struct file *file);
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,28))
