@@ -23,13 +23,19 @@
 #define PM_QOS_NUM_CLASSES 5
 #define PM_QOS_DEFAULT_VALUE -1
 
+#define pm_qos_add_requirement LINUX_BACKPORT(pm_qos_add_requirement)
 int pm_qos_add_requirement(int qos, char *name, s32 value);
+#define pm_qos_update_requirement LINUX_BACKPORT(pm_qos_update_requirement)
 int pm_qos_update_requirement(int qos, char *name, s32 new_value);
+#define pm_qos_remove_requirement LINUX_BACKPORT(pm_qos_remove_requirement)
 void pm_qos_remove_requirement(int qos, char *name);
 
+#define pm_qos_requirement LINUX_BACKPORT(pm_qos_requirement)
 int pm_qos_requirement(int qos);
 
+#define pm_qos_add_notifier LINUX_BACKPORT(pm_qos_add_notifier)
 int pm_qos_add_notifier(int qos, struct notifier_block *notifier);
+#define pm_qos_remove_notifier LINUX_BACKPORT(pm_qos_remove_notifier)
 int pm_qos_remove_notifier(int qos, struct notifier_block *notifier);
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,25)) */
 
