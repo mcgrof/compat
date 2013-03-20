@@ -16,6 +16,8 @@
 #include <linux/firmware.h>
 #include <linux/input.h>
 
+#define usb_autopm_get_interface_no_resume LINUX_BACKPORT(usb_autopm_get_interface_no_resume)
+#define usb_autopm_put_interface_no_suspend LINUX_BACKPORT(usb_autopm_put_interface_no_suspend)
 #ifdef CONFIG_USB_SUSPEND
 extern void usb_autopm_get_interface_no_resume(struct usb_interface *intf);
 extern void usb_autopm_put_interface_no_suspend(struct usb_interface *intf);
@@ -31,29 +33,27 @@ static inline void usb_autopm_put_interface_no_suspend(struct usb_interface *int
 #endif /* CONFIG_USB_SUSPEND */
 
 #if defined(CONFIG_COMPAT_FIRMWARE_CLASS)
-#if defined(CONFIG_FW_LOADER) || defined(CONFIG_FW_LOADER_MODULE)
-#define release_firmware compat_release_firmware
-#define request_firmware compat_request_firmware
-#define request_firmware_nowait compat_request_firmware_nowait
-#endif
+#define request_firmware_nowait LINUX_BACKPORT(request_firmware_nowait)
+#define request_firmware LINUX_BACKPORT(request_firmware)
+#define release_firmware LINUX_BACKPORT(release_firmware)
 
 #if defined(CONFIG_FW_LOADER) || defined(CONFIG_FW_LOADER_MODULE)
-int compat_request_firmware(const struct firmware **fw, const char *name,
+int request_firmware(const struct firmware **fw, const char *name,
 		     struct device *device);
-int compat_request_firmware_nowait(
+int request_firmware_nowait(
 	struct module *module, int uevent,
 	const char *name, struct device *device, gfp_t gfp, void *context,
 	void (*cont)(const struct firmware *fw, void *context));
 
-void compat_release_firmware(const struct firmware *fw);
+void release_firmware(const struct firmware *fw);
 #else
-static inline int compat_request_firmware(const struct firmware **fw,
+static inline int request_firmware(const struct firmware **fw,
 				   const char *name,
 				   struct device *device)
 {
 	return -EINVAL;
 }
-static inline int compat_request_firmware_nowait(
+static inline int request_firmware_nowait(
 	struct module *module, int uevent,
 	const char *name, struct device *device, gfp_t gfp, void *context,
 	void (*cont)(const struct firmware *fw, void *context))
@@ -61,7 +61,7 @@ static inline int compat_request_firmware_nowait(
 	return -EINVAL;
 }
 
-static inline void compat_release_firmware(const struct firmware *fw)
+static inline void release_firmware(const struct firmware *fw)
 {
 }
 #endif
@@ -106,6 +106,7 @@ static inline struct sk_buff *netdev_alloc_skb_ip_align(struct net_device *dev,
 #define pcmcia_map_mem_page(a, b, c) pcmcia_map_mem_page(b, c)
 
 /* loop over CIS entries */
+#define pcmcia_loop_tuple LINUX_BACKPORT(pcmcia_loop_tuple)
 int pcmcia_loop_tuple(struct pcmcia_device *p_dev, cisdata_t code,
 		      int (*loop_tuple) (struct pcmcia_device *p_dev,
 					 tuple_t *tuple,
@@ -115,6 +116,7 @@ int pcmcia_loop_tuple(struct pcmcia_device *p_dev, cisdata_t code,
 #endif /* CONFIG_PCMCIA */
 
 /* loop over CIS entries */
+#define pccard_loop_tuple LINUX_BACKPORT(pccard_loop_tuple)
 int pccard_loop_tuple(struct pcmcia_socket *s, unsigned int function,
 		      cisdata_t code, cisparse_t *parse, void *priv_data,
 		      int (*loop_tuple) (tuple_t *tuple,
