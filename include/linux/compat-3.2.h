@@ -102,6 +102,7 @@ static inline void *dma_zalloc_coherent(struct device *dev, size_t size,
 	return ret;
 }
 
+#define __netdev_printk LINUX_BACKPORT(__netdev_printk)
 extern int __netdev_printk(const char *level, const struct net_device *dev,
 			   struct va_format *vaf);
 
