@@ -43,6 +43,7 @@ struct cordic_iq {
  * for -180 degrees to +180 degrees. Passed values outside this range are
  * converted before doing the actual calculation.
  */
+#define cordic_calc_iq LINUX_BACKPORT(cordic_calc_iq)
 struct cordic_iq cordic_calc_iq(s32 theta);
 
 #endif /* __CORDIC_H_ */
