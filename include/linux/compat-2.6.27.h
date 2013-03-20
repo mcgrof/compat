@@ -87,6 +87,7 @@ static inline bool qdisc_all_tx_empty(const struct net_device *dev)
 	return skb_queue_empty(&dev->qdisc->q);
 }
 
+#define pci_pme_capable LINUX_BACKPORT(pci_pme_capable)
 bool pci_pme_capable(struct pci_dev *dev, pci_power_t state);
 
 /*
@@ -207,7 +208,9 @@ static inline void list_splice_tail_init(struct list_head *list,
 }
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24))
+#define mmc_align_data_size LINUX_BACKPORT(mmc_align_data_size)
 extern unsigned int mmc_align_data_size(struct mmc_card *, unsigned int);
+#define sdio_align_size LINUX_BACKPORT(sdio_align_size)
 extern unsigned int sdio_align_size(struct sdio_func *func, unsigned int sz);
 #endif /* LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,24) */
 
@@ -250,6 +253,8 @@ static inline void dma_sync_single_range_for_device(struct device *dev,
 }
 
 #endif /* arm */
+
+#define debugfs_remove_recursive LINUX_BACKPORT(debugfs_remove_recursive)
 
 #if defined(CONFIG_DEBUG_FS)
 void debugfs_remove_recursive(struct dentry *dentry);
