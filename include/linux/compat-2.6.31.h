@@ -25,25 +25,19 @@
 #define ADVERTISED_10000baseKR_Full    (1 << 19)
 #define ADVERTISED_10000baseR_FEC      (1 << 20)
 
-/*
- * These macros allow us to backport rfkill without any
- * changes on cfg80211 through compat.diff. Note that this
- * file will be included by rfkill_backport.h so we must
- * not conflict with things there.
- */
-#define rfkill_get_led_trigger_name	backport_rfkill_get_led_trigger_name
-#define rfkill_set_led_trigger_name	backport_rfkill_set_led_trigger_name
-#define rfkill_set_hw_state	backport_rfkill_set_hw_state
-#define rfkill_set_sw_state	backport_rfkill_set_sw_state
-#define rfkill_init_sw_state	backport_rfkill_init_sw_state
-#define rfkill_set_states	backport_rfkill_set_states
-#define rfkill_pause_polling	backport_rfkill_pause_polling
-#define rfkill_resume_polling	backport_rfkill_resume_polling
-#define rfkill_blocked		backport_rfkill_blocked
-#define rfkill_alloc		backport_rfkill_alloc
-#define rfkill_register		backport_rfkill_register
-#define rfkill_unregister	backport_rfkill_unregister
-#define rfkill_destroy		backport_rfkill_destroy
+#define rfkill_get_led_trigger_name LINUX_BACKPORT(rfkill_get_led_trigger_name)
+#define rfkill_set_led_trigger_name LINUX_BACKPORT(rfkill_set_led_trigger_name)
+#define rfkill_set_hw_state LINUX_BACKPORT(rfkill_set_hw_state)
+#define rfkill_set_sw_state LINUX_BACKPORT(rfkill_set_sw_state)
+#define rfkill_init_sw_state LINUX_BACKPORT(rfkill_init_sw_state)
+#define rfkill_set_states LINUX_BACKPORT(rfkill_set_states)
+#define rfkill_pause_polling LINUX_BACKPORT(rfkill_pause_polling)
+#define rfkill_resume_polling LINUX_BACKPORT(rfkill_resume_polling)
+#define rfkill_blocked LINUX_BACKPORT(rfkill_blocked)
+#define rfkill_alloc LINUX_BACKPORT(rfkill_alloc)
+#define rfkill_register LINUX_BACKPORT(rfkill_register)
+#define rfkill_unregister LINUX_BACKPORT(rfkill_unregister)
+#define rfkill_destroy LINUX_BACKPORT(rfkill_destroy)
 
 #ifndef ERFKILL
 #if !defined(CONFIG_ALPHA) && !defined(CONFIG_MIPS) && !defined(CONFIG_PARISC) && !defined(CONFIG_SPARC)
@@ -63,29 +57,14 @@
 #endif
 #endif
 
-/*
- * These changes allow us to backport and forward port
- * the driver/net/mdio module. What we do is simply
- * rename the exported symbols to other symbols and
- * rely on the fact that compat-drivers will take care
- * of renaming that module. This allows in-place drivers
- * to use the old module and have the newer supplied
- * drivers through compat-drivers to use the new bacported
- * module.
- *
- * XXX: maybe we should have a COMPAT_EXPORT_SYMBOL() that
- * takes care of renaming the symbols with a compat_ prefix?
- * There are other ideas of using a separate namespace for
- * modules supplied by compat -- someone already did the work
- * but never sent the patches ;) who are you out there ?
- */
-#define mdio45_probe			compat_mdio45_probe
-#define mdio_set_flag			compat_mdio_set_flag
-#define mdio45_links_ok			compat_mdio45_links_ok
-#define mdio45_nway_restart		compat_mdio45_nway_restart
-#define mdio45_ethtool_gset_npage	compat_mdio45_ethtool_gset_npage
-#define mdio45_ethtool_spauseparam_an	compat_mdio45_ethtool_spauseparam_an
-#define mdio_mii_ioctl			compat_mdio_mii_ioctl
+#define mdio45_probe LINUX_BACKPORT(mdio45_probe)
+#define mdio_set_flag LINUX_BACKPORT(mdio_set_flag)
+#define mdio45_links_ok LINUX_BACKPORT(mdio45_links_ok)
+#define mdio45_nway_restart LINUX_BACKPORT(mdio45_nway_restart)
+
+#define mdio45_ethtool_gset_npage LINUX_BACKPORT(mdio45_ethtool_gset_npage)
+#define mdio45_ethtool_spauseparam_an LINUX_BACKPORT(mdio45_ethtool_spauseparam_an)
+#define mdio_mii_ioctl LINUX_BACKPORT(mdio_mii_ioctl)
 
 #ifndef NETDEV_PRE_UP
 #define NETDEV_PRE_UP		0x000D
@@ -245,7 +224,9 @@ typedef struct {
 	long long counter;
 } atomic64_t;
 
+#define atomic64_read LINUX_BACKPORT(atomic64_read)
 extern long long atomic64_read(const atomic64_t *v);
+#define atomic64_add_return LINUX_BACKPORT(atomic64_add_return)
 extern long long atomic64_add_return(long long a, atomic64_t *v);
 
 #define atomic64_inc_return(v)          atomic64_add_return(1LL, (v))
