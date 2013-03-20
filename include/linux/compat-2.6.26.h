@@ -45,6 +45,7 @@
 #define SHORT_MAX       ((s16)(USHORT_MAX>>1))
 #define SHORT_MIN       (-SHORT_MAX - 1)
 
+#define dev_set_name LINUX_BACKPORT(dev_set_name)
 extern int dev_set_name(struct device *dev, const char *name, ...)
 			__attribute__((format(printf, 2, 3)));
 
