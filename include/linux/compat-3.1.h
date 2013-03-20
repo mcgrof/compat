@@ -88,21 +88,15 @@ static inline void security_sk_clone(const struct sock *sk, struct sock *newsk)
 #include <asm-generic/atomic64.h>
 #endif
 
-/* mask ida_simple_get as RHEL6 backports this */
-#define ida_simple_get(a,b,c,d) compat_ida_simple_get(a,b,c,d)
-
+#define ida_simple_get LINUX_BACKPORT(ida_simple_get)
 int ida_simple_get(struct ida *ida, unsigned int start, unsigned int end,
 		   gfp_t gfp_mask);
 
-/* mask ida_simple_remove as RHEL6 backports this */
-#define ida_simple_remove(a,b) compat_ida_simple_remove(a,b)
-
+#define ida_simple_remove LINUX_BACKPORT(ida_simple_remove)
 void ida_simple_remove(struct ida *ida, unsigned int id);
 
 #ifdef CONFIG_CPU_FREQ
-/* mask cpufreq_quick_get_max as RHEL6 backports this */
-#define cpufreq_quick_get_max(a) compat_cpufreq_quick_get_max(a)
-
+#define cpufreq_quick_get_max LINUX_BACKPORT(cpufreq_quick_get_max)
 unsigned int cpufreq_quick_get_max(unsigned int cpu);
 #endif
 

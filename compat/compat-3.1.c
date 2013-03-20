@@ -19,7 +19,7 @@
  * 	cpufreq: expose a cpufreq_quick_get_max routine
  */
 #ifdef CONFIG_CPU_FREQ
-unsigned int compat_cpufreq_quick_get_max(unsigned int cpu)
+unsigned int cpufreq_quick_get_max(unsigned int cpu)
 {
 	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
 	unsigned int ret_freq = 0;
@@ -31,7 +31,7 @@ unsigned int compat_cpufreq_quick_get_max(unsigned int cpu)
 
 	return ret_freq;
 }
-EXPORT_SYMBOL_GPL(compat_cpufreq_quick_get_max);
+EXPORT_SYMBOL_GPL(cpufreq_quick_get_max);
 #endif
 
 static DEFINE_SPINLOCK(compat_simple_ida_lock);
@@ -48,7 +48,7 @@ static DEFINE_SPINLOCK(compat_simple_ida_lock);
  *
  * Use ida_simple_remove() to get rid of an id.
  */
-int compat_ida_simple_get(struct ida *ida, unsigned int start, unsigned int end,
+int ida_simple_get(struct ida *ida, unsigned int start, unsigned int end,
 		   gfp_t gfp_mask)
 {
 	int ret, id;
@@ -86,14 +86,14 @@ again:
 
 	return ret;
 }
-EXPORT_SYMBOL_GPL(compat_ida_simple_get);
+EXPORT_SYMBOL_GPL(ida_simple_get);
 
 /**
  * ida_simple_remove - remove an allocated id.
  * @ida: the (initialized) ida.
  * @id: the id returned by ida_simple_get.
  */
-void compat_ida_simple_remove(struct ida *ida, unsigned int id)
+void ida_simple_remove(struct ida *ida, unsigned int id)
 {
 	unsigned long flags;
 
@@ -102,6 +102,6 @@ void compat_ida_simple_remove(struct ida *ida, unsigned int id)
 	ida_remove(ida, id);
 	spin_unlock_irqrestore(&compat_simple_ida_lock, flags);
 }
-EXPORT_SYMBOL_GPL(compat_ida_simple_remove);
+EXPORT_SYMBOL_GPL(ida_simple_remove);
 /* source lib/idr.c */
 
