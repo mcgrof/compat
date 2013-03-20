@@ -23,10 +23,12 @@
  *
  * First part is in compat-3.0.c.
  */
+#define shmem_read_mapping_page_gfp LINUX_BACKPORT(shmem_read_mapping_page_gfp)
 extern struct page *shmem_read_mapping_page_gfp(struct address_space *mapping,
 						pgoff_t index, gfp_t gfp);
 
 
+#define shmem_read_mapping_page LINUX_BACKPORT(shmem_read_mapping_page)
 static inline struct page *shmem_read_mapping_page(
                                struct address_space *mapping, pgoff_t index)
 {
@@ -77,6 +79,7 @@ struct bcma_device_id {
 #define BCMA_ANY_CLASS		0xFF
 #endif /* BCMA_CORE */
 
+#define mac_pton LINUX_BACKPORT(mac_pton)
 int mac_pton(const char *s, u8 *mac);
 
 int __must_check kstrtoull_from_user(const char __user *s, size_t count, unsigned int base, unsigned long long *res);
