@@ -3,6 +3,8 @@
 
 #ifndef __ASSEMBLY__
 
+#define LINUX_BACKPORT(__sym) backport_ ##__sym
+
 #include <linux/version.h>
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(3,1,0))
 #include <linux/kconfig.h>
