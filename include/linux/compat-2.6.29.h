@@ -245,6 +245,7 @@ static inline int ndo_do_ioctl(struct net_device *dev,
 }
 
 
+#define netdev_attach_ops LINUX_BACKPORT(netdev_attach_ops)
 void netdev_attach_ops(struct net_device *dev,
 		       const struct net_device_ops *ops);
 
@@ -287,6 +288,7 @@ static inline struct net_device_stats *dev_get_stats(struct net_device *dev)
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,23))
 #if defined(CONFIG_USB) || defined(CONFIG_USB_MODULE)
+#define usb_unpoison_anchored_urbs LINUX_BACKPORT(usb_unpoison_anchored_urbs)
 extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);
 #endif /* CONFIG_USB */
 #endif
@@ -298,8 +300,11 @@ extern void usb_unpoison_anchored_urbs(struct usb_anchor *anchor);
 }							\
 )
 
+#define eth_mac_addr LINUX_BACKPORT(eth_mac_addr)
 extern int eth_mac_addr(struct net_device *dev, void *p);
+#define eth_change_mtu LINUX_BACKPORT(eth_change_mtu)
 extern int eth_change_mtu(struct net_device *dev, int new_mtu);
+#define eth_validate_addr LINUX_BACKPORT(eth_validate_addr)
 extern int eth_validate_addr(struct net_device *dev);
 
 #ifdef CONFIG_NET_NS
@@ -327,6 +332,7 @@ static inline struct net *read_pnet(struct net * const *pnet)
 
 #endif
 
+#define init_dummy_netdev LINUX_BACKPORT(init_dummy_netdev)
 extern int		init_dummy_netdev(struct net_device *dev);
 
 #else /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,29)) */
