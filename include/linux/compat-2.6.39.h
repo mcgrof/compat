@@ -24,6 +24,7 @@ static inline int __must_check PTR_RET(const void *ptr)
 #define tiocmset(tty, set, clear) tiocmset(tty, NULL, set, clear)
 
 #if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27))
+#define tty_set_termios LINUX_BACKPORT(tty_set_termios)
 extern int tty_set_termios(struct tty_struct *tty, struct ktermios *kt);
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 
