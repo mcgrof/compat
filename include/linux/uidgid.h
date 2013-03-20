@@ -133,19 +133,27 @@ static inline bool gid_valid(kgid_t gid)
 
 #ifdef CONFIG_USER_NS
 
+#define make_kuid LINUX_BACKPORT(make_kuid)
 extern kuid_t make_kuid(struct user_namespace *from, uid_t uid);
+#define make_kgid LINUX_BACKPORT(make_kgid)
 extern kgid_t make_kgid(struct user_namespace *from, gid_t gid);
 
+#define from_kuid LINUX_BACKPORT(from_kuid)
 extern uid_t from_kuid(struct user_namespace *to, kuid_t uid);
+#define from_kgid LINUX_BACKPORT(from_kgid)
 extern gid_t from_kgid(struct user_namespace *to, kgid_t gid);
+#define from_kuid_munged LINUX_BACKPORT(from_kuid_munged)
 extern uid_t from_kuid_munged(struct user_namespace *to, kuid_t uid);
+#define from_kgid_munged LINUX_BACKPORT(from_kgid_munged)
 extern gid_t from_kgid_munged(struct user_namespace *to, kgid_t gid);
 
+#define kuid_has_mapping LINUX_BACKPORT(kuid_has_mapping)
 static inline bool kuid_has_mapping(struct user_namespace *ns, kuid_t uid)
 {
 	return from_kuid(ns, uid) != (uid_t) -1;
 }
 
+#define kgid_has_mapping LINUX_BACKPORT(kgid_has_mapping)
 static inline bool kgid_has_mapping(struct user_namespace *ns, kgid_t gid)
 {
 	return from_kgid(ns, gid) != (gid_t) -1;
@@ -153,26 +161,31 @@ static inline bool kgid_has_mapping(struct user_namespace *ns, kgid_t gid)
 
 #else
 
+#define make_kuid LINUX_BACKPORT(make_kuid)
 static inline kuid_t make_kuid(struct user_namespace *from, uid_t uid)
 {
 	return KUIDT_INIT(uid);
 }
 
+#define make_kgid LINUX_BACKPORT(make_kgid)
 static inline kgid_t make_kgid(struct user_namespace *from, gid_t gid)
 {
 	return KGIDT_INIT(gid);
 }
 
+#define from_kuid LINUX_BACKPORT(from_kuid)
 static inline uid_t from_kuid(struct user_namespace *to, kuid_t kuid)
 {
 	return __kuid_val(kuid);
 }
 
+#define from_kgid LINUX_BACKPORT(from_kgid)
 static inline gid_t from_kgid(struct user_namespace *to, kgid_t kgid)
 {
 	return __kgid_val(kgid);
 }
 
+#define from_kuid_munged LINUX_BACKPORT(from_kuid_munged)
 static inline uid_t from_kuid_munged(struct user_namespace *to, kuid_t kuid)
 {
 	uid_t uid = from_kuid(to, kuid);
@@ -181,6 +194,7 @@ static inline uid_t from_kuid_munged(struct user_namespace *to, kuid_t kuid)
 	return uid;
 }
 
+#define from_kgid_munged LINUX_BACKPORT(from_kgid_munged)
 static inline gid_t from_kgid_munged(struct user_namespace *to, kgid_t kgid)
 {
 	gid_t gid = from_kgid(to, kgid);
@@ -189,11 +203,13 @@ static inline gid_t from_kgid_munged(struct user_namespace *to, kgid_t kgid)
 	return gid;
 }
 
+#define kuid_has_mapping LINUX_BACKPORT(kuid_has_mapping)
 static inline bool kuid_has_mapping(struct user_namespace *ns, kuid_t uid)
 {
 	return true;
 }
 
+#define kgid_has_mapping LINUX_BACKPORT(kgid_has_mapping)
 static inline bool kgid_has_mapping(struct user_namespace *ns, kgid_t gid)
 {
 	return true;
