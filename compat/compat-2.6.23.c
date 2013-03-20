@@ -11,6 +11,7 @@
 #include <net/compat.h>
 
 /* On net/core/dev.c as of 2.6.24 */
+#define __dev_addr_delete LINUX_BACKPORT(__dev_addr_delete)
 int __dev_addr_delete(struct dev_addr_list **list, int *count,
                       void *addr, int alen, int glbl)
 {
@@ -40,6 +41,7 @@ EXPORT_SYMBOL_GPL(__dev_addr_delete);
 
 /* On net/core/dev.c as of 2.6.24. This is not yet used by mac80211 but
  * might as well add it */
+#define __dev_addr_add LINUX_BACKPORT(__dev_addr_add)
 int __dev_addr_add(struct dev_addr_list **list, int *count,
                    void *addr, int alen, int glbl)
 {

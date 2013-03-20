@@ -75,6 +75,8 @@ static inline void tcf_destroy_chain_compat(struct tcf_proto **fl)
 #define __dev_set_promiscuity dev_set_promiscuity
 
 /* Our own 2.6.22 port on compat.c */
+#define dev_mc_unsync LINUX_BACKPORT(dev_mc_unsync)
+#define dev_mc_sync LINUX_BACKPORT(dev_mc_sync)
 extern void	dev_mc_unsync(struct net_device *to, struct net_device *from);
 extern int	dev_mc_sync(struct net_device *to, struct net_device *from);
 
@@ -113,6 +115,7 @@ struct genl_multicast_group
 
 
 /* Added as of 2.6.23 */
+#define pci_try_set_mwi LINUX_BACKPORT(pci_try_set_mwi)
 int pci_try_set_mwi(struct pci_dev *dev);
 
 /* Added as of 2.6.23 */
