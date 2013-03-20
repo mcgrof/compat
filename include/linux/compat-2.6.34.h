@@ -326,9 +326,11 @@ static inline int lockdep_rtnl_is_held(void)
 }
 #endif /* #ifdef CONFIG_PROVE_LOCKING */
 
+#define seq_hlist_start_head LINUX_BACKPORT(seq_hlist_start_head)
 extern struct hlist_node *seq_hlist_start_head(struct hlist_head *head,
 					       loff_t pos);
 
+#define seq_hlist_next LINUX_BACKPORT(seq_hlist_next)
 extern struct hlist_node *seq_hlist_next(void *v, struct hlist_head *head,
 					 loff_t *ppos);
 
