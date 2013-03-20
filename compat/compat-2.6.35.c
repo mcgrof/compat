@@ -122,4 +122,4 @@ ssize_t simple_write_to_buffer(void *to, size_t available, loff_t *ppos,
 	*ppos = pos + count;
 	return count;
 }
-EXPORT_SYMBOL(simple_write_to_buffer);
+EXPORT_SYMBOL_GPL(simple_write_to_buffer);

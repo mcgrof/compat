@@ -61,7 +61,7 @@ struct hlist_node *seq_hlist_start_head(struct hlist_head *head, loff_t pos)
 
 	return seq_hlist_start(head, pos - 1);
 }
-EXPORT_SYMBOL(seq_hlist_start_head);
+EXPORT_SYMBOL_GPL(seq_hlist_start_head);
 
 /**
  * seq_hlist_next - move to the next position of the hlist
@@ -82,4 +82,4 @@ struct hlist_node *seq_hlist_next(void *v, struct hlist_head *head,
 	else
 		return node->next;
 }
-EXPORT_SYMBOL(seq_hlist_next);
+EXPORT_SYMBOL_GPL(seq_hlist_next);

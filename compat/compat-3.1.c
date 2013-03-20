@@ -31,7 +31,7 @@ unsigned int compat_cpufreq_quick_get_max(unsigned int cpu)
 
 	return ret_freq;
 }
-EXPORT_SYMBOL(compat_cpufreq_quick_get_max);
+EXPORT_SYMBOL_GPL(compat_cpufreq_quick_get_max);
 #endif
 
 static DEFINE_SPINLOCK(compat_simple_ida_lock);
@@ -86,7 +86,7 @@ again:
 
 	return ret;
 }
-EXPORT_SYMBOL(compat_ida_simple_get);
+EXPORT_SYMBOL_GPL(compat_ida_simple_get);
 
 /**
  * ida_simple_remove - remove an allocated id.
@@ -102,6 +102,6 @@ void compat_ida_simple_remove(struct ida *ida, unsigned int id)
 	ida_remove(ida, id);
 	spin_unlock_irqrestore(&compat_simple_ida_lock, flags);
 }
-EXPORT_SYMBOL(compat_ida_simple_remove);
+EXPORT_SYMBOL_GPL(compat_ida_simple_remove);
 /* source lib/idr.c */
 

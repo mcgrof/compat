@@ -25,6 +25,6 @@
 int overflowuid = DEFAULT_OVERFLOWUID;
 int overflowgid = DEFAULT_OVERFLOWGID;
 
-EXPORT_SYMBOL(overflowuid);
-EXPORT_SYMBOL(overflowgid);
+EXPORT_SYMBOL_GPL(overflowuid);
+EXPORT_SYMBOL_GPL(overflowgid);
 #endif

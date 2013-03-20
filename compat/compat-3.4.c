@@ -479,7 +479,7 @@ const struct i2c_algorithm i2c_bit_algo = {
         .master_xfer    = bit_xfer,
 	.functionality  = bit_func,
 };
-EXPORT_SYMBOL(i2c_bit_algo);
+EXPORT_SYMBOL_GPL(i2c_bit_algo);
 #endif
 
 int simple_open(struct inode *inode, struct file *file)
