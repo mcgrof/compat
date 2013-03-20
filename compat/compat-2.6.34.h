@@ -7,11 +7,11 @@
 
 #include <linux/mmc/sdio_func.h>
 
-void init_compat_mmc_pm_flags(void);
+void backport_init_mmc_pm_flags(void);
 
 #else /* Kernels >= 2.6.34 */
 
-static inline void init_compat_mmc_pm_flags(void)
+static inline void backport_init_mmc_pm_flags(void)
 {
 }
 

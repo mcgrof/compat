@@ -12,16 +12,16 @@
 
 #include "compat-2.6.34.h"
 
-static mmc_pm_flag_t compat_mmc_pm_flags;
+static mmc_pm_flag_t backport_mmc_pm_flags;
 
-void init_compat_mmc_pm_flags(void)
+void backport_init_mmc_pm_flags(void)
 {
-	compat_mmc_pm_flags = 0;
+	backport_mmc_pm_flags = 0;
 }
 
 mmc_pm_flag_t sdio_get_host_pm_caps(struct sdio_func *func)
 {
-	return compat_mmc_pm_flags;
+	return backport_mmc_pm_flags;
 }
 
 int sdio_set_host_pm_flags(struct sdio_func *func, mmc_pm_flag_t flags)

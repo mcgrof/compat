@@ -414,7 +414,7 @@ static ssize_t pm_qos_power_write(struct file *filp, const char __user *buf,
 /*
  * This initializes pm-qos for older kernels.
  */
-int compat_pm_qos_power_init(void)
+int backport_pm_qos_power_init(void)
 {
 	int ret = 0;
 
@@ -442,7 +442,7 @@ int compat_pm_qos_power_init(void)
 	return ret;
 }
 
-int compat_pm_qos_power_deinit(void)
+int backport_pm_qos_power_deinit(void)
 {
 	int ret = 0;
 

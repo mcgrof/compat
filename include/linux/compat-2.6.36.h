@@ -161,8 +161,8 @@ extern struct workqueue_struct *system_long_wq;
 #define system_nrt_wq LINUX_BACKPORT(system_nrt_wq)
 extern struct workqueue_struct *system_nrt_wq;
 
-void compat_system_workqueue_create(void);
-void compat_system_workqueue_destroy(void);
+void backport_system_workqueue_create(void);
+void backport_system_workqueue_destroy(void);
 
 #define schedule_work LINUX_BACKPORT(schedule_work)
 int schedule_work(struct work_struct *work);
@@ -191,11 +191,11 @@ extern unsigned int work_busy(struct work_struct *work);
 
 #else
 
-static inline void compat_system_workqueue_create(void)
+static inline void backport_system_workqueue_create(void)
 {
 }
 
-static inline void compat_system_workqueue_destroy(void)
+static inline void backport_system_workqueue_destroy(void)
 {
 }
 

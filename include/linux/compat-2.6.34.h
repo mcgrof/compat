@@ -25,8 +25,6 @@ typedef unsigned int mmc_pm_flag_t;
 extern mmc_pm_flag_t sdio_get_host_pm_caps(struct sdio_func *func);
 extern int sdio_set_host_pm_flags(struct sdio_func *func, mmc_pm_flag_t flags);
 
-void init_compat_mmc_pm_flags(void);
-
 #define netdev_mc_count(dev) ((dev)->mc_count)
 #define netdev_mc_empty(dev) (netdev_mc_count(dev) == 0)
 
@@ -340,10 +338,6 @@ static inline struct sock *sk_entry(const struct hlist_node *node)
 }
 
 #else /* Kernels >= 2.6.34 */
-
-static inline void init_compat_mmc_pm_flags(void)
-{
-}
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,34)) */
 

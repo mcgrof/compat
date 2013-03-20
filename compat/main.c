@@ -1,7 +1,8 @@
 #include <linux/module.h>
+#include "compat-2.6.34.h"
 
 MODULE_AUTHOR("Luis R. Rodriguez");
-MODULE_DESCRIPTION("Kernel compatibility module");
+MODULE_DESCRIPTION("Kernel backport module");
 MODULE_LICENSE("GPL");
 
 #ifndef COMPAT_BASE
@@ -41,17 +42,17 @@ module_param(compat_version, charp, 0400);
 MODULE_PARM_DESC(compat_version,
 		 "Version of the kernel compat backport work");
 
-void compat_dependency_symbol(void)
+void backport_dependency_symbol(void)
 {
 }
-EXPORT_SYMBOL_GPL(compat_dependency_symbol);
+EXPORT_SYMBOL_GPL(backport_dependency_symbol);
 
 
-static int __init compat_init(void)
+static int __init backport_init(void)
 {
-	compat_pm_qos_power_init();
-	compat_system_workqueue_create();
-	init_compat_mmc_pm_flags();
+	backport_pm_qos_power_init();
+	backport_system_workqueue_create();
+	backport_init_mmc_pm_flags();
 
 	printk(KERN_INFO
 	       COMPAT_PROJECT " backport release: "
@@ -65,14 +66,14 @@ static int __init compat_init(void)
 
         return 0;
 }
-module_init(compat_init);
+module_init(backport_init);
 
-static void __exit compat_exit(void)
+static void __exit backport_exit(void)
 {
-	compat_pm_qos_power_deinit();
-	compat_system_workqueue_destroy();
+	backport_pm_qos_power_deinit();
+	backport_system_workqueue_destroy();
 
         return;
 }
-module_exit(compat_exit);
+module_exit(backport_exit);
 

@@ -28,16 +28,16 @@
  * To the call to the initfn we added the symbol dependency on compat
  * to make sure that compat.ko gets loaded for any compat modules.
  */
-void compat_dependency_symbol(void);
+void backport_dependency_symbol(void);
 
 #undef module_init
 #define module_init(initfn)						\
-	static int __init __init_compat(void)				\
+	static int __init __init_backport(void)				\
 	{								\
-		compat_dependency_symbol();				\
+		backport_dependency_symbol();				\
 		return initfn();					\
 	}								\
-	int init_module(void) __attribute__((alias("__init_compat")));
+	int init_module(void) __attribute__((alias("__init_backport")));
 
 /*
  * Each compat file represents compatibility code for new kernel
