@@ -16,6 +16,7 @@
 #define prandom_u32_state(_state)	prandom32(_state)
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,7,8))
+#define netdev_set_default_ethtool_ops LINUX_BACKPORT(netdev_set_default_ethtool_ops)
 extern void netdev_set_default_ethtool_ops(struct net_device *dev,
 					   const struct ethtool_ops *ops);
 #endif
@@ -26,6 +27,7 @@ extern void netdev_set_default_ethtool_ops(struct net_device *dev,
 #define  PCI_EXP_LNKCTL_ASPM_L0S  0x01 /* L0s Enable */
 #define  PCI_EXP_LNKCTL_ASPM_L1   0x02 /* L1 Enable */
 
+#define hid_ignore LINUX_BACKPORT(hid_ignore)
 extern bool hid_ignore(struct hid_device *);
 
 /* This backports:
