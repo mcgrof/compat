@@ -41,6 +41,7 @@ static inline int proto_ports_offset(int proto)
 
 #define SDIO_CLASS_BT_AMP	0x09	/* Type-A Bluetooth AMP interface */
 
+#define net_ns_type_operations LINUX_BACKPORT(net_ns_type_operations)
 extern struct kobj_ns_type_operations net_ns_type_operations;
 
 /* mask skb_checksum_none_assert as RHEL6 backports this */
@@ -144,9 +145,7 @@ extern void compat_led_brightness_set(struct led_classdev *led_cdev,
 
 #define netdev_refcnt_read(a) atomic_read(&a->refcnt)
 
-/* mask vzalloc as RHEL6 backports this */
-#define vzalloc(a) compat_vzalloc(a)
-
+#define vzalloc LINUX_BACKPORT(vzalloc)
 extern void *vzalloc(unsigned long size);
 
 #define rtnl_dereference(p)                                     \

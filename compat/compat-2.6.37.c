@@ -345,7 +345,7 @@ EXPORT_SYMBOL_GPL(compat_led_classdev_unregister);
  *	For tight control over page level allocator and protection flags
  *	use __vmalloc() instead.
  */
-void *compat_vzalloc(unsigned long size)
+void *vzalloc(unsigned long size)
 {
 	void *buf;
 	buf = vmalloc(size);
@@ -353,6 +353,6 @@ void *compat_vzalloc(unsigned long size)
 		memset(buf, 0, size);
 	return buf;
 }
-EXPORT_SYMBOL_GPL(compat_vzalloc);
+EXPORT_SYMBOL_GPL(vzalloc);
 
 #endif
