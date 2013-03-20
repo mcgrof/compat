@@ -190,6 +190,7 @@ struct tm {
 	int tm_yday;
 };
 
+#define time_to_tm LINUX_BACKPORT(time_to_tm)
 void time_to_tm(time_t totalsecs, int offset, struct tm *result);
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(2,6,32)) */
