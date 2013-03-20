@@ -61,7 +61,7 @@ EXPORT_SYMBOL_GPL(netif_set_real_num_tx_queues);
  * hex_to_bin() converts one hex digit to its actual value or -1 in case of bad
  * input.
  */
-int compat_hex_to_bin(char ch)
+int hex_to_bin(char ch)
 {
 	if ((ch >= '0') && (ch <= '9'))
 		return ch - '0';
@@ -70,7 +70,7 @@ int compat_hex_to_bin(char ch)
 		return ch - 'a' + 10;
 	return -1;
 }
-EXPORT_SYMBOL_GPL(compat_hex_to_bin);
+EXPORT_SYMBOL_GPL(hex_to_bin);
 
 /**
  * noop_llseek - No Operation Performed llseek implementation

@@ -45,6 +45,7 @@ static inline void qdisc_reset_all_tx_gt(struct net_device *dev, unsigned int i)
 }
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,27)) */
 
+#define netif_set_real_num_tx_queues LINUX_BACKPORT(netif_set_real_num_tx_queues)
 extern int netif_set_real_num_tx_queues(struct net_device *dev,
 					unsigned int txq);
 
@@ -68,11 +69,10 @@ static inline wait_queue_head_t *sk_sleep(struct sock *sk)
 
 #define sdio_writeb_readb(func, write_byte, addr, err_ret) sdio_readb(func, addr, err_ret)
 
-/* mask hex_to_bin as RHEL6 backports this */
-#define hex_to_bin(a) compat_hex_to_bin(a)
-
+#define hex_to_bin LINUX_BACKPORT(hex_to_bin)
 int hex_to_bin(char ch);
 
+#define noop_llseek LINUX_BACKPORT(noop_llseek)
 extern loff_t noop_llseek(struct file *file, loff_t offset, int origin);
 
 #define pm_qos_request(_qos) pm_qos_requirement(_qos)
@@ -88,6 +88,7 @@ usb_pipe_endpoint(struct usb_device *dev, unsigned int pipe)
 	return eps[usb_pipeendpoint(pipe)];
 }
 
+#define simple_write_to_buffer LINUX_BACKPORT(simple_write_to_buffer)
 extern ssize_t simple_write_to_buffer(void *to, size_t available, loff_t *ppos,
 		const void __user *from, size_t count);
 
