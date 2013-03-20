@@ -187,6 +187,89 @@ __kfifo_int_must_check_helper(int val)
 	return val;
 }
 
+#define __kfifo_alloc LINUX_BACKPORT(__kfifo_alloc)
+extern int __kfifo_alloc(struct __kfifo *fifo, unsigned int size,
+	size_t esize, gfp_t gfp_mask);
+#define __kfifo_free LINUX_BACKPORT(__kfifo_free)
+extern void __kfifo_free(struct __kfifo *fifo);
+
+#define __kfifo_init LINUX_BACKPORT(__kfifo_init)
+extern int __kfifo_init(struct __kfifo *fifo, void *buffer,
+	unsigned int size, size_t esize);
+
+#define __kfifo_in LINUX_BACKPORT(__kfifo_in)
+extern unsigned int __kfifo_in(struct __kfifo *fifo,
+	const void *buf, unsigned int len);
+
+#define __kfifo_out LINUX_BACKPORT(__kfifo_out)
+extern unsigned int __kfifo_out(struct __kfifo *fifo,
+	void *buf, unsigned int len);
+
+#define __kfifo_from_user LINUX_BACKPORT(__kfifo_from_user)
+extern int __kfifo_from_user(struct __kfifo *fifo,
+	const void __user *from, unsigned long len, unsigned int *copied);
+
+#define __kfifo_to_user LINUX_BACKPORT(__kfifo_to_user)
+extern int __kfifo_to_user(struct __kfifo *fifo,
+	void __user *to, unsigned long len, unsigned int *copied);
+
+#define __kfifo_dma_in_prepare LINUX_BACKPORT(__kfifo_dma_in_prepare)
+extern unsigned int __kfifo_dma_in_prepare(struct __kfifo *fifo,
+	struct scatterlist *sgl, int nents, unsigned int len);
+
+#define __kfifo_dma_out_prepare LINUX_BACKPORT(__kfifo_dma_out_prepare)
+extern unsigned int __kfifo_dma_out_prepare(struct __kfifo *fifo,
+	struct scatterlist *sgl, int nents, unsigned int len);
+
+#define __kfifo_out_peek LINUX_BACKPORT(__kfifo_out_peek)
+extern unsigned int __kfifo_out_peek(struct __kfifo *fifo,
+	void *buf, unsigned int len);
+
+#define __kfifo_in_r LINUX_BACKPORT(__kfifo_in_r)
+extern unsigned int __kfifo_in_r(struct __kfifo *fifo,
+	const void *buf, unsigned int len, size_t recsize);
+
+#define __kfifo_out_r LINUX_BACKPORT(__kfifo_out_r)
+extern unsigned int __kfifo_out_r(struct __kfifo *fifo,
+	void *buf, unsigned int len, size_t recsize);
+
+#define __kfifo_from_user_r LINUX_BACKPORT(__kfifo_from_user_r)
+extern int __kfifo_from_user_r(struct __kfifo *fifo,
+	const void __user *from, unsigned long len, unsigned int *copied,
+	size_t recsize);
+
+#define __kfifo_to_user_r LINUX_BACKPORT(__kfifo_to_user_r)
+extern int __kfifo_to_user_r(struct __kfifo *fifo, void __user *to,
+	unsigned long len, unsigned int *copied, size_t recsize);
+
+#define __kfifo_dma_in_prepare_r LINUX_BACKPORT(__kfifo_dma_in_prepare_r)
+extern unsigned int __kfifo_dma_in_prepare_r(struct __kfifo *fifo,
+	struct scatterlist *sgl, int nents, unsigned int len, size_t recsize);
+
+#define __kfifo_dma_in_finish_r LINUX_BACKPORT(__kfifo_dma_in_finish_r)
+extern void __kfifo_dma_in_finish_r(struct __kfifo *fifo,
+	unsigned int len, size_t recsize);
+
+#define __kfifo_dma_out_prepare_r LINUX_BACKPORT(__kfifo_dma_out_prepare_r)
+extern unsigned int __kfifo_dma_out_prepare_r(struct __kfifo *fifo,
+	struct scatterlist *sgl, int nents, unsigned int len, size_t recsize);
+
+#define __kfifo_dma_out_finish_r LINUX_BACKPORT(__kfifo_dma_out_finish_r)
+extern void __kfifo_dma_out_finish_r(struct __kfifo *fifo, size_t recsize);
+
+#define __kfifo_len_r LINUX_BACKPORT(__kfifo_len_r)
+extern unsigned int __kfifo_len_r(struct __kfifo *fifo, size_t recsize);
+
+#define __kfifo_skip_r LINUX_BACKPORT(__kfifo_skip_r)
+extern void __kfifo_skip_r(struct __kfifo *fifo, size_t recsize);
+
+#define __kfifo_out_peek_r LINUX_BACKPORT(__kfifo_out_peek_r)
+extern unsigned int __kfifo_out_peek_r(struct __kfifo *fifo,
+	void *buf, unsigned int len, size_t recsize);
+
+#define __kfifo_max_r LINUX_BACKPORT(__kfifo_max_r)
+extern unsigned int __kfifo_max_r(unsigned int len, size_t recsize);
+
 /**
  * kfifo_initialized - Check if the fifo is initialized
  * @fifo: address of the fifo to check
@@ -790,68 +873,5 @@ __kfifo_uint_must_check_helper( \
 	__kfifo_out_peek(__kfifo, __buf, __n); \
 }) \
 )
-
-extern int __kfifo_alloc(struct __kfifo *fifo, unsigned int size,
-	size_t esize, gfp_t gfp_mask);
-
-extern void __kfifo_free(struct __kfifo *fifo);
-
-extern int __kfifo_init(struct __kfifo *fifo, void *buffer,
-	unsigned int size, size_t esize);
-
-extern unsigned int __kfifo_in(struct __kfifo *fifo,
-	const void *buf, unsigned int len);
-
-extern unsigned int __kfifo_out(struct __kfifo *fifo,
-	void *buf, unsigned int len);
-
-extern int __kfifo_from_user(struct __kfifo *fifo,
-	const void __user *from, unsigned long len, unsigned int *copied);
-
-extern int __kfifo_to_user(struct __kfifo *fifo,
-	void __user *to, unsigned long len, unsigned int *copied);
-
-extern unsigned int __kfifo_dma_in_prepare(struct __kfifo *fifo,
-	struct scatterlist *sgl, int nents, unsigned int len);
-
-extern unsigned int __kfifo_dma_out_prepare(struct __kfifo *fifo,
-	struct scatterlist *sgl, int nents, unsigned int len);
-
-extern unsigned int __kfifo_out_peek(struct __kfifo *fifo,
-	void *buf, unsigned int len);
-
-extern unsigned int __kfifo_in_r(struct __kfifo *fifo,
-	const void *buf, unsigned int len, size_t recsize);
-
-extern unsigned int __kfifo_out_r(struct __kfifo *fifo,
-	void *buf, unsigned int len, size_t recsize);
-
-extern int __kfifo_from_user_r(struct __kfifo *fifo,
-	const void __user *from, unsigned long len, unsigned int *copied,
-	size_t recsize);
-
-extern int __kfifo_to_user_r(struct __kfifo *fifo, void __user *to,
-	unsigned long len, unsigned int *copied, size_t recsize);
-
-extern unsigned int __kfifo_dma_in_prepare_r(struct __kfifo *fifo,
-	struct scatterlist *sgl, int nents, unsigned int len, size_t recsize);
-
-extern void __kfifo_dma_in_finish_r(struct __kfifo *fifo,
-	unsigned int len, size_t recsize);
-
-extern unsigned int __kfifo_dma_out_prepare_r(struct __kfifo *fifo,
-	struct scatterlist *sgl, int nents, unsigned int len, size_t recsize);
-
-extern void __kfifo_dma_out_finish_r(struct __kfifo *fifo, size_t recsize);
-
-extern unsigned int __kfifo_len_r(struct __kfifo *fifo, size_t recsize);
-
-extern void __kfifo_skip_r(struct __kfifo *fifo, size_t recsize);
-
-extern unsigned int __kfifo_out_peek_r(struct __kfifo *fifo,
-	void *buf, unsigned int len, size_t recsize);
-
-extern unsigned int __kfifo_max_r(unsigned int len, size_t recsize);
-
 #endif
 #endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,36)) */
