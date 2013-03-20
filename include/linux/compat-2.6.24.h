@@ -45,6 +45,7 @@ struct net {
 
 #ifdef CONFIG_NET
 /* Init's network namespace */
+#define init_net LINUX_BACKPORT(init_net)
 extern struct net init_net;
 #define INIT_NET_NS(net_ns) .net_ns = &init_net,
 #else
@@ -162,12 +163,16 @@ struct ssb_device_id {
 #define dev_get_by_index(a, b)		dev_get_by_index(b)
 #define __dev_get_by_index(a, b)	__dev_get_by_index(b)
 
+#define eth_header LINUX_BACKPORT(eth_header)
 extern int		eth_header(struct sk_buff *skb, struct net_device *dev,
 				unsigned short type, void *daddr,
 				void *saddr, unsigned len);
+#define eth_rebuild_header LINUX_BACKPORT(eth_rebuild_header)
 extern int		eth_rebuild_header(struct sk_buff *skb);
+#define eth_header_cache_update LINUX_BACKPORT(eth_header_cache_update)
 extern void		eth_header_cache_update(struct hh_cache *hh, struct net_device *dev,
 				unsigned char * haddr);
+#define eth_header_cache LINUX_BACKPORT(eth_header_cache)
 extern int		eth_header_cache(struct neighbour *neigh,
 			struct hh_cache *hh);
 
