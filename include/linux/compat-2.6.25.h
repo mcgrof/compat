@@ -68,6 +68,7 @@ hit:
 }
 
 /* Backports b718989da7 */
+#define pci_enable_device_mem LINUX_BACKPORT(pci_enable_device_mem)
 int __must_check pci_enable_device_mem(struct pci_dev *dev);
 
 /*
@@ -221,7 +222,9 @@ int compat_pm_qos_power_deinit(void);
 #define dev_crit(dev, format, arg...)           \
 	dev_printk(KERN_CRIT , dev , format , ## arg)
 
+#define __dev_addr_sync LINUX_BACKPORT(__dev_addr_sync)
 extern int		__dev_addr_sync(struct dev_addr_list **to, int *to_count, struct dev_addr_list **from, int *from_count);
+#define __dev_addr_unsync LINUX_BACKPORT(__dev_addr_unsync)
 extern void		__dev_addr_unsync(struct dev_addr_list **to, int *to_count, struct dev_addr_list **from, int *from_count);
 
 #define seq_file_net &init_net;
@@ -301,7 +304,9 @@ static inline void led_classdev_unregister_suspended(struct led_classdev *lcd)
  * The following things are out of ./include/linux/kernel.h
  * The new iwlwifi driver is using them.
  */
+#define strict_strtoul LINUX_BACKPORT(strict_strtoul)
 extern int strict_strtoul(const char *, unsigned int, unsigned long *);
+#define strict_strtol LINUX_BACKPORT(strict_strtol)
 extern int strict_strtol(const char *, unsigned int, long *);
 
 #else

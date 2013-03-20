@@ -113,7 +113,7 @@ static inline struct msi_desc *irq_desc_get_msi_desc(struct irq_desc *desc)
  * version included in compat-drivers. We use strict_strtol to check if
  * kstrto* is already available.
  */
-#ifndef strict_strtol
+#ifndef strict_strtoull
 /* Internal, do not use. */
 int __must_check _kstrtoul(const char *s, unsigned int base, unsigned long *res);
 int __must_check _kstrtol(const char *s, unsigned int base, long *res);
