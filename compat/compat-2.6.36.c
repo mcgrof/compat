@@ -170,7 +170,7 @@ unsigned int work_busy(struct work_struct *work)
 }
 EXPORT_SYMBOL_GPL(work_busy);
 
-void compat_system_workqueue_create()
+void backport_system_workqueue_create(void)
 {
 	system_wq = alloc_workqueue("events", 0, 0);
 	system_long_wq = alloc_workqueue("events_long", 0, 0);
@@ -178,7 +178,7 @@ void compat_system_workqueue_create()
 	BUG_ON(!system_wq || !system_long_wq || !system_nrt_wq);
 }
 
-void compat_system_workqueue_destroy()
+void backport_system_workqueue_destroy(void)
 {
 	destroy_workqueue(system_wq);
 	destroy_workqueue(system_long_wq);
