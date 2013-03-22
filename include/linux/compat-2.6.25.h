@@ -20,10 +20,43 @@
 #include <linux/errno.h>
 #include <linux/init.h>
 #include <linux/pci.h>
+#include <linux/scatterlist.h>
 #define __inet_lookup_established __inet_lookup_established_old
 #include <net/inet_hashtables.h>
 #undef __inet_lookup_established
 #include <linux/compat-3.9.h>
+
+struct sg_table {
+	struct scatterlist *sgl;        /* the list */
+	unsigned int nents;             /* number of mapped entries */
+	unsigned int orig_nents;        /* original size of list */
+};
+
+#define sg_alloc_fn LINUX_BACKPORT(sg_alloc_fn)
+typedef struct scatterlist *(sg_alloc_fn)(unsigned int, gfp_t);
+
+#define sg_free_fn LINUX_BACKPORT(sg_free_fn)
+typedef void (sg_free_fn)(struct scatterlist *, unsigned int);
+
+#define __sg_free_table LINUX_BACKPORT(__sg_free_table)
+void __sg_free_table(struct sg_table *table, unsigned int max_ents,
+		     sg_free_fn *free_fn);
+#define sg_free_table LINUX_BACKPORT(sg_free_table)
+void sg_free_table(struct sg_table *);
+#define __sg_alloc_table LINUX_BACKPORT(__sg_alloc_table)
+int __sg_alloc_table(struct sg_table *table, unsigned int nents,
+		     unsigned int max_ents, gfp_t gfp_mask,
+		     sg_alloc_fn *alloc_fn);
+#define sg_alloc_table LINUX_BACKPORT(sg_alloc_table)
+int sg_alloc_table(struct sg_table *table, unsigned int nents, gfp_t gfp_mask);
+
+/*
+ * Maximum number of entries that will be allocated in one piece, if
+ * a list larger than this is required then chaining will be utilized.
+ */
+#define SG_MAX_SINGLE_ALLOC            (PAGE_SIZE / sizeof(struct scatterlist))
+
+
 /*
  * Sockets in TCP_CLOSE state are _always_ taken out of the hash, so we need
  * not check it for lookups anymore, thanks Alexey. -DaveM
