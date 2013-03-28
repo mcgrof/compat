@@ -72,6 +72,7 @@ void backport_dependency_symbol(void);
 #include <linux/compat-3.7.h>
 #include <linux/compat-3.8.h>
 #include <linux/compat-3.9.h>
+#include <linux/compat-3.10.h>
 
 #endif /* __ASSEMBLY__ */
 
