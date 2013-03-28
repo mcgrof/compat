@@ -11,7 +11,7 @@
 #include <linux/module.h>
 #include <linux/scatterlist.h>
 
-#ifndef __sg_page_iter_next
+#ifdef __sg_page_iter_next
 
 void __sg_page_iter_start(struct sg_page_iter *piter,
 			  struct scatterlist *sglist, unsigned int nents,
