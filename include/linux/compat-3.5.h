@@ -294,6 +294,9 @@ do {								\
 #define net_dbg_ratelimited(fmt, ...)				\
 	net_ratelimited_function(pr_debug, fmt, ##__VA_ARGS__)
 
+#define ktime_get_monotonic_offset LINUX_BACKPORT(ktime_get_monotonic_offset)
+extern ktime_t ktime_get_monotonic_offset(void);
+
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,5,0)) */
 
 #endif /* LINUX_3_5_COMPAT_H */
