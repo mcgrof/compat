@@ -17,7 +17,7 @@
  * version included in compat-drivers. We use strict_strtol to check if
  * kstrto* is already available.
  */
-#ifndef strict_strtol
+#ifndef strict_strtoll
 
 #include <linux/ctype.h>
 #include <linux/errno.h>
