@@ -40,6 +40,7 @@ extern void compat_wake_up_locked(wait_queue_head_t *q, unsigned int mode, int n
 
 /* SIZE_MAX is backported in compat-3.5.h so include it */
 #include <linux/compat-3.5.h>
+#define kmalloc_array backport_kmalloc_array
 static inline void *kmalloc_array(size_t n, size_t size, gfp_t flags)
 {
 	if (size != 0 && n > SIZE_MAX / size)
