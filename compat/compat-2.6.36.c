@@ -133,7 +133,6 @@ int schedule_delayed_work_on(int cpu,
 }
 EXPORT_SYMBOL_GPL(schedule_delayed_work_on);
 
-#undef flush_scheduled_work
 void flush_scheduled_work(void)
 {
 	/*
