@@ -7,6 +7,9 @@
 
 #include <linux/scatterlist.h>
 
+#define memweight LINUX_BACKPORT(memweight)
+extern size_t memweight(const void *ptr, size_t bytes);
+
 /* backports efc42bc9 */
 #define sg_alloc_table_from_pages LINUX_BACKPORT(sg_alloc_table_from_pages)
 int sg_alloc_table_from_pages(struct sg_table *sgt,
