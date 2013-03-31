@@ -5,6 +5,8 @@
 
 #if (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0))
 
+#include <linux/poll.h>
+
 /*
  * defined here to allow things to compile but technically
  * using this for memory regions will yield in a no-op on newer
@@ -143,6 +145,31 @@ static inline void eth_hw_addr_random(struct net_device *dev)
 #define _config_enabled(value) __config_enabled(__ARG_PLACEHOLDER_##value)
 #define __config_enabled(arg1_or_junk) ___config_enabled(arg1_or_junk 1, 0)
 #define ___config_enabled(__ignored, val, ...) val
+
+#if (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31))
+/*
+ * Return true if it is guaranteed that poll will not wait. This is the case
+ * if the poll() of another file descriptor in the set got an event, so there
+ * is no need for waiting.
+ */
+#define poll_does_not_wait LINUX_BACKPORT(poll_does_not_wait)
+static inline bool poll_does_not_wait(const poll_table *p)
+{
+	return p == NULL || p->qproc == NULL;
+}
+
+/*
+ * Return the set of events that the application wants to poll for.
+ * This is useful for drivers that need to know whether a DMA transfer has
+ * to be started implicitly on poll(). You typically only want to do that
+ * if the application is actually polling for POLLIN and/or POLLOUT.
+ */
+#define poll_requested_events LINUX_BACKPORT(poll_requested_events)
+static inline unsigned long poll_requested_events(const poll_table *p)
+{
+	return p ? p->key : ~0UL;
+}
+#endif /* (LINUX_VERSION_CODE >= KERNEL_VERSION(2,6,31)) */
 
 #endif /* (LINUX_VERSION_CODE < KERNEL_VERSION(3,4,0)) */
 
