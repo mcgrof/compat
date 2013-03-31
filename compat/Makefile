@@ -48,6 +48,7 @@ compat-$(CONFIG_COMPAT_KERNEL_3_3) += \
 compat-$(CONFIG_COMPAT_KERNEL_3_4) += compat-3.4.o
 compat-$(CONFIG_COMPAT_KERNEL_3_5) += \
 	compat-3.5.o \
+	dma-buf.o \
 	user_namespace.o
 compat-$(CONFIG_COMPAT_KERNEL_3_6) += compat-3.6.o
 compat-$(CONFIG_COMPAT_KERNEL_3_7) += compat-3.7.o
