@@ -705,7 +705,7 @@ static int request_firmware_work_func(void *arg)
  *	in atomic contexts.
  **/
 int
-request_firmware_nowait(
+backport_request_firmware_nowait(
 	struct module *module, int uevent,
 	const char *name, struct device *device, gfp_t gfp, void *context,
 	void (*cont)(const struct firmware *fw, void *context))
@@ -756,4 +756,4 @@ module_exit(firmware_class_exit);
 
 EXPORT_SYMBOL_GPL(release_firmware);
 EXPORT_SYMBOL_GPL(request_firmware);
-EXPORT_SYMBOL_GPL(request_firmware_nowait);
+EXPORT_SYMBOL_GPL(backport_request_firmware_nowait);
