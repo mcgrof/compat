@@ -53,7 +53,9 @@ compat-$(CONFIG_COMPAT_KERNEL_3_5) += \
 compat-$(CONFIG_COMPAT_KERNEL_3_6) += compat-3.6.o
 compat-$(CONFIG_COMPAT_KERNEL_3_7) += compat-3.7.o
 compat-$(CONFIG_COMPAT_KERNEL_3_8) += compat-3.8.o
-compat-$(CONFIG_COMPAT_KERNEL_3_9) += compat-3.9.o
+compat-$(CONFIG_COMPAT_KERNEL_3_9) += \
+	hdmi.o \
+	compat-3.9.o
 
 compat-$(CONFIG_COMPAT_CORDIC) += cordic.o
 compat-$(CONFIG_COMPAT_CRC8) += crc8.o
